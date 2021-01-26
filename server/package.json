@@ -4,7 +4,7 @@
   "description": "",
   "main": "init.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/init.js --delay 2"
+    "dev:server": "nodemon --exec babel-node src/init.js --delay 2"
   },
   "repository": {
     "type": "git",

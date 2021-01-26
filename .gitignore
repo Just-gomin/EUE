@@ -1,2 +1,8 @@
+# Mac OS Format File
+.DS_Store
+
+# VScode setting File
 .vscode/*
+
+# Arduino File
 arduino/
