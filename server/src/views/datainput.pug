@@ -1,0 +1,7 @@
+block content
+    .form__container
+        form(action=routes.data+routes.dataInput, method = "post")
+            input(type="text", name="temp", require=true, placeholder="Temperature")
+            input(type="text", name="humi", require=true, placeholder="Humidity")
+            input(type="text", name="bri", require=true, placeholder="Brightness")
+            input(type="submit", value="Submit")
