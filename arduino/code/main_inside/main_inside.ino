@@ -26,7 +26,6 @@ String SSPW = "Wifi_SSPW";        // Wifi - SSPW
 String EUEIP = "EUE_IP";          // Web Server - IP
 int EUEPORT = 8081;               // Web Server - Port
 
-// 함수 선언부
 void connectESP();
 void connectWifi();
 void sendData(String vars);
@@ -77,30 +76,52 @@ void setup() {
 void loop() {
   String input = "";
 
+  // 사용자 ID
+  String ID = "Admin";
+
+  // 측정기 분류(IN / OUT)
+  String type_ = "In";
+  
+  // 사용자 장소의 위도(Latitude), 경도(Longitude)
+  float lati = 37.241706;
+  String str_lati = String(lati,6);
+  float lng = 131.864889;
+  String str_lng = String(lng,6);
+
+  // DHT11 모듈의 측정 event
   sensors_event_t event;
   
+  // 온도
   dht.temperature().getEvent(&event);
   float temp = event.temperature;
   String str_Temp = String(temp);
 
+  // 습도
   dht.humidity().getEvent(&event);
   float humi = event.relative_humidity;
   String str_Humi = String(humi);
 
+  // 광도
   int lights = analogRead(CDS_A);
   String str_Lights = String(lights);
   
-  String ID = "Admin";
   input += "id=" + ID;
+  input += "&type=" + type_;
+  input += "&lat=" + str_lati;
+  input += "&lng=" + str_lng;
   input += "&temp=" + str_Temp;
   input += "&humi=" + str_Humi;
   input += "&lights=" + str_Lights;
   Serial.println(input);
   
+  // 데이터 전송
   sendData(input);
+
+  // 1분마다 전송 진행
+  delay(60000);
 }
 
-// 함수 정의부
+// ESP모듈 연결
 void connectESP(){
   esp.println("AT");
   Serial.println("AT Sent");
@@ -111,30 +132,36 @@ void connectESP(){
   Serial.println("OK Command Received.");
 }
 
+// 공유기와 연결
 void connectWifi(){
-  String cmd = "AT+CWMODE=1"; // Client로 설정
+  // ESP8266 모듈 Client로 설정
+  String cmd = "AT+CWMODE=1";
   esp.println(cmd);
   Serial.println("Set ESP8266 to client.");
 
+  // 공유기와 연결
   Serial.println("Connecting to Wifi...");
   cmd = "AT+CWJAP=\"" + SSID + "\"," + SSPW + "\"";
   esp.println(cmd);
- 
+  
+  // 연결 확인
   while(!esp.find("OK"));
   Serial.println("Wifi Connected");
   
+  // 연결된 공유기 확인
   cmd = "AT+CWJAP?";
   esp.println(cmd);
   Serial.write(esp.read());
 }
 
 void sendData(String input){
-  // ESP 모듈을 통해 Server로 데이터 전송
+  // ESP 모듈을 통해 Server와 연결
   esp.println("AT+CIPSTART=\"TCP\",\"" + EUEIP + "\"," + EUEPORT);
   if(esp.find("Error")){
     Serial.println("AT+CIPSTART Error...");
   }
 
+  // 서버로 전송할 데이터 작성
   String vars = input;
   
   String msg = "GET /data/input?";
@@ -144,13 +171,14 @@ void sendData(String input){
   esp.println(msg.length());
   delay(2000);
 
+  // 데이터 전송
   if(esp.find(">")){
     esp.print(msg);
     Serial.println("Data sent.");
     delay(1000);
   }
+
+  // 서버와 연결 종료
   Serial.println("Connection Closed.");
   esp.println("AT+CIPCLOSE");
-
-  delay(5000);
 }
