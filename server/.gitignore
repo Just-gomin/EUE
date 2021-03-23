@@ -1,3 +1,9 @@
+# Node Packages
 package-lock.json
 /node_modules
+
+# Project Environments
 .env
+
+# Project Data
+/data
