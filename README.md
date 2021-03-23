@@ -2,17 +2,17 @@
 
 ## INDEX
 
-**1. [프로젝트 구성](#1.-프로젝트-구성)</br>**
-**2. [프로젝트 설치](#2.-프로젝트-설치)**
+**1. [프로젝트 구성](https://github.com/dorakang612/EUE#1.-프로젝트-구성)</br>**
+**2. [프로젝트 설치](https://github.com/dorakang612/EUE#2.-프로젝트-설치)**
 
-- 2-1. [Git](#2-1.-Git)
-- 2-2. [Zip File](#2-2.-Zip-File)
+- 2-1. [Git](https://github.com/dorakang612/EUE#2-1.-Git)
+- 2-2. [Zip File](https://github.com/dorakang612/EUE#2-2.-Zip-File)
 
-**3. [프로젝트 실행](#3.-프로젝트-실행)**
+**3. [프로젝트 실행](https://github.com/dorakang612/EUE#3.-프로젝트-실행)**
 
-- 3-1. [아두이노](#3-1.-아두이노)
-- 3-2. [Client (React)](<#3-2.-Client-(React)>)
-- 3-3. [Server (Express.js)](<#3-3.-Server-(Express.js)>)
+- 3-1. [아두이노](https://github.com/dorakang612/EUE#3-1.-아두이노)
+- 3-2. [Client (React)](<https://github.com/dorakang612/EUE#3-2.-Client-(React)>)
+- 3-3. [Server (Express.js)](<https://github.com/dorakang612/EUE#3-3.-Server-(Express.js)>)
 
 </br>
 
