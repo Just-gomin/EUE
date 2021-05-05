@@ -22,19 +22,19 @@ void sendData(String vars);
 void setup() {
   Serial.begin(9600);     // Serial monitor의 통신 속도 9600으로 설정
   esp.begin(9600);        // esp모듈의 통신 속도 9600으로 설정
-
-  connectESP();           // ESP 모듈 탐색
-  connectWifi();          // ESP 모듈 wifi 연결
 }
 
 void loop() {
+  connectESP();           // ESP 모듈 탐색
+  connectWifi();          // ESP 모듈 wifi 연결
+
   String input = "";
   
-   // 사용자 ID
-  String ID = "Admin";
-
   // 측정기 분류(IN / OUT)
   String type_ = "Out";
+  
+  // 지역 코드
+  String locCode = "3743011";
 
   // 지역의 위도(Latitude), 경도(Longitude)
   float lati = 37.241706;
@@ -42,8 +42,8 @@ void loop() {
   float lng = 131.864889;
   String str_lng = String(lng,6);
   
-  input += "id=" + ID;
-  input += "&type=" + type_;
+  input += "type=" + type_;
+  input += "&locCode=" + locCode;
   input += "&lat=" + str_lati;
   input += "&lng=" + str_lng;
   Serial.println(input);
@@ -51,8 +51,8 @@ void loop() {
   // 데이터 전송
   sendData(input);
 
-  // 1분마다 전송 진행
-  delay(60000);
+  // 30분마다 전송 진행
+  delay(1800000);
 }
 
 // ESP모듈 연결

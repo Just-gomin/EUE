@@ -76,11 +76,14 @@ void setup() {
 void loop() {
   String input = "";
 
+  // 측정기 분류(IN / OUT)
+  String type_ = "In";
+
   // 사용자 ID
   String ID = "Admin";
 
-  // 측정기 분류(IN / OUT)
-  String type_ = "In";
+  // 지역 코드
+  String locCode = "3743011";
   
   // 사용자 장소의 위도(Latitude), 경도(Longitude)
   float lati = 37.241706;
@@ -105,8 +108,9 @@ void loop() {
   int lights = analogRead(CDS_A);
   String str_Lights = String(lights);
   
-  input += "id=" + ID;
-  input += "&type=" + type_;
+  input += "type=" + type_;
+  input += "&id=" + ID;
+  input += "&locCode" + locCode;
   input += "&lat=" + str_lati;
   input += "&lng=" + str_lng;
   input += "&temp=" + str_Temp;
@@ -117,8 +121,8 @@ void loop() {
   // 데이터 전송
   sendData(input);
 
-  // 1분마다 전송 진행
-  delay(60000);
+  // 10분마다 전송 진행
+  delay(600000);
 }
 
 // ESP모듈 연결
