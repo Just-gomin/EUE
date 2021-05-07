@@ -12,7 +12,7 @@ const DATA_OUTSIDE = "/outside";
 // # Local Code Data
 const LOCCODE = "/loccode";
 const DO = "/do";
-const SIGUNGU = "/sigungu";
+const SIGUNGU = "/si-gun-gu";
 const EUPMYEONDONG = "/eup-myeon-dong";
 
 // # Auth
