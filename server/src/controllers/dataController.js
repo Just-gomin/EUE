@@ -40,9 +40,19 @@ const getTimeInfo = () => {
   return time;
 };
 
+const getDataDIR = (loc, time) => {
+  const repoDIR = `./data/${loc.DO}/${loc.SGG}/${loc.EMD}/${time.year}/${
+    time.year
+  }${time.month < 10 ? "0" + time.month : time.month}${
+    time.date < 10 ? "0" + time.date : time.date
+  }`;
+
+  return repoDIR;
+};
+
 // 데이터를 파일 형식으로 저장
 const storeData = (type, time, loc, fdir, data) => {
-  const fileName = "wData.csv";
+  const fileName = "weather.csv";
 
   fs.open(fdir + `/${fileName}`, "a", (err, fd) => {
     if (err) {
@@ -55,7 +65,14 @@ const storeData = (type, time, loc, fdir, data) => {
         });
 
         console.log("Create directory.");
-      } else console.log(err);
+
+        if (type === IN) {
+          data = data.split("\n")[1];
+          console.log("Split the user Data.");
+        }
+      }
+      // 그 외의 에러는 출력
+      else console.log(err);
     }
 
     fs.appendFile(fdir + `/${fileName}`, data, (err) => {
@@ -73,8 +90,9 @@ const storeData = (type, time, loc, fdir, data) => {
 // 외부 수집기로 부터 들어온 정보 처리
 const handleOutData = (locCode, lat, lng) => {
   // OpenWeatherAPI로 부터 지역의 날씨 정보획득
+  // 지역의 경도와 위도, API KEy, 단위 기준 metric 전달
   fetch(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.OPENWEATHERMAP_API_KEY}`
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.OPENWEATHERMAP_API_KEY}&units=metric`
   )
     .then((response) => response.json())
     .then((json) => {
@@ -86,8 +104,9 @@ const handleOutData = (locCode, lat, lng) => {
       const loc = locCodeSep(locCode);
       const time = getTimeInfo();
 
-      const fdir = `data/${loc.DO}/${loc.SGG}/${loc.EMD}/Outside/${time.year}/${time.month}/${time.date}`;
-      const data = `${time.hour},${time.minute},${temp},${humi},${press},${wind_speed}\n`;
+      const fdir = getDataDIR(loc, time) + "/Outside";
+      // 데이터 형식 - 월 | 일 | 시 | 분 | 온도 | 습도 | 기압 | 풍속
+      const data = `${time.month},${time.date},${time.hour},${time.minute},${temp},${humi},${press},${wind_speed}\n`;
 
       storeData(OUT, time, loc, fdir, data);
     })
@@ -99,8 +118,9 @@ const handleInData = (id, locCode, temp, humi, lights) => {
   const loc = locCodeSep(locCode);
   const time = getTimeInfo();
 
-  const fdir = `data/${loc.DO}/${loc.SGG}/${loc.EMD}/${id}/${time.year}/${time.month}/${time.date}`;
-  const data = `${time.hour},${time.minute},${temp},${humi},${lights}\n`;
+  const fdir = getDataDIR(loc, time) + `/Users/${id}`;
+  // 데이터 형식 - [이전 줄 : 현재 온도 ( 이전 기록 기준 단위 시간 후 온도)] , [ 현재 줄 : 월 | 일 | 시 | 분 | 온도 | 습도 | 광도 ]
+  const data = `${temp}\n${time.month},${time.date},${time.hour},${time.minute},${temp},${humi},${lights}`;
 
   storeData(IN, time, loc, fdir, data);
 };
