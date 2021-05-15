@@ -16,7 +16,7 @@ const db_config = {
 const pool = mysql.createPool(db_config);
 
 // Pool을 이용시, Connection을 생성 후 반환하여 사용
-const connection = (callback) => {
+export const getPoolConnection = (callback) => {
   console.log("db_connection()");
   pool.getConnection(async (err, connection) => {
     console.log("db_connection_poolConnection()");
@@ -24,4 +24,8 @@ const connection = (callback) => {
   });
 };
 
-export default connection;
+export const dbMSG = {
+  connection_err: "DB Connection Error.",
+  query_err: "DB Query Error.",
+  query_success: "Query Success",
+};

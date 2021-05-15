@@ -1,30 +1,21 @@
-import db from "../db";
-
-const DB_QUERY_ERROR_MSG = "DB Query Error.";
-const DB_CONNECTION_ERROR_MSG = "DB Connection Error.";
-const SERVER_ERROR_MSG = "The server encountered an error.";
-const QUERY_SUCCESS_MSG = "Query Success.";
-
-const STATUS_OK_CODE = 200;
-const STATUS_SERVER_ERROR_CODE = 500;
+import { getPoolConnection as db, dbMSG } from "../db";
+import { serverMSG, statusCode } from "../serverinfo";
 
 export const getDo = async (req, res) => {
   const query = "SELECT CODE, DONAME FROM LOCDO";
 
   db((connErr, connection) => {
     if (connErr) {
-      console.log(DB_CONNECTION_ERROR_MSG);
-      res.status(STATUS_SERVER_ERROR_CODE).json({ error: SERVER_ERROR_MSG });
+      console.log(dbMSG.connection_err);
+      res.status(statusCode.err).json({ error: serverMSG.server_err });
     } else {
       connection.query(query, (queryErr, result) => {
         if (queryErr) {
-          console.log(DB_QUERY_ERROR_MSG);
-          res
-            .status(STATUS_SERVER_ERROR_CODE)
-            .json({ error: SERVER_ERROR_MSG });
+          console.log(dbMSG.query_err);
+          res.status(statusCode.err).json({ error: serverMSG.server_err });
         } else {
-          console.log(QUERY_SUCCESS_MSG);
-          res.status(STATUS_OK_CODE).json({ info: result });
+          console.log(dbMSG.query_success);
+          res.status(statusCode.ok).json({ info: result });
         }
       });
 
@@ -42,18 +33,16 @@ export const getSGG = (req, res) => {
 
   db((connErr, connection) => {
     if (connErr) {
-      console.log(DB_CONNECTION_ERROR_MSG);
-      res.status(STATUS_SERVER_ERROR_CODE).json({ error: SERVER_ERROR_MSG });
+      console.log(dbMSG.connection_err);
+      res.status(statusCode.err).json({ error: serverMSG.server_err });
     } else {
       connection.query(query, (queryErr, result) => {
         if (queryErr) {
-          console.log(DB_QUERY_ERROR_MSG);
-          res
-            .status(STATUS_SERVER_ERROR_CODE)
-            .json({ error: SERVER_ERROR_MSG });
+          console.log(dbMSG.query_err);
+          res.status(statusCode.err).json({ error: serverMSG.server_err });
         } else {
-          console.log(QUERY_SUCCESS_MSG);
-          res.status(STATUS_OK_CODE).json({ info: result });
+          console.log(dbMSG.query_success);
+          res.status(statusCode.ok).json({ info: result });
         }
       });
 
@@ -71,18 +60,16 @@ export const getEMD = (req, res) => {
 
   db((connErr, connection) => {
     if (connErr) {
-      console.log(DB_CONNECTION_ERROR_MSG);
-      res.status(STATUS_SERVER_ERROR_CODE).json({ error: SERVER_ERROR_MSG });
+      console.log(dbMSG.connection_err);
+      res.status(statusCode.err).json({ error: serverMSG.server_err });
     } else {
       connection.query(query, (queryErr, result) => {
         if (queryErr) {
-          console.log(DB_QUERY_ERROR_MSG);
-          res
-            .status(STATUS_SERVER_ERROR_CODE)
-            .json({ error: SERVER_ERROR_MSG });
+          console.log(dbMSG.query_err);
+          res.status(statusCode.err).json({ error: serverMSG.server_err });
         } else {
-          console.log(QUERY_SUCCESS_MSG);
-          res.status(STATUS_OK_CODE).json({ info: result });
+          console.log(dbMSG.query_success);
+          res.status(statusCode.ok).json({ info: result });
         }
       });
 
