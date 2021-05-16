@@ -1,5 +1,7 @@
 import fs from "fs";
 import fetch from "node-fetch";
+import { serverMSG, statusCode } from "../serverinfo";
+import { pool as db, dbMSG, pool } from "../db";
 
 const OUT = "Out";
 const IN = "In";
@@ -43,20 +45,45 @@ const getTimeInfo = () => {
   return time;
 };
 
-const getDataDIR = (loc, time, id) => {
+// Data 접근 경로 반환, DB에 존재 하지 않을 시 Update 동작
+const getDataDIR = async (loc, time, type, id) => {
   const year = time.year;
   const month = time.month < 10 ? `0${time.month}` : time.month;
   const date = time.date < 10 ? `0${time.date}` : time.date;
 
-  const repoDIR =
-    "./data" +
-    `/${loc.DO}` +
-    `/${loc.SGG}` +
-    `/${loc.EMD}` +
-    `/${id}` +
-    `/${year}` +
-    `/${year}${month}` +
-    `/${year}${month}${date}`;
+  const select_query =
+    "SELECT DATALINK" +
+    " " +
+    `FROM ${type === OUT ? "LOCINFO" : "USER"}` +
+    " " +
+    `WHERE ${type === OUT ? `CODE=${loc.EMD}` : `ID='${id}'`}`;
+  const [row, fields] = await db.execute(select_query);
+
+  let baseDIR = row[0]["DATALINK"];
+
+  // DB에 Data 저장 경로가 존재하지 않을 시 UPDATE
+  if (baseDIR === null) {
+    baseDIR =
+      "./data" +
+      `/${loc.DO}` +
+      `/${loc.SGG}` +
+      `/${loc.EMD}` +
+      `/${type === OUT ? OUTSIDE : USERS + "/" + id}`;
+
+    const update_query =
+      `UPDATE ${type === OUT ? "LOCINFO" : "USER"}` +
+      " " +
+      `SET DATALINK='${baseDIR}'` +
+      " " +
+      `WHERE ${type === OUT ? `CODE=${loc.EMD}` : `ID='${id}'`}`;
+
+    db.execute(update_query);
+  }
+
+  const timeDIR = `/${year}` + `/${year}${month}` + `/${year}${month}${date}`;
+
+  // 최종 Data 저장소 경로
+  const repoDIR = baseDIR + timeDIR;
 
   return repoDIR;
 };
@@ -110,7 +137,7 @@ const handleOutData = (locCode, lat, lng) => {
       const loc = locCodeSep(locCode);
       const time = getTimeInfo();
 
-      const fdir = getDataDIR(loc, time, OUTSIDE);
+      const fdir = getDataDIR(loc, time, OUT, OUTSIDE);
       // 데이터 형식 - [ 월 | 일 | 시 | 분 | 온도 | 습도 | 기압 | 풍속 ]
       const data = `${time.month},${time.date},${time.hour},${time.minute},${temp},${humi},${press},${wind_speed}\n`;
 
@@ -120,11 +147,11 @@ const handleOutData = (locCode, lat, lng) => {
 };
 
 // 내부 수집기로 부터 들어온 정보 처리
-const handleInData = (id, locCode, temp, humi, lights) => {
+const handleInData = async (id, locCode, temp, humi, lights) => {
   const loc = locCodeSep(locCode);
   const time = getTimeInfo();
 
-  const fdir = getDataDIR(loc, time, `${USERS}/${id}`);
+  const fdir = await getDataDIR(loc, time, IN, id);
   // 데이터 형식 - [ 월 | 일 | 시 | 분 | 온도 | 습도 | 광도 ]
   const data = `${time.month},${time.date},${time.hour},${time.minute},${temp},${humi},${lights}\n`;
 
@@ -133,7 +160,6 @@ const handleInData = (id, locCode, temp, humi, lights) => {
 
 // 데이터 수신 처리
 export const getDataInput = (req, res) => {
-  console.log(process.cwd());
   try {
     if (req.query.type === OUT) {
       // 외부 데이터 수집기
@@ -151,8 +177,9 @@ export const getDataInput = (req, res) => {
       handleInData(id, locCode, temp, humi, lights);
     }
 
-    res.status(200).send("<p>OK</p>");
+    res.status(statusCode.ok).send(serverMSG.server_ok);
   } catch (error) {
     console.log(error);
+    res.status(statusCode.err).send(serverMSG.server_err);
   }
 };
