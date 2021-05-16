@@ -4,6 +4,9 @@ import fetch from "node-fetch";
 const OUT = "Out";
 const IN = "In";
 
+const OUTSIDE = "Outside";
+const USERS = "Users";
+
 // 데이터 수집 기로 부터 받아온 지역 코드 세분화
 const locCodeSep = (code = "") => {
   const DO = code.slice(0, 2);
@@ -40,12 +43,20 @@ const getTimeInfo = () => {
   return time;
 };
 
-const getDataDIR = (loc, time) => {
-  const repoDIR = `./data/${loc.DO}/${loc.SGG}/${loc.EMD}/${time.year}/${
-    time.year
-  }${time.month < 10 ? "0" + time.month : time.month}${
-    time.date < 10 ? "0" + time.date : time.date
-  }`;
+const getDataDIR = (loc, time, id) => {
+  const year = time.year;
+  const month = time.month < 10 ? `0${time.month}` : time.month;
+  const date = time.date < 10 ? `0${time.date}` : time.date;
+
+  const repoDIR =
+    "./data" +
+    `/${loc.DO}` +
+    `/${loc.SGG}` +
+    `/${loc.EMD}` +
+    `/${id}` +
+    `/${year}` +
+    `/${year}${month}` +
+    `/${year}${month}${date}`;
 
   return repoDIR;
 };
@@ -65,11 +76,6 @@ const storeData = (type, time, loc, fdir, data) => {
         });
 
         console.log("Create directory.");
-
-        if (type === IN) {
-          data = data.split("\n")[1];
-          console.log("Split the user Data.");
-        }
       }
       // 그 외의 에러는 출력
       else console.log(err);
@@ -81,7 +87,7 @@ const storeData = (type, time, loc, fdir, data) => {
         console.log(
           `${time.year}/${time.month}/${time.date} ${time.hour}:${
             time.minute
-          } - ${loc.EMD} ${type === OUT ? "Outside" : "User"} data append.`
+          } - ${loc.EMD} ${type === OUT ? OUTSIDE : USERS} data append.`
         );
     });
   });
@@ -104,8 +110,8 @@ const handleOutData = (locCode, lat, lng) => {
       const loc = locCodeSep(locCode);
       const time = getTimeInfo();
 
-      const fdir = getDataDIR(loc, time) + "/Outside";
-      // 데이터 형식 - 월 | 일 | 시 | 분 | 온도 | 습도 | 기압 | 풍속
+      const fdir = getDataDIR(loc, time, OUTSIDE);
+      // 데이터 형식 - [ 월 | 일 | 시 | 분 | 온도 | 습도 | 기압 | 풍속 ]
       const data = `${time.month},${time.date},${time.hour},${time.minute},${temp},${humi},${press},${wind_speed}\n`;
 
       storeData(OUT, time, loc, fdir, data);
@@ -118,9 +124,9 @@ const handleInData = (id, locCode, temp, humi, lights) => {
   const loc = locCodeSep(locCode);
   const time = getTimeInfo();
 
-  const fdir = getDataDIR(loc, time) + `/Users/${id}`;
-  // 데이터 형식 - [이전 줄 : 현재 온도 ( 이전 기록 기준 단위 시간 후 온도)] , [ 현재 줄 : 월 | 일 | 시 | 분 | 온도 | 습도 | 광도 ]
-  const data = `${temp}\n${time.month},${time.date},${time.hour},${time.minute},${temp},${humi},${lights}`;
+  const fdir = getDataDIR(loc, time, `${USERS}/${id}`);
+  // 데이터 형식 - [ 월 | 일 | 시 | 분 | 온도 | 습도 | 광도 ]
+  const data = `${time.month},${time.date},${time.hour},${time.minute},${temp},${humi},${lights}\n`;
 
   storeData(IN, time, loc, fdir, data);
 };
