@@ -1,79 +1,76 @@
-import { getPoolConnection as db, dbMSG } from "../db";
+import { pool as db, dbMSG } from "../db";
 import { serverMSG, statusCode } from "../serverinfo";
 
+// 각각의 지역 코드 정보를 가져오는
+const getQueryResult = async (query) => {
+  let isError = false;
+  let result;
+
+  try {
+    const [row, fields] = await db.execute(query);
+    result = row;
+
+    console.log(dbMSG.query_success);
+  } catch (error) {
+    //Error Log
+    console.log("", error);
+
+    isError = true;
+
+    // 발생한 오류가 DB와 연결 오류인지 확인 후 Error Message 지정 및 전달
+    if (error.code === "ECONNREFUSED") result = dbMSG.connection_err;
+    else result = dbMSG.query_err;
+  }
+
+  return [isError, result];
+};
+
+// Do Code에 대한 GET 요청 처리
 export const getDo = async (req, res) => {
   const query = "SELECT CODE, DONAME FROM LOCDO";
 
-  db((connErr, connection) => {
-    if (connErr) {
-      console.log(dbMSG.connection_err);
-      res.status(statusCode.err).json({ error: serverMSG.server_err });
-    } else {
-      connection.query(query, (queryErr, result) => {
-        if (queryErr) {
-          console.log(dbMSG.query_err);
-          res.status(statusCode.err).json({ error: serverMSG.server_err });
-        } else {
-          console.log(dbMSG.query_success);
-          res.status(statusCode.ok).json({ info: result });
-        }
-      });
+  const [isError, result] = await getQueryResult(query);
 
-      connection.release();
-    }
-  });
+  if (!isError) {
+    res.status(statusCode.ok).json({ DO: result });
+  } else {
+    console.log(result);
+    res.status(statusCode.err).send(serverMSG.server_err);
+  }
 };
 
-export const getSGG = (req, res) => {
+// SGG Code에 대한 GET 요청 처리
+export const getSGG = async (req, res) => {
   const {
     params: { id },
   } = req;
 
   const query = `SELECT CODE, SGGNAME FROM LOCSIGUNGU WHERE DOCODE = ${id}`;
 
-  db((connErr, connection) => {
-    if (connErr) {
-      console.log(dbMSG.connection_err);
-      res.status(statusCode.err).json({ error: serverMSG.server_err });
-    } else {
-      connection.query(query, (queryErr, result) => {
-        if (queryErr) {
-          console.log(dbMSG.query_err);
-          res.status(statusCode.err).json({ error: serverMSG.server_err });
-        } else {
-          console.log(dbMSG.query_success);
-          res.status(statusCode.ok).json({ info: result });
-        }
-      });
+  const [isError, result] = await getQueryResult(query);
 
-      connection.release();
-    }
-  });
+  if (!isError) {
+    res.status(statusCode.ok).json({ DO: id, SGG: result });
+  } else {
+    console.log(result);
+    res.status(statusCode.err).send(serverMSG.server_err);
+  }
 };
 
-export const getEMD = (req, res) => {
+// EMD Code에 대한 GET 요청 처리
+export const getEMD = async (req, res) => {
   const {
     params: { id },
   } = req;
 
   const query = `SELECT CODE, EMDNAME FROM LOCINFO WHERE SGGCODE = ${id}`;
 
-  db((connErr, connection) => {
-    if (connErr) {
-      console.log(dbMSG.connection_err);
-      res.status(statusCode.err).json({ error: serverMSG.server_err });
-    } else {
-      connection.query(query, (queryErr, result) => {
-        if (queryErr) {
-          console.log(dbMSG.query_err);
-          res.status(statusCode.err).json({ error: serverMSG.server_err });
-        } else {
-          console.log(dbMSG.query_success);
-          res.status(statusCode.ok).json({ info: result });
-        }
-      });
+  const [isError, result] = await getQueryResult(query);
 
-      connection.release();
-    }
-  });
+  if (!isError) {
+    res.status(statusCode.ok).json({ SGG: id, EMD: result });
+  } else {
+    console.log(result);
+    res.status(statusCode.err).send(serverMSG.server_err);
+  }
 };

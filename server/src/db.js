@@ -1,4 +1,4 @@
-import mysql from "mysql";
+import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -12,20 +12,12 @@ const db_config = {
   connectionLimit: 5,
 };
 
-// Creation of MySQL Pool
-const pool = mysql.createPool(db_config);
+// Creation of MySQL Pool, and Export
+export const pool = mysql.createPool(db_config);
 
-// Pool을 이용시, Connection을 생성 후 반환하여 사용
-export const getPoolConnection = (callback) => {
-  console.log("db_connection()");
-  pool.getConnection(async (err, connection) => {
-    console.log("db_connection_poolConnection()");
-    await callback(err, connection);
-  });
-};
-
+// Messages for Data Base.
 export const dbMSG = {
   connection_err: "DB Connection Error.",
-  query_err: "DB Query Error.",
-  query_success: "Query Success",
+  query_success: "DB Query Success.",
+  query_err: "DB Querry Error.",
 };
