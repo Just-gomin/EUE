@@ -85,6 +85,8 @@ const getDataDIR = async (loc, time, type, id) => {
   // 최종 Data 저장소 경로
   const repoDIR = baseDIR + timeDIR;
 
+  console.log(repoDIR);
+
   return repoDIR;
 };
 
@@ -121,29 +123,27 @@ const storeData = (type, time, loc, fdir, data) => {
 };
 
 // 외부 수집기로 부터 들어온 정보 처리
-const handleOutData = (locCode, lat, lng) => {
+const handleOutData = async (locCode, lat, lng) => {
   // OpenWeatherAPI로 부터 지역의 날씨 정보획득
   // 지역의 경도와 위도, API KEy, 단위 기준 metric 전달
-  fetch(
+  const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.OPENWEATHERMAP_API_KEY}&units=metric`
-  )
-    .then((response) => response.json())
-    .then((json) => {
-      const temp = json.main.temp;
-      const humi = json.main.humidity;
-      const press = json.main.pressure;
-      const wind_speed = json.wind.speed;
+  );
+  const json = await response.json();
 
-      const loc = locCodeSep(locCode);
-      const time = getTimeInfo();
+  const temp = json["main"]["temp"];
+  const humi = json["main"]["humidity"];
+  const press = json["main"]["pressure"];
+  const wind_speed = json["wind"]["speed"];
 
-      const fdir = getDataDIR(loc, time, OUT, OUTSIDE);
-      // 데이터 형식 - [ 월 | 일 | 시 | 분 | 온도 | 습도 | 기압 | 풍속 ]
-      const data = `${time.month},${time.date},${time.hour},${time.minute},${temp},${humi},${press},${wind_speed}\n`;
+  const loc = locCodeSep(locCode);
+  const time = getTimeInfo();
 
-      storeData(OUT, time, loc, fdir, data);
-    })
-    .catch((err) => console.log(err));
+  const fdir = await getDataDIR(loc, time, OUT, OUTSIDE);
+
+  const data = `${time.month},${time.date},${time.hour},${time.minute},${temp},${humi},${press},${wind_speed}\n`;
+
+  storeData(OUT, time, loc, fdir, data);
 };
 
 // 내부 수집기로 부터 들어온 정보 처리
