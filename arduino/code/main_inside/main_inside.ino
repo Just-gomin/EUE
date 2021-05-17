@@ -85,12 +85,6 @@ void loop() {
   // 지역 코드
   String locCode = "3743011";
   
-  // 사용자 장소의 위도(Latitude), 경도(Longitude)
-  float lati = 37.241706;
-  String str_lati = String(lati,6);
-  float lng = 131.864889;
-  String str_lng = String(lng,6);
-
   // DHT11 모듈의 측정 event
   sensors_event_t event;
   
@@ -111,8 +105,6 @@ void loop() {
   input += "type=" + type_;
   input += "&id=" + ID;
   input += "&locCode" + locCode;
-  input += "&lat=" + str_lati;
-  input += "&lng=" + str_lng;
   input += "&temp=" + str_Temp;
   input += "&humi=" + str_Humi;
   input += "&lights=" + str_Lights;
