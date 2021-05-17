@@ -2,6 +2,9 @@ import fs from "fs";
 import fetch from "node-fetch";
 import { serverMSG, statusCode } from "../serverinfo";
 import { pool as db, dbMSG, pool } from "../db";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const OUT = "Out";
 const IN = "In";
@@ -57,14 +60,17 @@ const getDataDIR = async (loc, time, type, id) => {
     `FROM ${type === OUT ? "LOCINFO" : "USER"}` +
     " " +
     `WHERE ${type === OUT ? `CODE=${loc.EMD}` : `ID='${id}'`}`;
+
   const [row, fields] = await db.execute(select_query);
 
-  let baseDIR = row[0]["DATALINK"];
+  let baseDIR;
+  if (row.length != 0) baseDIR = row[0]["DATALINK"];
+  else baseDIR = null;
 
   // DB에 Data 저장 경로가 존재하지 않을 시 UPDATE
   if (baseDIR === null) {
     baseDIR =
-      "./data" +
+      "/data" +
       `/${loc.DO}` +
       `/${loc.SGG}` +
       `/${loc.EMD}` +
@@ -83,9 +89,7 @@ const getDataDIR = async (loc, time, type, id) => {
   const timeDIR = `/${year}` + `/${year}${month}` + `/${year}${month}${date}`;
 
   // 최종 Data 저장소 경로
-  const repoDIR = baseDIR + timeDIR;
-
-  console.log(repoDIR);
+  const repoDIR = process.env.LOCAL_SERVER_DIR + baseDIR + timeDIR;
 
   return repoDIR;
 };
