@@ -7,3 +7,6 @@ package-lock.json
 
 # Project Data
 /data
+
+# Python Cache
+__pycache__
