@@ -221,7 +221,7 @@ def preprocessingData(user_link, out_link):
     '''
     raw_user_data = loadRawData(user_link, "/weather.csv")
     raw_out_data = loadRawData(out_link, "/weather.csv")
-    raw_parameters = loadRawData(user_link, "/parameters.csv")
+    raw_parameters = loadRawData(user_link, "/analysis_parameters.csv")
 
     user_x, train_t = handleUserRawData(raw_user_data)
     out_dict = handleOutRawData(raw_out_data)
