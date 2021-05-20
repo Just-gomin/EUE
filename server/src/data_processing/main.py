@@ -5,30 +5,48 @@
     - 진행된 후의 Weights를 파일로 저장합니다.
 """
 
+import datetime
+from os import getcwd
 import sys
 import pymysql
+import numpy as np
 from preprocessing import preprocessingData
+from linear_regression import LinearRegression
 
 
-def getUsersDataLinks(dbconfig):
-    eue_db = pymysql.connect(user=dbconfig["user"], password=dbconfig["password"],
-                             host=dbconfig["host"], db=dbconfig["database"], charset='utf8')
-    cursor = eue_db.cursor(pymysql.cursors.DictCursor)
+def storeParameters(link, filename, data):
+    today = datetime.datetime.today()
+    year = str(today.year)
+    month = str(today.month) if today.month >= 10 else '0'+str(today.month)
+    day = str(today.day) if today.day >= 10 else '0'+str(today.day)
 
-    query = "SELECT ID,DATALINK FROM USER;"
-    cursor.execute(query)
-    result = cursor.fetchall()
+    time_dir = '/' + year + '/' + year+month + '/' + year + month + day
 
-    return result
+    file_dir = getcwd() + '/server' + link + time_dir + filename
+
+    file = open(file_dir, "w")
+
+    file.write(data)
+
+    file.close()
 
 
 dbconfig = {"host": sys.argv[1], "user": sys.argv[2],
             "password": sys.argv[3], "database": sys.argv[4]}
 
+eue_db = pymysql.connect(user=dbconfig["user"], password=dbconfig["password"],
+                         host=dbconfig["host"], db=dbconfig["database"], charset='utf8')
+cursor = eue_db.cursor(pymysql.cursors.DictCursor)
 
-users = getUsersDataLinks(dbconfig)
+query = "SELECT ID,DATALINK FROM USER;"
+cursor.execute(query)
+result = cursor.fetchall()
 
-for userdata in users:
+for userdata in result:
+
+    print("User ID : ", userdata["ID"])
+    print("Data Processing Start...")
+
     # Get Data links
     # ./data/DO/SGG/EMD/Users/ID
     user_datalink = userdata["DATALINK"]
@@ -37,7 +55,65 @@ for userdata in users:
     outside_datalink = ("/").join(dir_ls[:-2]) + "/Outside"
 
     # data load
-    train_x, train_t = preprocessingData(user_datalink, outside_datalink)
+    train_x, train_t, weights, bias, mean, std_d = preprocessingData(
+        user_datalink, outside_datalink)
 
     # linear regression
-    pass
+    model = LinearRegression(train_x, train_t, weights,
+                             bias, learning_rate=0.05)
+    model.gradientDescent()
+
+
+'''
+    # Test Codes Start.
+'''
+
+print("After Linear Regression -\n")
+test_data = np.array([[5], [20], [0], [16.87], [40], [
+    1011], [0.72], [26.70], [47.00], [64]])
+print(test_data.shape, mean.shape, std_d.shape)
+test_data = (test_data - mean) / std_d
+y_hat = model.predict(test_data, model.weights, model.bias)
+print(y_hat.shape)
+
+print("Test Data.\n", test_data, "\n")
+print("Predict - standard deviation : ", y_hat)
+print("Predict - temperature : ", y_hat*std_d[7][0] + mean[7][0], "\n")
+print("Cost.")
+print(model.cost_MSE(model.train_x, model.train_t,
+                     model.weights, model.bias), "\n")
+print("Weights.")
+print(model.weights, "\n")
+print("Bias.")
+print(model.bias)
+
+
+'''
+    # Test Codes End.
+'''
+
+# Save the Parameters.
+
+# - analysis_parameters
+analysis_data = ""
+
+for i in range(len(model.weights[0])):
+    analysis_data += str(model.weights[0][i]) + ','
+analysis_data += str(model.bias)
+
+storeParameters(user_datalink, "/analysis_parameters.csv", analysis_data)
+
+# - prediction_parameters
+prediction_data = ""
+
+for i in range(len(mean)):
+    prediction_data += str(mean[i][0]) + ','
+prediction_data = prediction_data[:-1]
+prediction_data += '\n'
+
+for i in range(len(std_d)):
+    prediction_data += str(std_d[i][0]) + ','
+prediction_data = prediction_data[:-1]
+
+storeParameters(
+    user_datalink, "/prediction_parameters.csv", prediction_data)

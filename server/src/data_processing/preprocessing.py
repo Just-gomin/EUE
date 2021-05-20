@@ -10,10 +10,9 @@ import csv
 import numpy as np
 
 
-def loadRawData(link):
+def loadRawData(link, file_name):
     '''
-        # CSV 파일의 내용을 반환하는 함수
-        - 어제 하루 기록된 파일들에 대해 진행하기 위해 날짜 정보를 생성합니다.
+        ### CSV 파일의 내용을 반환하는 함수
         - 제공 받은 링크를 통해 파일을 읽고 반환합니다.
     '''
     raw_data = []
@@ -28,9 +27,14 @@ def loadRawData(link):
         str(yesterday.year) + str(yMonth) + "/" + \
         str(yesterday.year) + str(yMonth) + str(yDay)
 
-    weather_dir = os.getcwd() + "/server" + link + time_dir + "/weather.csv"
+    file_dir = os.getcwd() + "/server" + link + time_dir + file_name
 
-    data_file = open(weather_dir, 'r', newline='')
+    if not os.path.isfile(file_dir):
+        print("File doesn't exist on {0}".format(file_dir))
+        return None
+
+    data_file = open(file_dir, 'r', newline='')
+    print("Data File before CSV reader.\n", data_file)
     csv_data = csv.reader(data_file)
 
     for line in csv_data:
@@ -109,6 +113,22 @@ def handleOutRawData(out_data):
     return out_dict
 
 
+def handleParameters(raw_w):
+
+    if raw_w == None:
+        return None, None
+
+    weights = []
+
+    for line in raw_w:
+        for fig in line:
+            weights.append([float(fig)])
+
+    bias = weights.pop()[0]
+
+    return weights, bias
+
+
 def combineXdata(user_x, out_dict):
     '''
         # 분리된 입력 데이터를 합치는 함수
@@ -118,10 +138,74 @@ def combineXdata(user_x, out_dict):
 
     for line in user_x:
         hour, temp, humi, lights = line
-        x = out_dict[hour] + [temp, humi, lights]
+
+        # 데이터 수집이 균일하게 이루어지지 않은 경우 처리
+        if hour in out_dict:
+            key_hour = hour
+        else:
+            minimum = 4
+            key_hour = None
+            for h in range(hour-3, hour + 3):
+                if h in out_dict and abs(h - hour) < minimum:
+                    minimum = abs(h-hour)
+                    key_hour = h
+
+        x = out_dict[key_hour] + [temp, humi, lights]
         train_x.append(x)
 
     return train_x
+
+
+def Xnormalize(data):
+    '''
+        ### 정규화 함수
+        - 입력 층의 데이터를 정규화 시킵니다.
+    '''
+
+    normalized_data = data.T   # (n,10) -> (10,n)
+
+    mean = np.mean(normalized_data, axis=1)    # 평균 (10, 1)
+    std_d = np.std(normalized_data, axis=1)     # 표준편차
+
+    # 월, 일의 평균과 표준편차 지정
+    new_mean = []
+    for i, fig in enumerate(list(mean)):
+        if i == 0:
+            new_mean.append(6.5)
+        elif i == 1:
+            new_mean.append(16.0)
+        else:
+            new_mean.append(fig)
+    new_mean = np.array(new_mean).reshape((-1, 1))
+
+    new_std_d = []
+    for i, fig in enumerate(list(std_d)):
+        if i == 0:
+            new_std_d.append(3.45205253)
+        elif i == 1:
+            new_std_d.append(8.94427191)
+        else:
+            new_std_d.append(fig)
+    new_std_d = np.array(new_std_d).reshape((-1, 1))
+
+    normalized_data = (normalized_data - new_mean) / new_std_d
+
+    normalized_data = normalized_data.T
+
+    return normalized_data, new_mean, new_std_d
+
+
+def normalize(data):
+    n_data = data.T   # (n,10) -> (10,n)
+
+    mean = np.mean(n_data, axis=1)    # 평균
+    std_d = np.std(n_data, axis=1)     # 표준편차
+
+    n_data = (n_data - mean) / std_d
+
+    n_data = n_data.T
+
+    return n_data
 
 
 def preprocessingData(user_link, out_link):
@@ -130,18 +214,28 @@ def preprocessingData(user_link, out_link):
         1. 데이터 로드
         2. 데이터 1차 가공 (handle~RawData)
         3. 데이터 2차 가공 (combineXdata)
+        4. 데이터 3차 가공 (nomalize~)
+
         4. 데이터 넘파이 형식 배열로 변환
         5. 반환
     '''
-    raw_user_data = loadRawData(user_link)
-    raw_out_data = loadRawData(out_link)
+    raw_user_data = loadRawData(user_link, "/weather.csv")
+    raw_out_data = loadRawData(out_link, "/weather.csv")
+    raw_parameters = loadRawData(user_link, "/parameters.csv")
 
     user_x, train_t = handleUserRawData(raw_user_data)
     out_dict = handleOutRawData(raw_out_data)
+    weights, bias = handleParameters(raw_parameters)
 
     train_x = combineXdata(user_x, out_dict)
 
-    train_x = np.array(train_x)
-    train_t = np.array(train_t)
+    train_x = np.array(train_x)  # (n ,10)
+    train_x, mean, std_d = Xnormalize(train_x)
 
-    return train_x, train_t
+    train_t = np.array(train_t)  # (10,1)
+    train_t = normalize(train_t)
+
+    weights = np.array(weights) if weights != None else None
+    bias = float(bias) if bias != None else None
+
+    return train_x, train_t, weights, bias, mean, std_d

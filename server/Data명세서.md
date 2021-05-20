@@ -1,5 +1,7 @@
 ### _데이터 명세서_
 
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 <br>
 
 # 1. Data Directory Structure
@@ -19,7 +21,8 @@
                   ∟ YYYYMM (연/월)
                     ∟ YYYYMMDD (연/월/일)
                       ∟ weather.csv
-                      ∟ weights.csv
+                      ∟ analysis_parameters.csv
+                      ∟ predict_parameters.csv
 
 데이터가 저장되는 경로의 구조입니다.
 
@@ -33,7 +36,7 @@
 
 데이터들은 CSV(Comma Separated Values) 형식의 파일로 저장됩니다.<br><br>
 
-## Ouside Data
+## Ouside Data - weather.csv
 
 외부 데이터는 다음과 같은 형식으로 저장됩니다.
 
@@ -43,7 +46,7 @@
 
 <br><br>
 
-## User Side Data
+## User Side Data - weather.csv
 
 사용자가 설정한 장소의 데이터는 다음과 같은 형식으로 저장됩니다.
 
@@ -53,9 +56,27 @@
 
 <br><br>
 
+## User Side Data - parameters.csv
+
+Linear Regression을 진행하며 조정된 가중치와 편향 값입니다. 마지막 한개의 값이 편향이며, 이외의 값은 가중치 입니다.
+
+| Weights |  …  | Bias |
+| :-----: | :-: | :--: |
+| 가중치  |  …  | 편향 |
+
+<br><br>
+
 # 3. Data Processing
 
 EUE가 제일 중요하게 수행해야할 부분입니다. 데이터에 대해 선형회귀 분석을 진행합니다. 이 결과를 바탕으로 단위 시간 후의 온도를 예측해봅니다.
+각 데이터들 마다 그 크기가 다양해, 크기가 클 수록 결과에 많은 영향을 미칩니다. 이에 따라 **_Z 점수 정규화_**를 진행하겠습니다.
+
+- [정규화](<https://en.wikipedia.org/wiki/Normalization_(statistics)>)
+- [z 점수 (표준 점수)](https://ko.wikipedia.org/wiki/%ED%91%9C%EC%A4%80_%EC%A0%90%EC%88%98)
+
+예측 결과는 표준 점수로 나올 것이며, 해당 점수에 실내 온도의 표준편차를 곱하고, 평균을 더해 줌으로써 예측한 온도 값을 구할 수 있습니다.
+
+$$z ={x - m} \over { \theta }$$ -> $$x = z * \theta + m$$
 
 ## Input Data
 
@@ -90,3 +111,39 @@ EUE가 제일 중요하게 수행해야할 부분입니다. 데이터에 대해 
 [Linear Regression](https://ko.wikipedia.org/wiki/선형_회귀)를 통해서 데이터들의 선형 관계를 파악 후 다음의 온도를 예측해보려 합니다.
 
 매일 자정(Day K) 데이터 처리 과정이 진행 됩니다. 따라서 (Day K - 1)의 데이터들과 (Day K - 1)까지 사용된 가중치 데이터들을 이용해 Linear Regression을 진행합니다. 데이터 처리 과정이 진행된 후의 가중치들은 (Day K)의 가중치 파일로 생성되어 저장됩니다.
+
+## Data Processing Files
+
+데이터 처리에 관한 부분은 파이썬 코드로 진행 됩니다.
+
+    server
+      ∟ src
+        ∟ ...
+        ∟ data_processing
+          ∟ linear_regression.py
+          ∟ main.py
+          ∟ preprocessing.py
+
+1. 매일 자정이 되면 서버는 child process를 생성해 **/src/data_processing/main.py** 를 호출합니다. <br><br>
+2. main.py는 DB에 관한 정보를 넘겨받아, data들이 존재하는 링크를 획득합니다. <br><br>
+3. 링크들을 **/src/data_processing/preprocessing.py**의 preprocessing 메소드로 넘겨줍니다. <br><br>
+4. preprocessing 메소드는 수집된 데이터들과 이전까지 진행한 변수들의 정보를 연산 가능한 상태로 가공하여 반환합니다. <br><br>
+
+- 가공 후의 데이터 타입 및 Shape
+  | 변수 명 | 의미 | Shape |
+  | :---:|:---:|:---:|
+  |train_x|정규화된 수집 데이터 | (n , 1)|
+  |train_t| 정규화된 온도 값|(n, 1)|
+  |weights| 가중치|(10, 1) or None|
+  |bias |편향|float or None|
+  |mean |각 데이터 범주의 평균| (10, 1)|
+  |std_d |각 데이터 범주의 표준 편차| (10, 1)|
+
+  <br><br>
+
+  Preprocessing 과정에서 구해진 평균과 표준 오차는 사용자의 링크 하위에 **prediction_parameters.csv**로 저장합니다.
+
+<br><br>
+
+5. 가공된 데이터들을 바탕으로 학습률이 0.05이며, 비용 함수는 평균제곱 오차(MSE)인 선형회귀 분석을 진행합니다.<br><br>
+6. 선형 회귀 분석이 후 생긴 가중치와 편향을 **analysis_parameters.csv**로 저장합니다.<br><br>
