@@ -48,7 +48,7 @@ class LinearRegression:
     def cost_MAE(self, x, y, w, b):
         '''
             ### 비용 함수
-            - MAE (Mean Square Error) : 1/n * sigma|y_i - y_hat_i|
+            - MAE (Mean Absolute Error) : 1/n * sigma|y_i - y_hat_i|
         '''
         y_predict = self.predict(x, w, b)
         n = y_predict.shape[1]
@@ -81,6 +81,14 @@ class LinearRegression:
         return w_grad, b_grad
 
     def gradientDescent(self):
+        '''
+            ### 경사 하강법
+            - Linear Regression Class의 주요 동작 함수 입니다.
+            - 가중치와 편향을 비용함수에 넘겨준 뒤 손실을 계산합니다.
+            - 가중치와 편향의 각각의 편미분 값을 계산합니다.
+            - 편미분 값들과 학습률을 이용해 가중치와 편향 값을 갱신 합니다.
+            - 위의 과정을 주어진 손실 값 이하가 되거나 3000번 반복 할 때 까지 반복합니다.
+        '''
 
         iteration = 0
 
@@ -88,10 +96,10 @@ class LinearRegression:
         b = self.bias
 
         while iteration <= 3000:
+            loss = self.cost_MSE(self.train_x, self.train_t, w, b)
+
             grad_w, grad_b = self.gradient(
                 self.train_x, self.train_t, self.delta, w, b)
-
-            loss = self.cost_MSE(self.train_x, self.train_t, w, b)
 
             if iteration % 100 == 0:
                 print(iteration, " iters - cost :", loss)
