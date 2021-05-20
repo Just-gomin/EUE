@@ -1,7 +1,5 @@
 ### _데이터 명세서_
 
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 <br>
 
 # 1. Data Directory Structure
@@ -69,14 +67,20 @@ Linear Regression을 진행하며 조정된 가중치와 편향 값입니다. �
 # 3. Data Processing
 
 EUE가 제일 중요하게 수행해야할 부분입니다. 데이터에 대해 선형회귀 분석을 진행합니다. 이 결과를 바탕으로 단위 시간 후의 온도를 예측해봅니다.
-각 데이터들 마다 그 크기가 다양해, 크기가 클 수록 결과에 많은 영향을 미칩니다. 이에 따라 **_Z 점수 정규화_**를 진행하겠습니다.
+각 데이터들 마다 그 크기가 다양해, 크기가 클 수록 결과에 많은 영향을 미칩니다. 이에 따라 **Z 점수 정규화**를 진행하겠습니다.
 
 - [정규화](<https://en.wikipedia.org/wiki/Normalization_(statistics)>)
 - [z 점수 (표준 점수)](https://ko.wikipedia.org/wiki/%ED%91%9C%EC%A4%80_%EC%A0%90%EC%88%98)
 
 예측 결과는 표준 점수로 나올 것이며, 해당 점수에 실내 온도의 표준편차를 곱하고, 평균을 더해 줌으로써 예측한 온도 값을 구할 수 있습니다.
 
-$$z ={x - m} \over { \theta }$$ -> $$x = z * \theta + m$$
+    z = (x - m) / θ
+
+          ⥥
+
+    x = z * θ + m
+
+    x : 데이터 , z : 표준 점수, m : 평균, θ : 표준 편차
 
 ## Input Data
 
