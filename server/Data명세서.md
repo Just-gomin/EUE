@@ -54,13 +54,24 @@
 
 <br><br>
 
-## User Side Data - parameters.csv
+## User Side Data - analysis_parameters.csv
 
 Linear Regression을 진행하며 조정된 가중치와 편향 값입니다. 마지막 한개의 값이 편향이며, 이외의 값은 가중치 입니다.
 
 | Weights |  …  | Bias |
 | :-----: | :-: | :--: |
 | 가중치  |  …  | 편향 |
+
+<br><br>
+
+## User Side Data - prediction_parameters.csv
+
+출력된 결과 값을 통해 온도를 유추하기 위한 값들입니다. 첫 번째 줄이 각 데이터 범주들의 평균치 이며, 두 번째 줄이 표준편차 입니다.
+
+| Line NO. |  Parameters Name   |          Meaning           |
+| :------: | :----------------: | :------------------------: |
+|    1     |       Means        |   10가지 데이터들의 평균   |
+|    2     | Standard Deviation | 10가지 데이터들의 표준편차 |
 
 <br><br>
 
