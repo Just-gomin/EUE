@@ -8,7 +8,7 @@
 | Data - User    | GET         | /data/user/:id             | 사용자 지정 장소의 데이터 요청                              |
 | Data - Outside | GET         | /data/outside/:id          | 해당 지역구의 데이터 요청                                   |
 | Local Code     | GET         | /loccode/do                | 행정 구역 코드 '도' 요청                                    |
-| Local Code     | GET         | /loccode/sigungu/:id       | 사용자 입력 '도'에 따른 행정 구역 코드 '시군구' 요청        |
+| Local Code     | GET         | /loccode/si-gun-gu/:id     | 사용자 입력 '도'에 따른 행정 구역 코드 '시군구' 요청        |
 | Local Code     | GET         | /loccod/eup-myeon-dong/:id | 사용자 입력 '시군구'에 따른 행정 구역 코드 '읍면동' 요청    |
 | Auth           | POST        | /signup                    | 회원가입 요청                                               |
 | Auth           | POST        | /login                     | 로그인 요청                                                 |
