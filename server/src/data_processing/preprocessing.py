@@ -27,7 +27,7 @@ def loadRawData(link, file_name):
         str(yesterday.year) + str(yMonth) + "/" + \
         str(yesterday.year) + str(yMonth) + str(yDay)
 
-    file_dir = os.getcwd() + "/server" + link + time_dir + file_name
+    file_dir = os.getcwd() + link + time_dir + file_name
 
     if not os.path.isfile(file_dir):
         print("File doesn't exist on {0}".format(file_dir))

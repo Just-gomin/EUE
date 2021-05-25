@@ -22,7 +22,7 @@ def storeParameters(link, filename, data):
 
     time_dir = '/' + year + '/' + year+month + '/' + year + month + day
 
-    file_dir = getcwd() + '/server' + link + time_dir + filename
+    file_dir = getcwd() + link + time_dir + filename
 
     file = open(file_dir, "w")
 
@@ -33,6 +33,8 @@ def storeParameters(link, filename, data):
 
 dbconfig = {"host": sys.argv[1], "user": sys.argv[2],
             "password": sys.argv[3], "database": sys.argv[4]}
+
+print(dbconfig)
 
 eue_db = pymysql.connect(user=dbconfig["user"], password=dbconfig["password"],
                          host=dbconfig["host"], db=dbconfig["database"], charset='utf8')
@@ -71,10 +73,8 @@ for userdata in result:
 print("After Linear Regression -\n")
 test_data = np.array([[5], [20], [0], [16.87], [40], [
     1011], [0.72], [26.70], [47.00], [64]])
-print(test_data.shape, mean.shape, std_d.shape)
 test_data = (test_data - mean) / std_d
 y_hat = model.predict(test_data, model.weights, model.bias)
-print(y_hat.shape)
 
 print("Test Data.\n", test_data, "\n")
 print("Predict - standard deviation : ", y_hat)

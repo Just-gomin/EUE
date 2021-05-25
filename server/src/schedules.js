@@ -35,8 +35,9 @@ const dataProcessingJob = schedule.scheduleJob(rule, () => {
     console.log("Data processing is start.");
   });
 
-  pyprocess.stderr.on("data", (data) => {
+  pyprocess.stderr.on("data", (error) => {
     console.log("Error in the data processing.");
+    console.log(error);
   });
 
   pyprocess.on("close", () => {
