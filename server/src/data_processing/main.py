@@ -34,8 +34,6 @@ def storeParameters(link, filename, data):
 dbconfig = {"host": sys.argv[1], "user": sys.argv[2],
             "password": sys.argv[3], "database": sys.argv[4]}
 
-print(dbconfig)
-
 eue_db = pymysql.connect(user=dbconfig["user"], password=dbconfig["password"],
                          host=dbconfig["host"], db=dbconfig["database"], charset='utf8')
 cursor = eue_db.cursor(pymysql.cursors.DictCursor)
@@ -44,6 +42,7 @@ query = "SELECT ID,DATALINK FROM USER;"
 cursor.execute(query)
 result = cursor.fetchall()
 
+# Main Process
 for userdata in result:
 
     print("User ID : ", userdata["ID"])
@@ -53,6 +52,7 @@ for userdata in result:
     # ./data/DO/SGG/EMD/Users/ID
     user_datalink = userdata["DATALINK"]
     dir_ls = user_datalink.split("/")
+
     # ./data/DO/SGG/EMD/Outside
     outside_datalink = ("/").join(dir_ls[:-2]) + "/Outside"
 
@@ -65,55 +65,28 @@ for userdata in result:
                              bias, learning_rate=0.05)
     model.gradientDescent()
 
+    # Save the Parameters.
+    # - analysis_parameters
+    analysis_data = ""
 
-'''
-    # Test Codes Start.
-'''
+    for i in range(len(model.weights[0])):
+        analysis_data += str(model.weights[0][i]) + ','
 
-print("After Linear Regression -\n")
-test_data = np.array([[5], [20], [0], [16.87], [40], [
-    1011], [0.72], [26.70], [47.00], [64]])
-test_data = (test_data - mean) / std_d
-y_hat = model.predict(test_data, model.weights, model.bias)
+    analysis_data += str(model.bias)
 
-print("Test Data.\n", test_data, "\n")
-print("Predict - standard deviation : ", y_hat)
-print("Predict - temperature : ", y_hat*std_d[7][0] + mean[7][0], "\n")
-print("Cost.")
-print(model.cost_MSE(model.train_x, model.train_t,
-                     model.weights, model.bias), "\n")
-print("Weights.")
-print(model.weights, "\n")
-print("Bias.")
-print(model.bias)
+    storeParameters(user_datalink, "/analysis_parameters.csv", analysis_data)
 
+    # - prediction_parameters
+    prediction_data = ""
 
-'''
-    # Test Codes End.
-'''
+    for i in range(len(mean)):
+        prediction_data += str(mean[i][0]) + ','
+    prediction_data = prediction_data[:-1]
+    prediction_data += '\n'
 
-# Save the Parameters.
+    for i in range(len(std_d)):
+        prediction_data += str(std_d[i][0]) + ','
+    prediction_data = prediction_data[:-1]
 
-# - analysis_parameters
-analysis_data = ""
-
-for i in range(len(model.weights[0])):
-    analysis_data += str(model.weights[0][i]) + ','
-analysis_data += str(model.bias)
-
-storeParameters(user_datalink, "/analysis_parameters.csv", analysis_data)
-
-# - prediction_parameters
-prediction_data = ""
-
-for i in range(len(mean)):
-    prediction_data += str(mean[i][0]) + ','
-prediction_data = prediction_data[:-1]
-prediction_data += '\n'
-
-for i in range(len(std_d)):
-    prediction_data += str(std_d[i][0]) + ','
-prediction_data = prediction_data[:-1]
-
-storeParameters(
-    user_datalink, "/prediction_parameters.csv", prediction_data)
+    storeParameters(
+        user_datalink, "/prediction_parameters.csv", prediction_data)

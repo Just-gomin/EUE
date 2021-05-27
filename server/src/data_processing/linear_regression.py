@@ -11,11 +11,12 @@ import numpy as np
 
 
 class LinearRegression:
-    def __init__(self, train_x, train_t, weights, bias, delta=1e-4, learning_rate=0.05, err_rate=0.01):
+    def __init__(self, train_x, train_t, weights=None, bias=None, delta=1e-4, learning_rate=0.05, err_rate=0.01):
         self.train_x = train_x.T    # (n, 10) -> (10, n)
         self.train_t = train_t.T    # (n, 01) -> (01, n)
 
-        if weights == None or bias == None:
+        # weights와 bias가 존재하지 않는 경우, 초기화를 위해 bias를 대표로 확인
+        if bias == None:
             # Initialize Parameters - w : (1, 10), b : float
             self.weights, self.bias = self.initialize(self.train_x)
         else:

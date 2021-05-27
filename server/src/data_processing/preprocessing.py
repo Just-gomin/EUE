@@ -34,7 +34,6 @@ def loadRawData(link, file_name):
         return None
 
     data_file = open(file_dir, 'r', newline='')
-    print("Data File before CSV reader.\n", data_file)
     csv_data = csv.reader(data_file)
 
     for line in csv_data:
@@ -47,7 +46,7 @@ def loadRawData(link, file_name):
 
 def handleUserRawData(user_data):
     '''
-        # User Raw Data (CSV 파일 데이터) 가공 함수
+        ### User Raw Data (CSV 파일 데이터) 가공 함수
         - [ 월 / 일 / 시 / 분 / 온도 / 습도 / 광도 ]의 데이터를 변환하는 함수
         - 월 / 일 / 분 제거
         - test_data(분이 제거된 데이터)와 true_data(단위 시간 후 실제 온도)로 나누기
@@ -72,7 +71,7 @@ def handleUserRawData(user_data):
 
 def handleOutRawData(out_data):
     '''
-        # Out Raw Data (CSV 파일 데이터) 가공 함수
+        ### Out Raw Data (CSV 파일 데이터) 가공 함수
         - [ 월 / 일 / 시 / 분 / 온도 / 습도 / 기압 / 풍속 ] 데이터를 변환하는 함수
         - '분' 을 제거합니다.
         - 같은 시각의 데이터들은 평균을 구해서 데이터로 저장합니다.
@@ -114,6 +113,11 @@ def handleOutRawData(out_data):
 
 
 def handleParameters(raw_w):
+    '''
+        ### Weights & Bias를 처리하는 함수
+        - raw 데이터는 weights와 bias가 합쳐진 상태입니다.
+        - raw 데이터를 하나씩 잘라 실수로 변환한 뒤, 마지막의 편향을 잘라냅니다.
+    '''
 
     if raw_w == None:
         return None, None
@@ -131,7 +135,7 @@ def handleParameters(raw_w):
 
 def combineXdata(user_x, out_dict):
     '''
-        # 분리된 입력 데이터를 합치는 함수
+        ### 분리된 입력 데이터를 합치는 함수
         - 사용자 데이터와 외부 데이터를 결합해 입력층의 값으로 가공합니다.
     '''
     train_x = []
@@ -160,12 +164,13 @@ def Xnormalize(data):
     '''
         ### 정규화 함수
         - 입력 층의 데이터를 정규화 시킵니다.
+        - 월, 일 데이터의 평균과 표준 편차를 계산하여 값을 수정합니다.
     '''
 
     normalized_data = data.T   # (n,10) -> (10,n)
 
     mean = np.mean(normalized_data, axis=1)    # 평균 (10, 1)
-    std_d = np.std(normalized_data, axis=1)     # 표준편차
+    std_d = np.std(normalized_data, axis=1)    # 표준편차
 
     # 월, 일의 평균과 표준편차 지정
     new_mean = []
@@ -195,8 +200,13 @@ def Xnormalize(data):
     return normalized_data, new_mean, new_std_d
 
 
-def normalize(data):
-    n_data = data.T   # (n,10) -> (10,n)
+def Tnormalize(data):
+    '''
+        ### 데이터 정규화 함수
+        - 평균과 표준 편차를 이용해 입력된 데이터를 정규화 시킵니다.
+        - 현재 입력층의 데이터가 아닌 train 데이터의 참 값을 표준화 시킵니다.
+    '''
+    n_data = data.T   # (n,1) -> (1,n)
 
     mean = np.mean(n_data, axis=1)    # 평균
     std_d = np.std(n_data, axis=1)     # 표준편차
@@ -210,14 +220,13 @@ def normalize(data):
 
 def preprocessingData(user_link, out_link):
     '''
-        # 데이터 분석 전 데이터 전처리 함수입니다.
+        # 데이터 분석 전 데이터 전처리 함수
         1. 데이터 로드
         2. 데이터 1차 가공 (handle~RawData)
         3. 데이터 2차 가공 (combineXdata)
         4. 데이터 3차 가공 (nomalize~)
-
-        4. 데이터 넘파이 형식 배열로 변환
-        5. 반환
+        5. 데이터 넘파이 형식 배열로 변환
+        6. 반환
     '''
     raw_user_data = loadRawData(user_link, "/weather.csv")
     raw_out_data = loadRawData(out_link, "/weather.csv")
@@ -233,7 +242,7 @@ def preprocessingData(user_link, out_link):
     train_x, mean, std_d = Xnormalize(train_x)
 
     train_t = np.array(train_t)  # (10,1)
-    train_t = normalize(train_t)
+    train_t = Tnormalize(train_t)
 
     weights = np.array(weights) if weights != None else None
     bias = float(bias) if bias != None else None

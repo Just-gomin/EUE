@@ -33,11 +33,12 @@ const dataProcessingJob = schedule.scheduleJob(rule, () => {
 
   pyprocess.stdout.on("data", (data) => {
     console.log("Data processing is start.");
+    console.log(data.toString()); // Buffer to String.
   });
 
   pyprocess.stderr.on("data", (error) => {
     console.log("Error in the data processing.");
-    console.log(error);
+    console.log(error.toString());
   });
 
   pyprocess.on("close", () => {
