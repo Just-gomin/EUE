@@ -6,7 +6,7 @@
 """
 
 import datetime
-from os import getcwd
+from os import getcwd, path, makedirs
 import sys
 import pymysql
 import numpy as np
@@ -22,9 +22,15 @@ def storeParameters(link, filename, data):
 
     time_dir = '/' + year + '/' + year+month + '/' + year + month + day
 
-    file_dir = getcwd() + link + time_dir + filename
+    file_dir = getcwd() + link + time_dir
 
-    file = open(file_dir, "w")
+    try:
+        if not path.exists(file_dir):
+            makedirs(file_dir)
+    except:
+        print("Error : Creating Directory - ", file_dir)
+
+    file = open(file_dir + filename, "w")
 
     file.write(data)
 
