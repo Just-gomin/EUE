@@ -128,8 +128,7 @@ const storeData = (type, time, loc, fdir, data) => {
 
 // 외부 수집기로 부터 들어온 정보 처리
 const handleOutData = async (locCode, lat, lng) => {
-  // OpenWeatherAPI로 부터 지역의 날씨 정보획득
-  // 지역의 경도와 위도, API KEy, 단위 기준 metric 전달
+  // OpenWeatherAPI로 부터 지역의 날씨 정보획득을 위해 지역의 경도와 위도, API Key, 단위 기준 metric 전달
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.OPENWEATHERMAP_API_KEY}&units=metric`
   );
@@ -186,4 +185,13 @@ export const getDataInput = (req, res) => {
     console.log(error);
     res.status(statusCode.err).send(serverMSG.server_err);
   }
+};
+
+// 사용자의 데이터 가져오기 및 예측 값 전송
+export const getUserData = (req, res) => {
+  const {
+    params: { id },
+  } = req;
+
+  res.status(statusCode.ok).send(serverMSG.server_ok);
 };

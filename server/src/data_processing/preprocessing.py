@@ -10,24 +10,45 @@ import csv
 import numpy as np
 
 
-def loadRawData(link, file_name):
+def makeTimeDIR():
+    '''
+        ### 날짜를 이용한 경로를 생생하는 함수
+        - 오늘 날짜를 이용한 경로와 어제 날짜를 이용한 경로를 생성합니다.
+        - 생성된 경로는 dictionary 형태로 반환합니다.
+    '''
+    # 오늘 날짜로 된 경로 생성
+    today = datetime.datetime.today()
+
+    tYear = str(today.year)
+    tMonth = str(today.month) if today.month >= 10 else '0' + str(today.month)
+    tDay = str(today.day) if today.day >= 10 else '0' + str(today.day)
+
+    today_dir = '/' + tYear + '/' + tYear + tMonth + '/' + tYear + tMonth + tDay
+
+    # 오늘을 기준 하루 전 날짜로 된 경로 생성
+    yesterday = today - datetime.timedelta(days=1)
+
+    yYear = str(yesterday.year)
+    yMonth = str(yesterday.month) if yesterday.month >= 10 else "0" + \
+        str(yesterday.month)
+    yDay = str(yesterday.day) if yesterday.day >= 10 else "0" + \
+        str(yesterday.day)
+
+    yesterday_dir = "/" + yYear + "/" + yYear + yMonth + "/" + yYear + yMonth + yDay
+
+    time_dir = {"today": today_dir, "yesterday": yesterday_dir}
+    return time_dir
+
+
+def loadRawData(link, time_domain, file_name):
     '''
         ### CSV 파일의 내용을 반환하는 함수
         - 제공 받은 링크를 통해 파일을 읽고 반환합니다.
     '''
     raw_data = []
-    today = datetime.datetime.today()
-    yesterday = today - datetime.timedelta(days=1)
+    time_dir = makeTimeDIR()
 
-    yMonth = yesterday.month if yesterday.month >= 10 else "0" + \
-        str(yesterday.month)
-    yDay = yesterday.day if yesterday.day >= 10 else "0"+str(yesterday.day)
-
-    time_dir = "/" + str(yesterday.year) + "/" + \
-        str(yesterday.year) + str(yMonth) + "/" + \
-        str(yesterday.year) + str(yMonth) + str(yDay)
-
-    file_dir = os.getcwd() + link + time_dir + file_name
+    file_dir = os.getcwd() + link + time_dir[time_domain] + file_name
 
     if not os.path.isfile(file_dir):
         print("File doesn't exist on {0}".format(file_dir))
@@ -112,7 +133,7 @@ def handleOutRawData(out_data):
     return out_dict
 
 
-def handleParameters(raw_w):
+def handleLearningParams(raw_w=None):
     '''
         ### Weights & Bias를 처리하는 함수
         - raw 데이터는 weights와 bias가 합쳐진 상태입니다.
@@ -131,6 +152,27 @@ def handleParameters(raw_w):
     bias = weights.pop()[0]
 
     return weights, bias
+
+
+def handleStatsParams(raw_ms=None):
+    '''
+        ### 평균과 표준편차를 다루는 함수
+        - csv 파일로 부터 읽어온 자료를 전체 범주의 평균, 표준편차 그리고 내부 온도에 대한 평균, 표준편차로 나누는 함수 입니다.
+    '''
+    mean, std = [], []
+    raw_mean = raw_ms[0]
+    raw_std = raw_ms[1]
+
+    for fig in raw_mean:
+        mean.append(float(fig))
+
+    for fig in raw_std:
+        std.append(float(fig))
+
+    temp_mean = mean[7]
+    temp_std = std[7]
+
+    return mean, std, temp_mean, temp_std
 
 
 def combineXdata(user_x, out_dict):
@@ -228,13 +270,14 @@ def preprocessingData(user_link, out_link):
         5. 데이터 넘파이 형식 배열로 변환
         6. 반환
     '''
-    raw_user_data = loadRawData(user_link, "/weather.csv")
-    raw_out_data = loadRawData(out_link, "/weather.csv")
-    raw_parameters = loadRawData(user_link, "/analysis_parameters.csv")
+    raw_user_data = loadRawData(user_link, "yesterday", "/weather.csv")
+    raw_out_data = loadRawData(out_link, "yesterday", "/weather.csv")
+    raw_parameters = loadRawData(
+        user_link, "yesterday", "/analysis_parameters.csv")
 
     user_x, train_t = handleUserRawData(raw_user_data)
     out_dict = handleOutRawData(raw_out_data)
-    weights, bias = handleParameters(raw_parameters)
+    weights, bias = handleLearningParams(raw_parameters)
 
     train_x = combineXdata(user_x, out_dict)
 

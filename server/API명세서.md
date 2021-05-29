@@ -14,7 +14,7 @@
 | Auth           | POST        | /login                     | 로그인 요청                                                 |
 | Auth           | POST        | /:id/edit-profile          | 회원 정보 수정 요청                                         |
 
----
+<br><br>
 
 ## API 명세 기록
 

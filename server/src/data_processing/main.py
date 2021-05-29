@@ -9,7 +9,6 @@ import datetime
 from os import getcwd, path, makedirs
 import sys
 import pymysql
-import numpy as np
 from preprocessing import preprocessingData
 from linear_regression import LinearRegression
 
