@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Jumbotron, Container, Row, Card } from 'react-bootstrap';
 import Clock from 'react-live-clock'
+import '../App.css'
+
 
 function TimeNow() {
         const fontstyl = {
@@ -18,7 +20,7 @@ function TimeNow() {
             <>
                 <Row className='text-center w-100 my-2'>
                     <Card style={fontstyl}>
-                        <Card.Title>
+                        <Card.Title style={{color:'black'}}>
                             현재시각
                         </Card.Title>
                         <Card.Text>

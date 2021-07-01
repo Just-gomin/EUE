@@ -1,9 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+body {
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
 @media (max-width: 767.98px) { 
   body {
     padding: 10px;
     padding-left: 20px;
     padding-right: 20px;
     margin: auto;
+    /* font-family: "Noto Sans KR", sans-serif; */
+
   }
   .container-fluid {
     max-width: 480px !important;
@@ -17,7 +25,10 @@
     padding-left: 50px;
     padding-right: 50px;
     margin: auto;
+    /* font-family: "Noto Sans KR", sans-serif; */
+
   }
+
   .container-fluid {
     max-width: 1200px !important;
   }
