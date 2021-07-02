@@ -31,22 +31,33 @@ const locCodeSep = (code = "") => {
 };
 
 // 데이터가 들어온 시간 데이터 생성
-const getTimeInfo = () => {
-  const cur = new Date();
+const getTimeInfo = (date = null) => {
+  let time;
+  if (date == null) {
+    const now = new Date();
 
-  const year = cur.getFullYear();
-  const month = cur.getMonth() + 1;
-  const date = cur.getDate();
-  const hour = cur.getHours();
-  const minute = cur.getMinutes();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const date = now.getDate();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
 
-  const time = {
-    year: year,
-    month: month < 10 ? `0${month}` : month,
-    date: date < 10 ? `0${date}` : date,
-    hour: hour < 10 ? `0${hour}` : hour,
-    minute: minute < 10 ? `0${minute}` : minute,
-  };
+    time = {
+      year: year,
+      month: month < 10 ? `0${month}` : month,
+      date: date < 10 ? `0${date}` : date,
+      hour: hour < 10 ? `0${hour}` : hour,
+      minute: minute < 10 ? `0${minute}` : hour,
+    };
+  } else {
+    time = {
+      year: date.substring(0, 4),
+      month: date.substring(4, 6),
+      date: date.substring(6, 8),
+      hour: date.substring(8, 10),
+      minute: date.substring(10),
+    };
+  }
 
   return time;
 };
@@ -114,22 +125,18 @@ const storeData = (type, time, loc, dir, data) => {
           if (err) console.log(err);
         });
 
-        // 디렉토리를 새로 생성하는 경우 header 추가.
+        // 디렉토리를 새로 생성하는 경우 header 추가 및 데이터 추가.
         const header = type == OUT ? OUT_DATA_HEADER : IN_DATA_HEADER;
-        fs.appendFile(dir + `/${fileName}`, header, (err) => {
+        fs.appendFile(dir + `/${fileName}`, header + data, (err) => {
           if (err) console.log(err);
-          else console.log("Create directory and record header.");
-        });
-
-        // 헤더 추가 후 데이터 추가
-        fs.appendFile(dir + `/${fileName}`, data, (err) => {
-          if (err) console.log(err);
-          else
+          else {
+            console.log("Create directory and record header.");
             console.log(
               `${time.year}/${time.month}/${time.date} ${time.hour}:${
                 time.minute
               } - ${loc.EMD} ${type === OUT ? OUTSIDE : USERS} data append.`
             );
+          }
         });
       }
       // 그 외의 에러는 출력
@@ -151,7 +158,7 @@ const storeData = (type, time, loc, dir, data) => {
 };
 
 // 외부 수집기로 부터 들어온 정보 처리
-const handleOutData = async (locCode, lat, lng) => {
+const handleOutData = async (locCode, date, lat, lng) => {
   // OpenWeatherAPI로 부터 지역의 날씨 정보획득을 위해 지역의 경도와 위도, API Key, 단위 기준 metric 전달
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.OPENWEATHERMAP_API_KEY}&units=metric`
@@ -164,26 +171,26 @@ const handleOutData = async (locCode, lat, lng) => {
   const wind_speed = json["wind"]["speed"];
 
   const loc = locCodeSep(locCode);
-  const time = getTimeInfo();
+  const time = getTimeInfo(date);
 
   const dirs = await getDataDIR(loc, time, OUT, OUTSIDE);
 
   // 데이터 형식 - [ 연 월 일 시 분 | 온도 | 습도 | 기압 | 풍속 ]
-  const data = `${time.year}${time.month}${time.date}${time.hour}${time.minute},${temp},${humi},${press},${wind_speed}\n`;
+  const data = `${date},${temp},${humi},${press},${wind_speed}\n`;
 
   storeData(OUT, time, loc, dirs.base, data);
   storeData(OUT, time, loc, dirs.base + dirs.time, data);
 };
 
 // 내부 수집기로 부터 들어온 정보 처리
-const handleInData = async (id, locCode, temp, humi, lights) => {
+const handleInData = async (id, locCode, date, temp, humi, lights) => {
   const loc = locCodeSep(locCode);
-  const time = getTimeInfo();
+  const time = getTimeInfo(date);
 
   const dirs = await getDataDIR(loc, time, IN, id);
 
   // 데이터 형식 - [ 연 월 일 시 분 | 온도 | 습도 | 광도 ]
-  const data = `${time.year}${time.month}${time.date}${time.hour}${time.minute},${temp},${humi},${lights}\n`;
+  const data = `${date},${temp},${humi},${lights}\n`;
 
   storeData(IN, time, loc, dirs.base, data);
   storeData(IN, time, loc, dirs.base + dirs.time, data);
@@ -195,17 +202,19 @@ export const getDataInput = (req, res) => {
     if (req.query.type === OUT) {
       // 외부 데이터 수집기
       const {
-        query: { locCode, lat, lng },
+        query: { locCode, date, lat, lng },
       } = req;
 
-      handleOutData(locCode, lat, lng);
+      console.log(locCode, date, lat, lng);
+      // handleOutData(locCode, date, lat, lng);
     } else {
       // 내부 데이터 수집기 동작
       const {
-        query: { id, locCode, temp, humi, lights },
+        query: { id, locCode, date, temp, humi, lights },
       } = req;
 
-      handleInData(id, locCode, temp, humi, lights);
+      console.log(id, locCode, date, temp, humi, lights);
+      // handleInData(id, locCode, date, temp, humi, lights);
     }
 
     res.status(statusCode.ok).send(serverMSG.server_ok);

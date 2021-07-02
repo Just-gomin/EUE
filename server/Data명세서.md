@@ -9,12 +9,14 @@
         ∟ Local Code (SGG/시군구)
           ∟ Local Code (EMD/읍면동)
             ∟ Outside
+              ∟ weather.csv
               ∟ YYYY (연)
                 ∟ YYYYMM (연/월)
                   ∟ YYYYMMDD (연/월/일)
                     ∟ weather.csv
             ∟ Users
               ∟ ID (사용자 개인 ID)
+                ∟ weather.csv
                 ∟ YYYY (연)
                   ∟ YYYYMM (연/월)
                     ∟ YYYYMMDD (연/월/일)
@@ -24,9 +26,17 @@
 
 데이터가 저장되는 경로의 구조입니다.
 
-- 1차 : 지역별 대분류
-- 2차 : 사용자와 외부 정보 분류
-- 3차 : 연 / 월 / 일 분류
+- 통합 데이터
+
+  1. 지역별 분류
+  2. 외부 / 내부 구분
+  3. 내부의 경우 사용자 아이디별 구분
+
+- 날짜별 분류 데이터
+
+  1. 지역별 대분류
+  2. 사용자와 외부 정보 분류
+  3. 연 / 월 / 일 분류
 
 <br><br>
 
@@ -38,9 +48,9 @@
 
 외부 데이터는 다음과 같은 형식으로 저장됩니다.
 
-| Month | Date | Hour | Minute | Temperature | Humidity |   Press   | Wind Speed |
-| :---: | :--: | :--: | :----: | :---------: | :------: | :-------: | :--------: |
-|  월   |  일  |  시  |   분   |   온도(℃)   | 습도(%)  | 기압(hPa) | 풍속(m/s)  |
+|            Date             | Temperature | Humidity |   Press   | Wind Speed |
+| :-------------------------: | :---------: | :------: | :-------: | ---------- |
+| YYYYMMDDHHmm ( 연월일시분 ) |   온도(℃)   | 습도(%)  | 기압(hPa) | 풍속(m/s)  |
 
 <br><br>
 
@@ -48,9 +58,9 @@
 
 사용자가 설정한 장소의 데이터는 다음과 같은 형식으로 저장됩니다.
 
-| Month | Date | Hour | Minute | Temperature | Humidity | Lights |
-| :---: | :--: | :--: | :----: | :---------: | :------: | :----: |
-|  월   |  일  |  시  |   분   |   온도(℃)   | 습도(%)  |  광도  |
+|            Date             | Temperature | Humidity | Lights |
+| :-------------------------: | :---------: | :------: | :----: |
+| YYYYMMDDHHmm ( 연월일시분 ) |   온도(℃)   | 습도(%)  |  광도  |
 
 <br><br>
 
