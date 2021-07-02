@@ -1,11 +1,17 @@
 #include <SoftwareSerial.h>
+#include <TimeLib.h>
+#include <DS1302RTC.h>
 
 
-#define ESPPIN_TX 2     // ESP 8266 모듈의 TX 핀
-#define ESPPIN_RX 3     // ESP 8266 모듈의 RX 핀
+#define ESP_TX 2         // ESP8266 모듈의 TX 핀
+#define ESP_RX 3         // ESP8266 모듈의 RX 핀
 
+#define RTC_CLK 4        // DS1302RTC 모듈의 CLK 핀
+#define RTC_DAT 5        // DS1302RTC 모듈의 DAT 핀
+#define RTC_RST 6        // DS1302RTC 모듈의 CLK 핀
 
-SoftwareSerial esp(ESPPIN_TX,ESPPIN_RX);
+SoftwareSerial esp(ESP_TX,ESP_RX);          // ESP 모듈 객체 생성
+DS1302RTC rtc(RTC_RST, RTC_DAT, RTC_CLK);   // RTC 모듈 객체 생성
 
 
 String SSID = "Wifi_SSID";        // Wifi - SSID
@@ -14,48 +20,92 @@ String SSPW = "Wifi_SSPW";        // Wifi - SSPW
 String EUEIP = "EUE_IP";          // Web Server - IP
 int EUEPORT = 8081;               // Web Server - Port
 
+// 함수 선언부
 void connectESP();
 void connectWifi();
 void sendData(String vars);
+void printTime(tmElements_t tm);
 
 
 void setup() {
+
   Serial.begin(9600);     // Serial monitor의 통신 속도 9600으로 설정
   esp.begin(9600);        // esp모듈의 통신 속도 9600으로 설정
-}
 
-void loop() {
   connectESP();           // ESP 모듈 탐색
   connectWifi();          // ESP 모듈 wifi 연결
 
-  String input = "";
-  
-  // 측정기 분류(IN / OUT)
-  String type_ = "Out";
-  
-  // 지역 코드
-  String locCode = "3743011";
+  // DS1302 RTC 모듈이 작동 중인지 확인
+  if(rtc.haltRTC()){
+    Serial.println("The DS1302 is stopped.");
+    rtc.haltRTC(0);
+    Serial.println("The DS1302 starts.");
+    delay(100);
+  } else{
+    Serial.println("The DS1302 is working");
+  }
+  Serial.println();
 
-  // 지역의 위도(Latitude), 경도(Longitude)
-  float lati = 37.241706;
-  String str_lati = String(lati,6);
-  float lng = 131.864889;
-  String str_lng = String(lng,6);
-  
-  input += "type=" + type_;
-  input += "&locCode=" + locCode;
-  input += "&lat=" + str_lati;
-  input += "&lng=" + str_lng;
-  Serial.println(input);
-  
-  // 데이터 전송
-  sendData(input);
-
-  // 30분마다 전송 진행
-  delay(1800000);
+  // DS1302 RTC 모듈이 쓰기 금지 모드 상태인지 확인
+  if(rtc.writeEN() == 0){
+    Serial.println("The DS1302 is write protected.");
+  } else{
+    Serial.println("The DS1302 can write.");
+    rtc.writeEN(false);
+    Serial.println("Write protected is started.");
+  }
+  Serial.println();
 }
 
-// ESP모듈 연결
+void loop() {
+
+  tmElements_t tm;        // 시간 데이터를 저장하는 변수
+  if(rtc.read(tm) == 0){
+
+    printTime(tm);
+    
+    if(tm.Minute % 10 == 0 && tm.Second == 0){
+      // Wifi 연결 확인
+      String cmd = "AT+CWJAP?";
+      esp.println(cmd);
+      if(esp.find("No AP")){
+        Serial.println("Wifi disconnected, try to connect...");
+        connectESP();           // ESP 모듈 탐색
+        connectWifi();          // ESP 모듈 wifi 연결 
+      }
+
+      String input = "";        // 전송할 데이터
+
+      String date = "";         // 전송 시점 데이터
+      date += String(tmYearToCalendar(tm.Year));
+      date += tm.Month < 10 ? '0' + String(tm.Month) : String(tm.Month);
+      date += tm.Day < 10 ? '0' + String(tm.Day) : String(tm.Day);
+      date += tm.Hour < 10 ? '0' + String(tm.Hour): String(tm.Hour);
+      date += tm.Minute < 10 ? '0' + String(tm.Minute) : String(tm.Minute);
+    
+      String type_ = "Out";
+      String locCode = "3743011";
+      float lati = 37.241706;
+      String str_lati = String(lati,6);
+      float lng = 131.864889;
+      String str_lng = String(lng,6);
+    
+      input += "type=" + type_;
+      input += "&locCode=" + locCode;
+      input += "&date=" + date;
+      input += "&lat=" + str_lati;
+      input += "&lng=" + str_lng;
+
+      sendData(input);
+    }
+  }
+
+  delay(1000);    // 1초 단위로 확인하기 위한 지연
+}
+
+// 함수 정의부
+
+// ESP 모듈 연결 함수
 void connectESP(){
   esp.println("AT");
   Serial.println("AT Sent");
@@ -64,55 +114,71 @@ void connectESP(){
     Serial.println("ESP8266 Not Found.");
   }
   Serial.println("OK Command Received.");
+  Serial.println();
 }
 
-// 공유기와 연결
+// Wifi 연결 함수
+
 void connectWifi(){
-   // ESP8266 모듈 Client로 설정
-  String cmd = "AT+CWMODE=1";
+  String cmd = "AT+CWMODE=1";                         // Client로 설정
   esp.println(cmd);
   Serial.println("Set ESP8266 to client.");
 
-  // 공유기와 연결
   Serial.println("Connecting to Wifi...");
-  cmd = "AT+CWJAP=\"" + SSID + "\"," + SSPW + "\"";
+  cmd = "AT+CWJAP=\"" + SSID + "\"," + SSPW + "\"";   // Wifi 연결
   esp.println(cmd);
-  
-  // 연결 확인
+ 
   while(!esp.find("OK"));
   Serial.println("Wifi Connected");
   
-  // 연결된 공유기 확인
-  cmd = "AT+CWJAP?";
+  cmd = "AT+CWJAP?";                                  // 현재 연결된 AP 정보 확인, 연결 안되어있을 시 "No AP" 출력
   esp.println(cmd);
   Serial.write(esp.read());
+  Serial.println();
 }
 
+// 서버에 데이터 전송 함수
 void sendData(String input){
+  
   // ESP 모듈을 통해 Server로 데이터 전송
   esp.println("AT+CIPSTART=\"TCP\",\"" + EUEIP + "\"," + EUEPORT);
   if(esp.find("Error")){
     Serial.println("AT+CIPSTART Error...");
   }
 
-  // 서버로 전송할 데이터 작성
-  String vars = input;
-  
+  // Get 방식을 이용한 전송
   String msg = "GET /data/input?";
-  msg += vars;
+  msg += input;
+  
   msg += " HTTP/1.0\r\n\r\n";
   esp.print("AT+CIPSEND=");
   esp.println(msg.length());
   delay(2000);
 
-  // 데이터 전송
   if(esp.find(">")){
     esp.print(msg);
+    Serial.println(msg);
     Serial.println("Data sent.");
     delay(1000);
   }
-
-  // 서버와 연결 종료
+  
   Serial.println("Connection Closed.");
   esp.println("AT+CIPCLOSE");
+  Serial.println();
+}
+
+// 시간 출력 함수
+void printTime(tmElements_t tm){
+  Serial.print(tmYearToCalendar(tm.Year));
+  Serial.print(" / ");
+  Serial.print(tm.Month < 10 ? '0' + String(tm.Month) : tm.Month);
+  Serial.print(" / ");
+  Serial.print(tm.Day < 10 ? '0' + String(tm.Day) : tm.Day);
+  Serial.print(" - ");
+  Serial.print(tm.Hour < 10 ? '0' + String(tm.Hour) : tm.Hour);
+  Serial.print(" : ");
+  Serial.print(tm.Minute < 10 ? '0' + String(tm.Minute) : tm.Minute);
+  Serial.print(" : ");
+  Serial.println(tm.Second < 10 ? '0' + String(tm.Second) : tm.Second);
+  Serial.println();
 }
