@@ -20,10 +20,14 @@
 
 - [ESP8266 와이파이 모듈 전용 어댑터](https://smartstore.naver.com/mechasolution_com/products/3448897447?NaPm=ct%3Dkh5sj8sw%7Cci%3Dcheckout%7Ctr%3Dppc%7Ctrx%3D%7Chk%3D967033f4922b6288b4279fe63965a7511c1ecf4b) : ESP8266 wifi 모듈을 쉽게 사용하기 위한 어댑터
 
+- [DS1302 RTC 모듈](https://smartstore.naver.com/domekit/products/599920174?NaPm=ct%3Dkqm1qi9x%7Cci%3Dcheckout%7Ctr%3Dppc%7Ctrx%3D%7Chk%3De00f325f99c7d23306f06a0380ccc65a28ff29a6) : 시간 정보를 저장할 수 있는 모듈
+
 ## 사용 라이브러리
 
 - Adafruit Sensor Library : [https://github.com/adafruit/Adafruit_Sensor](https://github.com/adafruit/Adafruit_Sensor)
 - DHT Sensor Library : [https://github.com/adafruit/DHT-sensor-library](https://github.com/adafruit/DHT-sensor-library)
+- DS1302 RTC Library : [https://playground.arduino.cc/Main/DS1302RTC/](https://playground.arduino.cc/Main/DS1302RTC/)
+- Time Library : 아두이노 라이브러리 관리 -> "Time by Michael Margolis" 검색 및 설치
 
 ## Arduino 참고 자료
 
