@@ -1,3 +1,27 @@
+/*
+
+  # 실외 데이터 수집기 코드
+
+  ## 사용자 변수
+
+  1. String SSID
+  2. String SSPW
+  3. String EUEIP
+  4. int EUEPORT
+  5. String locCode
+  6. float lati
+  7. float lng 
+  
+  ## PC에 연결하여 동작 (시리얼 모니터 사용 O)
+
+    시리얼 모니터를 통해 상태를 확인하는 경우, 사용자 변수들의 값만 변경하여 사용합니다.
+
+  ## 아두이노 단독 실행 (시리얼 모니터 사용 X)
+
+    시리얼 모니터를 사용하지 않는 경우, 사용자 변수 값 변경 이외에 아래 "Serial.~~" 꼴로 된 라인은 모두 주석처리 해줍니다.
+
+*/
+
 #include <SoftwareSerial.h>
 #include <TimeLib.h>
 #include <DS1302RTC.h>
