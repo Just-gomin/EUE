@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Button, Form, Image, Row, ButtonGroup, Modal, Dropdown, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import '../App.css'
+import SignUp from '../pages/SignUp'
+import LoginwithSocial from '../pages/LoginwithSocial';
 
 function MainLayer() {
 
@@ -69,58 +71,21 @@ function MainLayer() {
                                 onHide={() => setLogshow(false)}
                                 aria-labelledby="example-modal-sizes-title-sm"
                             >
-                                <Modal.Header className='d-flex justify-content-center'>
-                                    <Modal.Title id="example-modal-sizes-title-sm">
-                                        LOGIN
-                                    </Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <Form style={loginstyled}>
-                                        <Form.Group controlId="formBasicEmail">
-                                            <Form.Control type="email" placeholder="Enter email" />
-                                        </Form.Group>
-
-                                        <Form.Group controlId="formBasicPassword">
-                                            <Form.Control type="password" placeholder="Password" />
-                                        </Form.Group>
-                                        <Button variant="maingreen" type="submit">
-                                            Submit
-                                        </Button>
-                                    </Form>
-                                </Modal.Body>
+                                <LoginwithSocial />
                             </Modal>
                         </Dropdown.Item>
                         <Dropdown.Item href="#/action-2">
 
-                            <Button className='w-100 m-auto' style={btnstyled} onClick={() => setSignshow(true)}>SIGN UP</Button>
+                            <Button className='w-100 m-auto' style={btnstyled} onClick={() => setSignshow(true)}>
+                                SIGN UP
+                            </Button>
                             <Modal
                                 size="md"
                                 show={signshow}
                                 onHide={() => setSignshow(false)}
                                 aria-labelledby="example-modal-sizes-title-sm"
                             >
-                                <Modal.Header className='d-flex justify-content-center'>
-                                    <Modal.Title id="example-modal-sizes-title-sm">
-                                        Sign Up
-                                    </Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <Form style={loginstyled}>
-                                        <Form.Group controlId="formBasicEmail">
-                                            <Form.Control type="email" placeholder="Enter email" />
-                                        </Form.Group>
-                                        <Form.Group controlId="formBasicPassword">
-                                            <Form.Control type="password" placeholder="Password" />
-                                            <Form.Text>8글자 이상 적어주세요.</Form.Text>
-                                        </Form.Group>
-                                        <Form.Group controlId="formBasicPassword">
-                                            <Form.Control type="password" placeholder="Password Check" />
-                                        </Form.Group>
-                                        <Button variant="maingreen" type="submit">
-                                            Submit
-                                        </Button>
-                                    </Form>
-                                </Modal.Body>
+                                <SignUp />
                             </Modal>
                         </Dropdown.Item>
                     </Dropdown.Menu>
@@ -136,25 +101,8 @@ function MainLayer() {
                         onHide={() => setLogshow(false)}
                         aria-labelledby="example-modal-sizes-title-sm"
                     >
-                        <Modal.Header className='d-flex justify-content-center'>
-                            <Modal.Title id="example-modal-sizes-title-sm">
-                                LOGIN
-                            </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <Form style={loginstyled}>
-                                <Form.Group controlId="formBasicEmail">
-                                    <Form.Control type="email" placeholder="Enter email" />
-                                </Form.Group>
+                        <LoginwithSocial />
 
-                                <Form.Group controlId="formBasicPassword">
-                                    <Form.Control type="password" placeholder="Password" />
-                                </Form.Group>
-                                <Button variant="maingreen" type="submit">
-                                    Submit
-                                </Button>
-                            </Form>
-                        </Modal.Body>
                     </Modal>
 
                     <Button style={btnstyled} onClick={() => setSignshow(true)}>SIGN UP</Button>
@@ -164,28 +112,8 @@ function MainLayer() {
                         onHide={() => setSignshow(false)}
                         aria-labelledby="example-modal-sizes-title-sm"
                     >
-                        <Modal.Header className='d-flex justify-content-center'>
-                            <Modal.Title id="example-modal-sizes-title-sm">
-                                Sign Up
-                            </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <Form style={loginstyled}>
-                                <Form.Group controlId="formBasicEmail">
-                                    <Form.Control type="email" placeholder="Enter email" />
-                                </Form.Group>
-                                <Form.Group controlId="formBasicPassword">
-                                    <Form.Control type="password" placeholder="Password" />
-                                    <Form.Text>8글자 이상 적어주세요.</Form.Text>
-                                </Form.Group>
-                                <Form.Group controlId="formBasicPassword">
-                                    <Form.Control type="password" placeholder="Password Check" />
-                                </Form.Group>
-                                <Button variant="maingreen" type="submit">
-                                    Submit
-                                </Button>
-                            </Form>
-                        </Modal.Body>
+                        <SignUp />
+
                     </Modal>
 
                 </ButtonGroup>
