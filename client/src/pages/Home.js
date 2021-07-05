@@ -10,7 +10,7 @@ import ChartDoughnut from '../components/ChartDoughnut';
 import Footer from './../components/Footer';
 
 
-function Home2() {
+function Home() {
     const constyled = {
         display: 'flex',
         justifyContent: 'space-evenly',
@@ -19,13 +19,11 @@ function Home2() {
     }
 
     const col1sty = {
-        width: '280px',
         display: 'flex',
         justifyContent: 'start',
-        alignItems: 'center',
-
-
+        alignItems: 'center'
     }
+
     const col2sty = {
         display: 'flex',
         justifyContent: 'center',
@@ -33,14 +31,16 @@ function Home2() {
         flexDirection: 'column',
         padding: '0'
     }
+    
+    const stickybox = {
+        zIndex: '10', border: 'solid', borderWidth: '1px', borderColor: 'rgba(195, 195, 195, 0.753)',
+        borderRadius: '10px', padding: '15px', boxShadow: '0.5px 0.5px gray', margin: '5px', boxSizing:'border-box'
+    }
 
     return (
         <Container fluid className='d-flex justify-content-center position-relative'>
             <Row style={constyled}>
-                <Col xs={12} md={4} className='d-flex justify-content-center ' style={{
-                    zIndex: '10', border: 'solid', borderWidth: '1px', borderColor: 'rgba(195, 195, 195, 0.753)',
-                    borderRadius: '10px', padding: '15px', boxShadow: '0.5px 0.5px gray', margin: '5px', boxSizing:'border-box', height: 'auto', maxHeight: '270px'
-                }} id='stickyy'>
+                <Col xs={12} md={4} className='d-flex justify-content-center m-2' id='stickyy'>
                     <Row style={col1sty} className='m-auto'>
                         <MainLayer />
                     </Row>
@@ -62,4 +62,4 @@ function Home2() {
     );
 }
 
-export default Home2;
+export default Home;

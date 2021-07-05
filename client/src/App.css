@@ -2,6 +2,39 @@
 
 body {
   font-family: "Noto Sans KR", sans-serif !important;
+  
+}
+.a:hover {
+    color: white;
+}
+.btn:active {
+  color : rgb(250, 220, 0);
+}
+
+.form-group .form-control {
+  border-radius: 40px;
+}
+#formbtn {
+  width: 100%;
+  border-radius: 40px;
+  background-color: rgb(110, 189, 142);
+  border-color: ivory;
+}
+
+#logpng {
+  width: 25px;
+  height: auto;
+  margin-right: 1em;
+
+}
+
+#socialLink {
+  padding: 0.5em;
+  margin: 0.5em;
+  height: 2.5em;
+  color: gray;
+  font-size: 10px;
+  width: fit-content;
 }
 
 @media (max-width: 767.98px) { 
@@ -10,11 +43,14 @@ body {
     padding-left: 20px;
     padding-right: 20px;
     margin: auto;
-    /* font-family: "Noto Sans KR", sans-serif; */
 
   }
   .container-fluid {
     max-width: 480px !important;
+  }
+  
+  #stickyy {
+    max-width: 300px;
   }
   
  }
@@ -25,18 +61,20 @@ body {
     padding-left: 50px;
     padding-right: 50px;
     margin: auto;
-    /* font-family: "Noto Sans KR", sans-serif; */
 
   }
 
   .container-fluid {
-    max-width: 1200px !important;
+    max-width: 1000px !important;
   }
   .container-fluid .row #stickyy {
     position: sticky !important;
-    position: -webkit-sticky;
-    top: 30px;
-    min-width: 300px;
+    position: -webkit-sticky; 
+    top: 40px;
+    width: fit-content;
+    height: fit-content;
+    max-width: 240px;
+
   }
 
  }
