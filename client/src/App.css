@@ -2,13 +2,21 @@
 
 body {
   font-family: "Noto Sans KR", sans-serif !important;
-  
+
 }
+
 .a:hover {
     color: white;
 }
-.btn:active {
-  color : rgb(250, 220, 0);
+
+.btn-primary:active {
+  outline: white !important;
+  border-color: white !important;
+}
+
+.card .card-title {
+  color: rgb(109, 110, 109);
+  /* background-color: ; */
 }
 
 .form-group .form-control {
@@ -19,6 +27,7 @@ body {
   border-radius: 40px;
   background-color: rgb(110, 189, 142);
   border-color: ivory;
+  color: white;
 }
 
 #logpng {

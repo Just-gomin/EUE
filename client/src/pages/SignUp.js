@@ -1,7 +1,7 @@
 import React from 'react'
 import '../App.css'
 import { Form, Modal, Button, Row, Col, Image } from 'react-bootstrap';
-import { KAKAO_AUTH_URL } from './../components/OAuth';
+// import { KAKAO_AUTH_URL } from '../components/Oauth';
 
 
 function SignUp() {
@@ -43,26 +43,17 @@ function SignUp() {
                         <Form.Control type="password2" placeholder="Confirm Password" />
                     </Form.Group>
 
-                    <Button type="submit" className='' id='formbtn'>
+                    <Button variant='light' type="submit" className='' id='formbtn'>
                         Sign Up
                     </Button>
                 </Form>
 
                 <hr />
-                {/* 
-                <p className='d-flex justify-content-center'>
-                    <a id="custom-login-btn" href="javascript:loginWithKakao()">
-                        <img
-                            src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
-                            width='200em'
-                        />
-                    </a>
-                </p> */}
                 <Row style={{margin: 'auto', marginBottom: '5px', display: 'flex', justifyContent: 'center' }}>
-                        <a href={KAKAO_AUTH_URL} target='_blank' id='socialLink' >
+                        {/* <a href={KAKAO_AUTH_URL} target='_blank' id='socialLink' >
                             <Image src='/images/Kakao1.jpg' id='logpng' />
                             KAKAO
-                        </a>
+                        </a> */}
                         <a href="javascript:loginWithKakao()" id='socialLink'>
                             <Image src='/images/google.png' id='logpng' />
                             GOOGLE

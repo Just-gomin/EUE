@@ -1,16 +1,19 @@
 import React from 'react'
 import { Container, Row, Card, Table, Button } from 'react-bootstrap';
+import '../App.css'
+
 
 function Trydays() {
-    const fontstyl = {
+    const cardstyled = {
         fontSize: '0.5em',
         margin: 'auto',
         padding: '1em',
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
-        borderWidth: '2px',
-        borderColor: 'rgba(195, 195, 195, 0.753)',
+        borderWidth: '1.5px',
+        borderRadius: '20px',
+        borderColor: '#04AB70',
         color: 'rgb(110, 189, 142)'
     }
     const btnstyled = {
@@ -19,14 +22,14 @@ function Trydays() {
         maxWidth: '100%',
         borderWidth: '2px',
         fontSize: '10px',
-        borderColor: 'rgba(195, 195, 195, 0.753)',
+        borderColor: 'rgba(195, 195, 195, 0.712)',
         borderRadius: '20px',
+        color: 'white'
     }
 
     return (
-        <>
             <Row className='text-center w-100 my-2'>
-                <Card style={fontstyl}>
+                <Card style={cardstyled}>
                     <Card.Title>
                         유저아이디
                     </Card.Title>
@@ -34,7 +37,7 @@ function Trydays() {
                         지역
                         울릉면
                         지역코드
-                        <Button style={btnstyled}>
+                        <Button variant='light' style={btnstyled}>
                             변경
                         </Button>
 
@@ -45,7 +48,6 @@ function Trydays() {
                     </Card.Text>
                 </Card>
             </Row>
-        </>
     )
 }
 

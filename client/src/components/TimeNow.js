@@ -5,21 +5,21 @@ import '../App.css'
 
 
 function TimeNow() {
-        const fontstyl = {
-            fontSize: '0.5em',
-            margin: 'auto',
-            padding: '1em',
-            display: 'flex',
-            justifyContent: 'center',
-            width: '100%',
-            borderWidth: '2px',
-            borderColor: 'rgba(195, 195, 195, 0.753)',
-            color: 'rgb(110, 189, 142)'
-        }
+    const cardstyled = {
+        fontSize: '0.5em',
+        margin: 'auto',
+        padding: '1em',
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%',
+        borderWidth: '1.5px',
+        borderRadius: '20px',
+        borderColor: '#04AB70',
+        color: 'rgb(110, 189, 142)'
+    }
         return (
-            <>
                 <Row className='text-center w-100 my-2'>
-                    <Card style={fontstyl}>
+                    <Card style={cardstyled}>
                         <Card.Title style={{color:'black'}}>
                             현재시각
                         </Card.Title>
@@ -30,7 +30,6 @@ function TimeNow() {
                         </Card.Text>
                     </Card>
                 </Row>
-            </>
         )
 }
 
