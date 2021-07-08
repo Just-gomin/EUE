@@ -1,86 +1,121 @@
-import React from 'react'
-import { Container, Row, Card, Table, Button } from 'react-bootstrap';
-import { Bar } from 'react-chartjs-2'
+import React, { useEffect, useRef, useState } from 'react'
+import { Container, Row, Card, Table, Button, Col, Modal, ModalTitle, Overlay, Tooltip } from 'react-bootstrap';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import '../App.css'
 
 function Footer() {
-    const fontstyl = {
+    const cardstyled = {
         fontSize: '0.5em',
         margin: 'auto',
         padding: '1em',
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
-        borderWidth: '2px',
-        borderColor: 'rgba(195, 195, 195, 0.753)',
+        borderWidth: '1.5px',
+        borderRadius: '20px',
+        borderColor: '#04AB70',
         color: 'rgb(110, 189, 142)'
     }
+
     const btnstyled = {
-        background: 'rgb(110, 189, 142)',
+        background: 'white',
         margin: '1px',
-        maxWidth: '100%',
+        maxWidth: 'fit-content',
         borderWidth: '2px',
         fontSize: '10px',
+        color: 'rgb(110, 189, 142)',
         borderColor: 'rgba(195, 195, 195, 0.753)',
         borderRadius: '20px',
+
     }
 
-    const options = {
-        legend: {
-            display: true, // label 보이기 여부
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    min: 0, // y축 스케일에 대한 최소값 설정
-                    stepSize: 1, // y축 그리드 한 칸당 수치
-                }
-            }]
-        },
+    const [donateShow, setDonateShow] = useState(false);
 
-        // false : 사용자 정의 크기에 따라 그래프 크기가 결정됨.
-        // true : 크기가 알아서 결정됨.
-        maintainAspectRatio: false
+
+    function clickAndCopy() {
+        return new Promise((resolve) => setTimeout(resolve, 2000))
     }
-    const data = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        datasets: [
-          {
-            label: '온도',
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [2,10], //점선
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: [-10, -2, 13, 18, 22, 25, 31, 28, 25, 18, 6, -8]
-          }
-        ]
-      };
+
+    // function CopyShow() {
+    const [isCopyshow, setCopyShow] = useState(false);
+
+    useEffect(() => {
+        if (isCopyshow) {
+            clickAndCopy().then(() => {
+                setCopyShow(false);
+            });
+        }
+    }, [isCopyshow]);
+
+    // }
+    const handleClick = () => setCopyShow(true);
 
     return (
+        <Row className='text-center w-100 my-2'>
+            <Card style={cardstyled}>
+                <Row className='my-1 d-flex justify-content-center' style={{ fontSize: '15px', color: 'rgb(109, 110, 109)' }}>
+                    서버비용 후원하기
+                </Row>
+                <Row className='my-1 d-flex justify-content-center'>
+                    이용하시는데 불편함이 없도록 광고 없이 운영하고 있습니다. <br />
+                    서버비용 충당 후 후원금이 남을시 UNICEF 에 기부하겠습니다.
+                </Row>
+                <Row className='my-1 d-flex justify-content-center'>
+                    <Button variant='light' style={btnstyled} onClick={() => setDonateShow(true)}>
+                        ♥ 후원하기
+                    </Button>
+                    <Modal
+                        size='sm'
+                        show={donateShow}
+                        onHide={() => setDonateShow(false)}
+                        style={{ top: '80px', left: '1vw' }}
+                    >
+                        <Modal.Header className='d-flex justify-content-center'>
+                            <Modal.Title style={{fontSize: '1em'}}>
+                                Thank you for your Donation
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Col className='d-flex justify-content-center text-center' style={{ flexDirection: 'column' }}>
+                                <p style={{ color: 'rgb(109, 110, 109)', margin: '1em', fontSize: '15px' }}>
+                                    카카오뱅크
+                                </p>
+                                <CopyToClipboard text={'박상호 3333-16-7299769'}>
+                                    <p className='m-auto' style={btnstyled} >
+                                        박상호 3333-16-7299769
+                                        <Button variant='light'
+                                            disabled={isCopyshow}
+                                            onClick={!isCopyshow ? handleClick : null}
+                                            style={{
+                                                background: 'lightgray',
+                                                margin: '5px',
+                                                maxWidth: 'fit-content',
+                                                borderWidth: '2px',
+                                                fontSize: '10px',
+                                                color: 'black',
+                                                border: 'none',
+                                                whiteSpace: 'nowrap'
+                                            }}>
+                                            {isCopyshow ? '복사 성공!' : '복사'}
+                                        </Button>
+                                    </p>
+                                </CopyToClipboard>
+                            </Col>
+                        </Modal.Body>
 
-        <>
-            <Row className='text-center w-100 my-2'>
-                <Card style={fontstyl}>
-                    <Bar
-                        data={data}
-                        options={options}
-                        height={300}
-                    />
-                </Card>
-            </Row>
-        </>
+                    </Modal>
+                </Row>
+                <Row className='my-1 d-flex justify-content-center flex-direction-column' style={{ color: 'rgb(109, 110, 109)', flexDirection: 'column' }}>
+                    <Col>
+                        <a href='https://www.notion.so/EUE-047f1812c6c24096a528dfd3330c227d' style={{ color: 'rgb(110, 189, 142)' }}>TEAM EUE </a> : 안강민, 박상호, 박예은
+                    </Col>
+                    <Col>
+                        © 2021 TEAM EUE. All rights reserved
+                    </Col>
+                </Row>
+
+            </Card>
+        </Row>
     )
 }
 

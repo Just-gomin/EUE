@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Row, Col, Button, ButtonGroup, Image, Form, Media } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
 import TimeNow from './../components/TimeNow';
 import '../App.css'
@@ -8,6 +8,7 @@ import EueSuggest from '../components/EueSuggest';
 import ChartLine from '../components/ChartLine';
 import ChartDoughnut from '../components/ChartDoughnut';
 import Footer from './../components/Footer';
+import { useEffect } from 'react';
 
 
 function Home() {
@@ -31,16 +32,14 @@ function Home() {
         flexDirection: 'column',
         padding: '0'
     }
-    
-    const stickybox = {
-        zIndex: '10', border: 'solid', borderWidth: '1px', borderColor: 'rgba(195, 195, 195, 0.753)',
-        borderRadius: '10px', padding: '15px', boxShadow: '0.5px 0.5px gray', margin: '5px', boxSizing:'border-box'
-    }
+    useEffect(() => {
+        console.log('마운트 될때마다 실행');
+    }, []);
 
     return (
         <Container fluid className='d-flex justify-content-center position-relative'>
             <Row style={constyled}>
-                <Col xs={12} md={4} className='d-flex justify-content-center m-2' id='stickyy'>
+                <Col xs={12} md={4} className='d-flex justify-content-center' id='stickyy'>
                     <Row style={col1sty} className='m-auto'>
                         <MainLayer />
                     </Row>
@@ -48,12 +47,13 @@ function Home() {
                 </Col>
                 <Col md={6} style={col2sty}>
                     <Row style={constyled} className='d-flex mb-2 w-100'>
-                        <TimeNow />
+                        {/* <KakaoLogin/> */}
+                        {/* <TimeNow /> */}
                         <Trydays />
-                        <EueSuggest/>
-                        <ChartLine/>
-                        <ChartDoughnut/>
-                        <Footer/>
+                        <EueSuggest />
+                        <ChartLine />
+                        <ChartDoughnut />
+                        <Footer />
                     </Row>
                 </Col>
             </Row>

@@ -2,15 +2,16 @@ import React from 'react'
 import { Container, Row, Card, Table, Button } from 'react-bootstrap';
 
 function EueSuggest() {
-    const fontstyl = {
+    const cardstyled = {
         fontSize: '0.5em',
         margin: 'auto',
         padding: '1em',
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
-        borderWidth: '2px',
-        borderColor: 'rgba(195, 195, 195, 0.753)',
+        borderWidth: '1.5px',
+        borderRadius: '20px',
+        borderColor: '#04AB70',
         color: 'rgb(110, 189, 142)'
     }
     const btnstyled = {
@@ -24,10 +25,8 @@ function EueSuggest() {
     }
 
     return (
-
-        <>
             <Row className='text-center w-100 my-2'>
-                <Card style={fontstyl}>
+                <Card style={cardstyled}>
                     <Card.Title>
                         EUE 제안
                     </Card.Title>
@@ -36,7 +35,6 @@ function EueSuggest() {
                     </Card.Text>
                 </Card>
             </Row>
-        </>
     )
 }
 

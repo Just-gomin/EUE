@@ -3,15 +3,16 @@ import { Container, Row, Card, Table, Button } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2'
 
 function ChartDoughnut() {
-    const fontstyl = {
+    const cardstyled = {
         fontSize: '0.5em',
         margin: 'auto',
         padding: '1em',
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
-        borderWidth: '2px',
-        borderColor: 'rgba(195, 195, 195, 0.753)',
+        borderWidth: '1.5px',
+        borderRadius: '20px',
+        borderColor: '#04AB70',
         color: 'rgb(110, 189, 142)'
     }
     const btnstyled = {
@@ -72,7 +73,7 @@ function ChartDoughnut() {
 
         <>
             <Row className='text-center w-100 my-2'>
-                <Card style={fontstyl}>
+                <Card style={cardstyled}>
                     <Doughnut
                         data={data}
                         options={options}

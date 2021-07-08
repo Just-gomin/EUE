@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="Web site created using create-react-app" />
-  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/images/Kakao.png" />
   <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -24,8 +24,49 @@
     -->
   <title>EUE, make your day</title>
   <script src='https://developers.kakao.com/sdk/js/kakao.min.js'></script>
-  <script>Kakao.init("29c2c90caed30db77d55580048c53d7b");</script>
-  <!-- <meta name ="google-signin-client_id" content="217755353555-3msma49ckq4fa47k0tg5tkshatcdh8c9.apps.googleusercontent.com"> -->
+  <script>
+    Kakao.init("29c2c90caed30db77d55580048c53d7b");
+    Kakao.isInitialized();
+    console.log(Kakao.isInitialized());
+
+    function loginWithKakao() {
+      Kakao.Auth.authorize({
+        redirectUri: 'http://localhost:3000/oauth'
+      })
+    }
+    // 아래는 데모를 위한 UI 코드입니다.
+    displayToken()
+    function displayToken() {
+      const token = getCookie('authorize-access-token')
+      if (token) {
+        Kakao.Auth.setAccessToken(token)
+        Kakao.Auth.getStatusInfo(({ status }) => {
+          if (status === 'connected') {
+            document.getElementById('token-result').innerText = 'login success. token: ' + Kakao.Auth.getAccessToken()
+          } else {
+            Kakao.Auth.setAccessToken(null)
+          }
+        })
+      }
+    }
+    function getCookie(name) {
+      const value = "; " + document.cookie;
+      const parts = value.split("; " + name + "=");
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    }
+  </script>
+  <script type="text/javascript">
+    function loginWithKakaoPOP() {
+      Kakao.Auth.login({
+        success: function (authObj) {
+          alert(JSON.stringify(authObj))
+        },
+        fail: function (err) {
+          alert(JSON.stringify(err))
+        },
+      })
+    }
+  </script>
 </head>
 
 <body>
