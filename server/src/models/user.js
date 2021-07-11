@@ -18,7 +18,7 @@ export class User extends Model {
           allowNull: false,
           primaryKey: true,
         },
-        pw: {
+        password: {
           type: DataTypes.STRING(20),
           allowNull: false,
         },
@@ -32,13 +32,13 @@ export class User extends Model {
   }
 
   static associate(db) {
-    // 모델이 참조하는 테이블
+    // User 모델이 참조하는 테이블에 대한 외래키 설정.
     db.User.belongsTo(db.Emd, {
       foreignKey: "loc_code",
-      targetKey: "code",
+      targetKey: "code_emd",
     });
 
-    // 모델이 참조되는 테이블
+    // User 모델을 참조하는 테이블에 대한 외래키 설정.
     db.User.hasMany(db.Weather_in, {
       foreignKey: "host",
       sourveKey: "email",

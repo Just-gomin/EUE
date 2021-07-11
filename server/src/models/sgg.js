@@ -13,7 +13,7 @@ export class Sgg extends Model {
   static init(sequelize) {
     return super.init(
       {
-        code: {
+        code_sgg: {
           type: DataTypes.INTEGER,
           allowNull: false,
           primaryKey: true,
@@ -32,16 +32,16 @@ export class Sgg extends Model {
   }
 
   static associate(db) {
-    // 모델이 참조하는 테이블
+    // Sgg 모델이 참조하는 테이블에 대한 외래키 설정
     db.Sgg.belongsTo(db.Doe, {
-      foreignKey: "code_do",
-      targetKey: "code",
+      foreignKey: "code_doe",
+      targetKey: "code_doe",
     });
 
-    // 모델이 참조되는 테이블
+    // Sgg 모델을 참조하는 테이블에 대한 외래키 설정
     db.Sgg.hasMany(db.Emd, {
       foreignKey: "code_sgg",
-      sourceKey: "code",
+      sourceKey: "code_sgg",
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
     });

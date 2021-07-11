@@ -11,12 +11,12 @@ export class Doe extends Model {
   static init(sequelize) {
     return super.init(
       {
-        code: {
+        code_doe: {
           type: DataTypes.INTEGER,
           allowNull: false,
           primaryKey: true,
         },
-        name_do: {
+        name_doe: {
           type: DataTypes.STRING(20),
           allowNull: false,
         },
@@ -30,16 +30,16 @@ export class Doe extends Model {
   }
 
   static associate(db) {
-    // 모델이 참조되는 테이블 설정
+    // Doe모델을 참조하는 테이블들에 대한 외래키 설정
     db.Doe.hasMany(db.Sgg, {
-      foreignKey: "code_do",
-      sourceKey: "code",
+      foreignKey: "code_doe",
+      sourceKey: "code_doe",
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
     });
     db.Doe.hasMany(db.Emd, {
-      foreignKey: "code_do",
-      sourceKey: "code",
+      foreignKey: "code_doe",
+      sourceKey: "code_doe",
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
     });

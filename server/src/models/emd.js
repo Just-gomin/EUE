@@ -13,7 +13,7 @@ export class Emd extends Model {
   static init(sequelize) {
     return super.init(
       {
-        code: {
+        code_emd: {
           type: DataTypes.INTEGER,
           allowNull: true,
           primaryKey: true,
@@ -32,26 +32,26 @@ export class Emd extends Model {
   }
 
   static associate(db) {
-    // 모델이 참조하는 테이블
+    // emd 모델이 참조하는 테이블에 대한 외래키 설정
     db.Emd.belongsTo(db.Doe, {
-      foreignKey: "code_do",
-      targetKey: "code",
+      foreignKey: "code_doe",
+      targetKey: "code_doe",
     });
     db.Emd.belongsTo(db.Sgg, {
       foreignKey: "code_sgg",
-      targetKey: "code",
+      targetKey: "code_sgg",
     });
 
-    // 모델이 참조되는 테이블
+    // emd 모델을 참조하는 테이블에 대한 외래키 설정
     db.Emd.hasMany(db.User, {
       foreignKey: "loc_code",
-      sourceKey: "code",
+      sourceKey: "code_emd",
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
     });
     db.Emd.hasMany(db.Weather_out, {
       foreignKey: "loc_code",
-      sourceKey: "code",
+      sourceKey: "code_emd",
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
     });
