@@ -1,119 +1,77 @@
 import fs from "fs";
-// import mysql from "mysql";
-import Sequelize from "sequelize";
-import dotenv from "dotenv";
+import db from "./index";
 
-dotenv.config();
-const envs = process.env;
+export const setLocTables = () => {
+  // File Read
+  let originData = fs.readFileSync("data/admAddressCode.csv", "utf8");
 
-const sequelize = new Sequelize(
-  envs.DB_DATABASE,
-  envs.DB_USER,
-  envs.DB_PASSWORD,
-  {
-    host: envs.DB_HOST,
-    dialect: "postgres",
-  }
-);
+  // Separate Data & Input Data
+  let sepData = originData.split("\r\n");
+  let doeCodeSet = new Set();
+  let sggCodeSet = new Set();
 
-const checkCONN = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
-    sequelize.close();
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
+  let doeList = [];
+  let sggList = [];
+  let emdList = [];
+
+  console.log("Start Location data insertion...");
+
+  sepData.forEach(async (line) => {
+    line = line.replace(/\s/g, "");
+    let addr = line.split(",");
+
+    // Get Local Codes and Names
+    const doeCode = Number(addr[0]);
+    let doeName = addr[1];
+    doeName = doeName.replace(/\s/g, "");
+
+    const sggCode = Number(addr[2]);
+    let sggName = addr[3];
+    sggName = sggName.replace(/\s/g, "");
+
+    const emdCode = Number(addr[4]);
+    let emdName = addr[5];
+    emdName = emdName.replace(/\s/g, "");
+
+    // Save Loc Info to array.
+    if (!doeCodeSet.has(doeCode)) {
+      doeCodeSet.add(doeCode);
+      doeList.push({ code_doe: doeCode, name_doe: doeName });
+    }
+
+    if (!sggCodeSet.has(sggCode)) {
+      sggCodeSet.add(sggCode);
+      sggList.push({
+        code_sgg: sggCode,
+        name_sgg: sggName,
+        code_doe: doeCode,
+      });
+    }
+
+    emdList.push({
+      code_emd: emdCode,
+      name_emd: emdName,
+      code_doe: doeCode,
+      code_sgg: sggCode,
+    });
+  });
+
+  console.log("Inserting Location Data...");
+
+  // Insert to DB.
+  doeList.map(async (node) => {
+    await db.Doe.create(node, { logging: false });
+  });
+
+  sggList.map(async (node) => {
+    await db.Sgg.create(node, { logging: false });
+  });
+
+  emdList.map(async (node) => {
+    await db.Emd.create(node, { logging: false });
+  });
+
+  console.log("Finish the insertion!");
 };
 
-checkCONN();
-// // DB Connection
-// const db = mysql.createConnection({
-//   host: process.env.MYSQL_HOST || "localhost",
-//   user: process.env.MYSQL_USER || "root",
-//   password: process.env.MYSQL_PASSWORD,
-//   database: process.env.MYSQL_DATABASE || "EUE",
-// });
-
-// const inputDo = (code, name) => {
-//   name = name.replace(/\s/g, "");
-//   let q = `INSERT INTO LOCDO (CODE,DONAME) VALUES (${code},'${name}');`;
-//   db.query(q, (err, result) => {
-//     if (err) {
-//       console.log(err);
-//       return;
-//     }
-//     console.log("Result : " + result);
-//   });
-// };
-
-// const inputSi = (code, name, doCode) => {
-//   name = name.replace(/\s/g, "");
-//   let q = `INSERT INTO LOCSIGUNGU (CODE,DOCODE,SGGNAME) VALUES (${code},${doCode},'${name}');`;
-//   db.query(q, (err, result) => {
-//     if (err) {
-//       console.log(err);
-//       return;
-//     }
-//     console.log("Result : " + result);
-//   });
-// };
-
-// const inputDong = (code, name, doCode, siCode) => {
-//   name = name.replace(/\s/g, "");
-//   let q = `INSERT INTO LOCINFO (CODE,DOCODE,SGGCODE,EMDNAME) VALUES (${code},${doCode},${siCode},'${name}');`;
-//   db.query(q, (err, result) => {
-//     if (err) {
-//       console.log(err);
-//       return;
-//     }
-//     console.log("Result : " + result);
-//   });
-// };
-
-// const setDB = () => {
-//   // DB Connect
-//   db.connect((err) => {
-//     if (err) {
-//       console.log(err);
-//       return;
-//     }
-//     console.log("connected as id" + db.threadId);
-//   });
-
-//   // File Read
-//   let originData = fs.readFileSync("data/admAddressCode.csv", "utf8");
-
-//   // Separate Data & Input Data
-//   let sepData = originData.split("\r\n");
-//   let setDoCode = new Set();
-//   let setSiCode = new Set();
-
-//   sepData.forEach((line) => {
-//     line = line.replace(/\s/g, "");
-//     let addr = line.split(",");
-
-//     const doCode = Number(addr[0]);
-//     if (!setDoCode.has(doCode)) {
-//       const doName = addr[1];
-//       inputDo(doCode, doName);
-//       setDoCode.add(doCode);
-//     }
-
-//     const siCode = Number(addr[2]);
-//     if (!setSiCode.has(siCode)) {
-//       const siName = addr[3];
-//       inputSi(siCode, siName, doCode);
-//       setSiCode.add(siCode);
-//     }
-
-//     const dongCode = Number(addr[4]);
-//     const dongName = addr[5];
-//     inputDong(dongCode, dongName, doCode, siCode);
-//   });
-
-//   // Connection Close
-//   db.end();
-// };
-
-// setDB();
+export default setLocTables;

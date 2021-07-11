@@ -2,6 +2,7 @@ import app from "./app";
 import dotenv from "dotenv";
 import "./schedules"; // 매일 자정 데이터 처리
 import db from "./db/index";
+import setLocTables from "./db/locationSetting";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ db.sequelize
   .then(() => {
     console.log(db.msg.connection_success);
   })
+  .then(() => setLocTables())
   .catch((err) => {
     console.log(db.msg.connection_err);
     console.log(err);
