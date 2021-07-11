@@ -13,11 +13,12 @@ const handleListening = () => {
 
 // DB 연결
 db.sequelize
-  .sync({ force: false })
+  .sync({ force: true })
   .then(() => {
-    console.log("DB Connect Suceecs!");
+    console.log(db.msg.connection_success);
   })
   .catch((err) => {
+    console.log(db.msg.connection_err);
     console.log(err);
   });
 

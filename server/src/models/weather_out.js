@@ -10,7 +10,7 @@ export class Weather_Out extends Model {
           primaryKey: true,
           references: {
             model: Emd,
-            key: "code",
+            key: "code_emd",
           },
         },
         collected_at: {
@@ -43,10 +43,10 @@ export class Weather_Out extends Model {
   }
 
   static associate(db) {
-    // 모델이 참조하는 테이블
+    // weather_out 모델이 참조하는 테이블에 대한 외래키 설정.
     db.Weather_out.belongsTo(db.Emd, {
       foreignKey: "loc_code",
-      targetKey: "code",
+      targetKey: "code_emd",
     });
   }
 }

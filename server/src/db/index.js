@@ -56,6 +56,7 @@ Weather_out.associate(db);
 
 // Messages for Data Base.
 const msg = {
+  connection_success: "DB Connection Success.",
   connection_err: "DB Connection Error.",
   query_success: "DB Query Success.",
   query_err: "DB Querry Error.",

@@ -39,7 +39,7 @@ export class Weather_In extends Model {
   }
 
   static associate(db) {
-    // 모델이 참조하는 테이블
+    // weather_in 모델이 참조하는 테이블에 대한 외래키 설정.
     db.Weather_in.belongsTo(db.User, {
       foreignKey: "host",
       targetKey: "email",
