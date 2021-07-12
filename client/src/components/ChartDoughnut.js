@@ -4,16 +4,15 @@ import { Doughnut } from 'react-chartjs-2'
 
 function ChartDoughnut() {
     const cardstyled = {
-        fontSize: '0.5em',
         margin: 'auto',
         padding: '1em',
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
-        borderWidth: '1.5px',
+        borderWidth: '3px',
         borderRadius: '20px',
-        borderColor: '#04AB70',
-        color: 'rgb(110, 189, 142)'
+        borderColor: 'rgb(110, 189, 142)',
+        color: '#04AB70'
     }
     const btnstyled = {
         background: 'rgb(110, 189, 142)',

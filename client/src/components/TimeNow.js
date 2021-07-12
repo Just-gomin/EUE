@@ -6,7 +6,6 @@ import '../App.css'
 
 function TimeNow() {
     const cardstyled = {
-        fontSize: '0.5em',
         margin: 'auto',
         padding: '1em',
         display: 'flex',

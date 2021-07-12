@@ -1,0 +1,56 @@
+import React from 'react'
+import { Container, Row, Card, Table, Button, Col, Modal } from 'react-bootstrap';
+import '../App.css'
+
+
+function LocalCode() {
+    const cardstyled = {
+        margin: 'auto',
+        padding: '1em',
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%',
+        borderWidth: '3px',
+        borderRadius: '20px',
+        borderColor: 'rgba(195, 195, 195, 0.753)',
+        color: 'rgb(110, 189, 142)'
+    }
+    const btnstyled2 = {
+        background: 'white',
+        margin: 'auto',
+        // maxWidth: 'fit-content',
+        borderWidth: '2px',
+        fontSize: '0.5em',
+        color: 'rgb(110, 189, 142)',
+        borderColor: 'rgba(195, 195, 195, 0.753)',
+        borderRadius: '20px',
+    }
+
+    return (
+        <>
+            <Col className='text-center pt-3 pb-2 px-0'>
+                <Card style={cardstyled} id='localName'>
+                    <Card.Title>
+                        GUEST
+                    </Card.Title>
+                    <Row style={{ alignItems: 'center', margin: 'auto', whiteSpace: 'nowrap' }}>
+                        <Card.Subtitle>
+                            지역이름
+                            지역코드
+                        </Card.Subtitle>
+                        <Button variant='light' className='ml-1' style={btnstyled2}>
+                            변경
+                        </Button>
+                    </Row>
+                    <Modal>
+                        gd
+                    </Modal>
+
+                    환경을 향한 노력 <br />
+                    <strong>OOO 일 째</strong>
+                </Card>
+            </Col>
+        </>
+    )
+}
+export default LocalCode;

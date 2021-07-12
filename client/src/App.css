@@ -15,8 +15,13 @@ body {
 }
 
 .card .card-title {
-  color: rgb(109, 110, 109);
-  /* background-color: ; */
+  color: rgb(70, 70, 70);
+  font-size: 1.5em;
+}
+
+.card .card-subtitle {
+  color: rgb(129, 129, 129);
+  font-size: 0.8em;
 }
 
 .form-group .form-control {
@@ -48,7 +53,7 @@ body {
 
 @media (max-width: 767.98px) { 
   body {
-    padding: 10px;
+    padding: 30px;
     padding-left: 20px;
     padding-right: 20px;
     margin: auto;
@@ -59,7 +64,12 @@ body {
   }
   
   #stickyy {
-    max-width: 300px;
+    max-width: 400px;
+  }
+
+  #contour {
+    padding: 10px;
+    color: rgba(195, 195, 195, 0.753);
   }
   
  }
@@ -82,8 +92,12 @@ body {
     top: 40px;
     width: fit-content;
     height: fit-content;
-    max-width: 240px;
+    max-width: 300px;
 
+  }
+
+  #contour {
+    display: none;
   }
 
  }
