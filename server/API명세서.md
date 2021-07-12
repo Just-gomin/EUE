@@ -7,7 +7,7 @@
 | Data Collector | GET         | /data/input?...            | 아두이노를 통해 수집한 자료 등록 (내부, 외부는 쿼리로 구분) |
 | Data - User    | GET         | /data/user/:id             | 사용자 지정 장소의 데이터 요청                              |
 | Data - Outside | GET         | /data/outside/:id          | 해당 지역구의 데이터 요청                                   |
-| Local Code     | GET         | /loccode/do                | 행정 구역 코드 '도' 요청                                    |
+| Local Code     | GET         | /loccode/doe               | 행정 구역 코드 '도' 요청                                    |
 | Local Code     | GET         | /loccode/si-gun-gu/:id     | 사용자 입력 '도'에 따른 행정 구역 코드 '시군구' 요청        |
 | Local Code     | GET         | /loccod/eup-myeon-dong/:id | 사용자 입력 '시군구'에 따른 행정 구역 코드 '읍면동' 요청    |
 | Auth           | POST        | /signup                    | 회원가입 요청                                               |
@@ -41,3 +41,8 @@
 - [x] 사용자 등록 ( Register )
 
       2021.05.07 +) Data Collector의 경우 Post 방식으로 보내주는 것이 맞으나, 현재 Get방식을 이용하고 있습니다. 올해 초 부터 아두이노에서 POST로 전송을 하고자 여러 자료를 찾아 봤지만, 방법을 찾지 못해 일단 진행 하였습니다. 방법을 발견하면 수정을 진행하겠습니다.
+
+### 2021.07.12 \_ 경로 수정
+
+1. 도 정보를 가져오는 경로 수정
+   : loccode/do -> loccode/doe
