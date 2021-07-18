@@ -14,6 +14,7 @@ import locCodeRouter from "./routers/locCodeRouter";
 
 const app = express();
 
+// Page Views for Development test.
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
