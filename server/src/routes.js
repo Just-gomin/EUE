@@ -16,7 +16,7 @@ const SIGUNGU = "/si-gun-gu";
 const EUPMYEONDONG = "/eup-myeon-dong";
 
 // # Auth
-const REGISTER = "/register";
+const SIGNUP = "/signup";
 const LOGIN = "/login";
 const EDIT_PROFILE = "/edit-profile";
 
@@ -33,7 +33,7 @@ const routes = {
   doe: DOE,
   sigungu: SIGUNGU,
   eupmyeondong: EUPMYEONDONG,
-  register: REGISTER,
+  signup: SIGNUP,
   login: LOGIN,
   editProfile: EDIT_PROFILE,
   Detail: (id) => {

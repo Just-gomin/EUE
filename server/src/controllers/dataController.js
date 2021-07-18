@@ -79,7 +79,7 @@ export const getDataInput = (req, res) => {
 };
 
 // 사용자의 데이터 가져오기 및 예측 값 전송
-export const getUserData = (req, res) => {
+export const getUserWeatherData = (req, res) => {
   const {
     params: { id },
   } = req;
