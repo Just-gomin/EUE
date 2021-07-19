@@ -1,25 +1,11 @@
+import db from "../db/index";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import { serverMSG, statusCode } from "../serverinfo";
 
 dotenv.config();
 
-// Page for Development Test.
-export const getSignup = (req, res) => {
-  res.render("signup", { pagename: "Sign Up" });
-};
-
-// Page for Development Test.
-export const getLogin = (req, res) => {
-  res.render("login", { pagename: "Log In" });
-};
-
-// Function for Signup Proccess.
-export const postSignup = async (req, res) => {
-  const {
-    body: { email, locCode },
-  } = req;
-
+const postMail = async (email, token) => {
   const transporter = nodemailer.createTransport({
     service: process.env.NODEMAILER_SERVICE,
     auth: {
@@ -56,4 +42,62 @@ export const postSignup = async (req, res) => {
   }
 };
 
-export const postLogin = (req, res) => {};
+// Page for Development Test.
+export const getSignup = (req, res) => {
+  res.render("signup", { pagename: "Sign Up" });
+};
+
+// Page for Development Test.
+export const getLogin = (req, res) => {
+  res.render("login", { pagename: "Log In" });
+};
+
+// Function for Signup Proccess.
+export const postSignup = async (req, res) => {
+  const {
+    body: { email, locCode },
+  } = req;
+
+  const result = db.User.findOne({
+    where: { email: email },
+    logging: false,
+  });
+
+  if (result) {
+    res.status(statusCode.err).json({
+      msg: serverMSG.server_err,
+      content: "You are aleady registered",
+    });
+  } else {
+    db.User.create({ email: email, locCode: locCode }, { logging: false });
+    // 로그인 페이지로 넘겨주기.
+  }
+};
+
+export const postLogin = (req, res) => {
+  const {
+    body: { email },
+  } = req;
+
+  const result = db.User.findOne({
+    where: { email: email },
+    logging: false,
+  });
+
+  if (result) {
+    // token 발행
+    const token = "ex Token";
+    // 토큰이 포함된 로그인 링크 전송
+    postLogin(email, token);
+    res
+      .status(statusCode.ok)
+      .json({ msg: serverMSG.server_ok, content: "Send Mail Successfully." });
+  } else {
+    res
+      .status(statusCode.err)
+      .json({
+        msg: serverMSG.server_err,
+        content: "You are still not our user.",
+      });
+  }
+};
