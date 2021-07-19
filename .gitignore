@@ -4,5 +4,9 @@
 # VScode setting File
 .vscode/*
 
+node_modules/*
+package-lock.json
+package.json
+
 # Arduino File
 arduino/code/test/*

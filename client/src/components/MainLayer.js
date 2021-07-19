@@ -27,10 +27,11 @@ function MainLayer() {
 
     const btnstyled = {
         background: 'rgb(110, 189, 142)',
-        margin: '1px',
+        margin: 'auto',
+        marginBottom: '0.5em',
         display: 'flex',
         justifyContent: 'center',
-        maxWidth: '100%',
+        width: '100%',
         borderWidth: '2px',
         borderColor: 'rgba(195, 195, 195, 0.753)',
         borderRadius: '20px',
@@ -38,8 +39,7 @@ function MainLayer() {
         color: 'white'
     }
 
-    const [logshow, setLogshow] = useState(false);
-    const kakao_accToken = localStorage.getItem('Kakao_token')
+    const logined = localStorage.getItem('nickname')
 
     return (
         <>
@@ -54,7 +54,7 @@ function MainLayer() {
             </Row>
             <Row className='d-flex justify-content-center align-items-center my-2 mx-auto w-100'>
                 <ButtonGroup vertical className='m-auto' style={{ width: '100%', flexDirection: 'column' }}>
-                    {kakao_accToken ?
+                    {logined ?
                         //true
                         <Button variant='light' style={btnstyled} onClick={kakaoLogout}>
                             로그아웃
@@ -67,27 +67,12 @@ function MainLayer() {
                             </Link>
                         </Button>
                     }
-                    <Modal
-                        size="sm"
-                        show={logshow}
-                        onHide={() => setLogshow(false)}
-                        aria-labelledby="example-modal-sizes-title-sm"
-                    >
-                        <LoginComp />
-                    </Modal>
-                    {!kakao_accToken ?
+                    {!logined &&
                         <Button variant='light' style={btnstyled}>
-
                             <Link to='/signup' id='btnlink'>
                                 회원가입
                             </Link>
                         </Button>
-                        :
-                        <Button variant='light' style={btnstyled} onClick={unlinkApp}>
-
-                            연결끊기
-                        </Button>
-
                     }
 
                 </ButtonGroup>

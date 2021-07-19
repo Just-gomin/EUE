@@ -23,30 +23,22 @@ function LoginComp() {
     const inboxstyled = {
         display: 'flex',
         flexDirection: 'column',
-        maxWidth: '100%',
+        maxWidth: '80%',
         justifyContent: 'center',
         margin: 'auto',
         padding: '10px'
     }
 
-    function loginWithKakao2() {
-        window.Kakao.Auth.authorize({
-            redirectUri: 'http://localhost:3000/oauth'
-        })
-    }
-
-    // useEffect(()=> {
-    //     window.location.replace('/')
-
-    // },[localStorage.getItem('Kakao_token')])
-
 
     return (
         <Row className='text-center w-100 my-2'>
             <Card style={cardstyled}>
-                <Card.Title>
+                <Card.Title id='impactTitle'>
                     LOGIN
                 </Card.Title>
+                <Card.Subtitle style={{ fontWeight: 'lighter' }}>
+                    Log in with your social media account or email address
+                </Card.Subtitle>
                 <hr />
                 <Card.Text>
                     <Form style={inboxstyled}>
@@ -54,23 +46,26 @@ function LoginComp() {
                             <Form.Control type="email" placeholder="Email" />
                         </Form.Group>
 
-                        <Form.Group controlId="formBasicPassword">
-                            <Form.Control type="password" placeholder="Password" />
-                        </Form.Group>
                         <Button variant='light' type="submit" id='formbtn'>
                             LOGIN
                         </Button>
+
                     </Form>
-                    <hr />
+
+                    <Row className='d-flex align-items-center m-2'>
+                        <Col>
+                            <hr />
+                        </Col>
+                        OR
+                        <Col>
+                            <hr />
+                        </Col>
+                    </Row>
+
                     <Row style={{ margin: 'auto', marginBottom: '5px', display: 'flex', justifyContent: 'center' }}>
-                        <a href="#" onClick={loginWithKakao2} id='socialLink' >
-                            <img src='/images/Kakao1.jpg' id='logpng' />
-                            KAKAO
-                        </a>
                         <a href="#;" onClick={LoginWithKakao} id='socialLink' >
                             {/* 세미콜론이 붙으면 최상단 이동 x */}
-                            <img src='/images/Kakao1.jpg' id='logpng' />
-                            KAKAOHTML
+                            <img src='http://image.kmib.co.kr/online_image/2020/0626/611514110014734788_1.jpg' id='logpng' alt='KAKAO' />
                         </a>
 
                     </Row>

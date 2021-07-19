@@ -3,11 +3,12 @@ import { Container, Row, Card, Table, Button, Col, Modal } from 'react-bootstrap
 // import db from "../db/index"
 import '../App.css'
 import { LoginWithKakao } from '../utils/Oauth';
+import { Link } from 'react-router-dom';
 
 
 function LocalCode() {
 
-    const kakao_accToken = localStorage.getItem('Kakao_token')
+    const logined = localStorage.getItem('nickname')
 
     const cardstyled = {
         margin: 'auto',
@@ -29,29 +30,30 @@ function LocalCode() {
         borderColor: 'rgba(195, 195, 195, 0.753)',
         borderRadius: '20px',
     }
-
     const [localChange, setLocalChange] = useState(false)
-    const user_email = localStorage.getItem('user_email')
+    const nickname = localStorage.getItem('nickname')
     return (
         <>
             <Col className='text-center pt-3 pb-2 px-0'>
                 <Card style={cardstyled} id='localName'>
                     <Card.Title>
-                        {kakao_accToken ?
-                            `${user_email}`
+                        {logined ?
+                            `${nickname}`
                             :
                             <>
                                 GUEST
                             </>
-                        }
+                        }, 환영합니다.
                     </Card.Title>
                     <Row style={{ alignItems: 'center', margin: 'auto', whiteSpace: 'nowrap' }}>
                         <Card.Subtitle>
                             지역코드
                         </Card.Subtitle>
-                        {kakao_accToken &&
-                            <Button variant='light' className='ml-1' onClick={() => setLocalChange(true)} style={btnstyled2}>
-                                변경
+                        {logined &&
+                            <Button variant='light' className='ml-1' style={btnstyled2}>
+                                <Link to='/local_code' style={{ textDecoration: 'none', color: 'rgb(110, 189, 142)' }}>
+                                    변경
+                                </Link>
                             </Button>
                         }
                     </Row>
