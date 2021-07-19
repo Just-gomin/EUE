@@ -10,7 +10,6 @@ import globalRouter from "./routers/globalRouter";
 import dataRouter from "./routers/dataRouter";
 
 import { localmiddleware } from "./middlewares";
-import locCodeRouter from "./routers/locCodeRouter";
 
 const app = express();
 
@@ -28,8 +27,7 @@ app.use(morgan("dev"));
 app.use(localmiddleware);
 
 // router 사용
-app.use(routes.home, globalRouter);
-app.use(routes.data, dataRouter);
-app.use(routes.locCode, locCodeRouter);
+app.use(routes.base, globalRouter);
+app.use(routes.base + routes.data, dataRouter);
 
 export default app;

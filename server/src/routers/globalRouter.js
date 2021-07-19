@@ -10,7 +10,7 @@ import {
 
 const globalRouter = express.Router();
 
-globalRouter.get(routes.home, getHome);
+globalRouter.get("/", getHome); // For development test.
 
 // Authentication
 globalRouter.get(routes.signup, getSignup); // For development test.

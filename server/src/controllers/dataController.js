@@ -1,4 +1,3 @@
-import fs from "fs";
 import fetch from "node-fetch";
 import { serverMSG, statusCode } from "../serverinfo";
 import db from "../db/index";
@@ -81,8 +80,17 @@ export const getDataInput = (req, res) => {
 // 사용자의 데이터 가져오기 및 예측 값 전송
 export const getUserWeatherData = (req, res) => {
   const {
-    params: { id },
+    params: { email },
   } = req;
+
+  /* 사용자 email에 따른 사용자 날씨 데이터 가져오기 */
+
+  res.status(statusCode.ok).send(serverMSG.server_ok);
+};
+
+// 지역 코드 요청 처리
+export const getLocCode = (req, res) => {
+  /* 통합 지역 코드 및 이름 json으로 생성 및 전송 */
 
   res.status(statusCode.ok).send(serverMSG.server_ok);
 };
