@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Container, Row, Card, Table, Button, Col, Modal } from 'react-bootstrap';
 import '../App.css'
+import { LoginWithKakao } from '../utils/Oauth';
 
 
 function LocalCode() {
+
+    const kakao_accToken = localStorage.getItem('Kakao_token')
+
     const cardstyled = {
         margin: 'auto',
         padding: '1em',
@@ -26,24 +30,38 @@ function LocalCode() {
         borderRadius: '20px',
     }
 
+    const [localChange, setLocalChange] = useState(false)
     return (
         <>
             <Col className='text-center pt-3 pb-2 px-0'>
                 <Card style={cardstyled} id='localName'>
                     <Card.Title>
                         GUEST
+                        {LoginWithKakao.userEmail}
                     </Card.Title>
                     <Row style={{ alignItems: 'center', margin: 'auto', whiteSpace: 'nowrap' }}>
                         <Card.Subtitle>
-                            지역이름
+                            
                             지역코드
                         </Card.Subtitle>
-                        <Button variant='light' className='ml-1' style={btnstyled2}>
-                            변경
-                        </Button>
+                        {kakao_accToken &&
+                            <Button variant='light' className='ml-1' onClick={() => setLocalChange(true)} style={btnstyled2}>
+                                변경
+                            </Button>
+                        }
                     </Row>
-                    <Modal>
-                        gd
+                    <Modal
+                        show={localChange}
+                        onHide={() => setLocalChange(false)}
+                    >
+                        <Modal.Header className='d-block text-center'>
+                            <Modal.Title>
+                                마이페이지
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            지역이름 (지역코드)
+                        </Modal.Body>
                     </Modal>
 
                     환경을 향한 노력 <br />

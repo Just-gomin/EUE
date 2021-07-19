@@ -31,13 +31,13 @@ function Footer() {
 
     const HandleClose = () => setDonateShow(false);
 
-    function clickAndCopy() {
+    function clickAndTwoSec() {
         return new Promise((resolve) => setTimeout(resolve, 2000))
     }
 
     useEffect(() => {
         if (isCopyshow) {
-            clickAndCopy().then(() => {
+            clickAndTwoSec().then(() => {
                 setCopyShow(false);
             });
         }

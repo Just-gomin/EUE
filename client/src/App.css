@@ -5,9 +5,11 @@ body {
 
 }
 
-.a:hover {
-    color: white;
+#btnlink {
+  color: white !important;
+  text-decoration: none !important;
 }
+
 
 .btn-primary:active {
   outline: white !important;
@@ -20,8 +22,11 @@ body {
 }
 
 .card .card-subtitle {
+  display: flex;
   color: rgb(129, 129, 129);
   font-size: 0.8em;
+  height: 2em;
+  align-items: center;
 }
 
 .form-group .form-control {

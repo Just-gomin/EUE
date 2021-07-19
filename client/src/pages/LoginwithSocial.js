@@ -1,7 +1,7 @@
 import React from 'react'
 import '../App.css'
 import { Form, Modal, Button, Row, Col, Image, Alert } from 'react-bootstrap';
-import Oauth from '../components/Oauth';
+import Oauth, { LoginWithKakao } from '../utils/Oauth';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
@@ -15,15 +15,19 @@ function LoginwithSocial() {
         justifyContent: 'center',
         margin: 'auto',
         padding: '10px'
-
     }
 
-    function loginWithKakao() {
+    function loginWithKakao2() {
         window.Kakao.Auth.authorize({
-          redirectUri: 'http://localhost:3000/oauth'
-        })
-    }
-    const [isLogin, setIsLogin] = useState(false)
+            redirectUri: 'http://localhost:3000/oauth'
+          })
+        }
+
+    // useEffect(()=> {
+    //     window.location.replace('/')
+
+    // },[localStorage.getItem('Kakao_token')])
+
 
     return (
         <Row className='m-auto'>
@@ -47,26 +51,16 @@ function LoginwithSocial() {
                 </Form>
                 <hr />
                 <Row style={{ margin: 'auto', marginBottom: '5px', display: 'flex', justifyContent: 'center' }}>
-                    <a href="#" onClick={loginWithKakao} id='socialLink' >
+                    <a href="#" onClick={loginWithKakao2} id='socialLink' >
                         <img src='/images/Kakao1.jpg' id='logpng' />
                         KAKAO
                     </a>
-                    <a href="javascript:loginWithKakao()" id='socialLink' >
+                    <a href="#;" onClick={LoginWithKakao} id='socialLink' >
+                        {/* 세미콜론이 붙으면 최상단 이동 x */}
                         <img src='/images/Kakao1.jpg' id='logpng' />
                         KAKAOHTML
                     </a>
-                    <a href="javascript:loginWithKakaoPOP()" id='socialLink' >
-                        <img src='/images/Kakao1.jpg' id='logpng' />
-                        KAKAOPOP
-                    </a>
-                    <a as='button' href="javascript:loginWithKakao()" id='socialLink'>
-                        <Image src='/images/google.png' id='logpng' />
-                        GOOGLE
-                    </a>
-                    <a as='button' href="javascript:loginWithKakao()" id='socialLink'>
-                        <Image src='/images/facebook.png' id='logpng' />
-                        FACEBOOK
-                    </a>
+                   
                 </Row>
             </Modal.Body>
         </Row>

@@ -1,15 +1,17 @@
 import React from 'react'
 import { useState } from 'react';
 import { Button, Form, Image, Row, ButtonGroup, Modal, Dropdown, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import '../App.css'
-import SignUp from '../pages/SignUp'
 import LoginwithSocial from '../pages/LoginwithSocial';
-import { isLogined } from './../Utils/Auth';
+import { isLogined, isOauth } from '../utils/Auth';
 import LocalCode from '../components/LocalCode';
+// import { isOauthChecked } from './../utils/Auth';
+import Oauth, { checkAuth, kakaoLogout, unlinkApp } from './../utils/Oauth';
 
 
 function MainLayer() {
+    const history = useHistory()
 
     const boxstyled = {
         border: 'solid',
@@ -36,25 +38,8 @@ function MainLayer() {
         color: 'white'
     }
 
-    // const loginstyled = {
-    //     margin: 'auto',
-    //     padding: '2px',
-    //     diplay: 'flex',
-    //     justifyContent: 'center',
-    //     borderRadius: '20px'
-    // }
-
-    // const titlesty = {
-    //     display: 'flex',
-    //     justifyContent: 'center',
-    //     background: 'rgb(110, 189, 142)',
-    //     text: 'center'
-    // }
-
     const [logshow, setLogshow] = useState(false);
-    const [signshow, setSignshow] = useState(false);
-
-    const user = isLogined()
+    const kakao_accToken = localStorage.getItem('Kakao_token')
 
     return (
         <>
@@ -69,11 +54,13 @@ function MainLayer() {
             </Row>
             <Row className='d-flex justify-content-center align-items-center my-2 mx-auto w-100'>
                 <ButtonGroup vertical className='m-auto' style={{ width: '100%', flexDirection: 'column' }}>
-                    {user ?
-                        <Button variant='light' style={btnstyled} onClick={() => setLogshow(true)}>
+                    {kakao_accToken ?
+                        //true
+                        <Button variant='light' style={btnstyled} onClick={kakaoLogout}>
                             로그아웃
                         </Button>
                         :
+                        //false
                         <Button variant='light' style={btnstyled} onClick={() => setLogshow(true)}>
                             로그인
                         </Button>
@@ -86,16 +73,21 @@ function MainLayer() {
                     >
                         <LoginwithSocial />
                     </Modal>
-                    <Button variant='light' style={btnstyled} onClick={() => setSignshow(true)}>회원가입</Button>
-                    <Modal
-                        size="md"
-                        show={signshow}
-                        onHide={() => setSignshow(false)}
-                        aria-labelledby="example-modal-sizes-title-sm"
-                    >
-                        <SignUp />
+                    {!kakao_accToken ?
+                        <Button variant='light' style={btnstyled}>
 
-                    </Modal>
+                            <Link to='/signup' id='btnlink'>
+                                회원가입
+                            </Link>
+                        </Button>
+                        :
+                        <Button variant='light' style={btnstyled} onClick={unlinkApp}>
+
+                                연결끊기
+                        </Button>
+
+                    }
+
                 </ButtonGroup>
             </Row>
             <Row className='m-auto justify-content-center w-100' id='contour'>

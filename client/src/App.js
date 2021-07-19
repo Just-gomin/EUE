@@ -2,19 +2,21 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
-import Oauth from './components/Oauth';
+import Oauth from './utils/Oauth';
+import SignupPage from './pages/SignupPage';
 
 
 function App() {
-  
+
   return (
     <Router>
       <>
-      <Route exact path='/' component={Home} />
-      <Route path='/oauth' component={Oauth}/>
+        <Route exact path='/' component={Home} />
+        <Route exact path='/signup' component={SignupPage} />
+        <Route path='/oauth' component={Oauth} />
       </>
     </Router>
-    
+
   );
 }
 

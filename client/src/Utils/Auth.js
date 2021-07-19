@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { useState } from 'react';
+import Oauth from './Oauth';
 
 export function handleLogin({ userId, role, name, tel, email }) {
     localStorage.setItem('id', userId)
@@ -30,4 +32,10 @@ export function isAdmin() {
     } else {
         return false
     }
+}
+
+
+export function isOauth(value) {
+    const TFoauth = value
+    return TFoauth;
 }

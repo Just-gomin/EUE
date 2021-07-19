@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
-import TimeNow from './../components/TimeNow';
 import '../App.css'
-import EueSuggest from '../components/EueSuggest';
-import ChartLine from '../components/ChartLine';
-import ChartDoughnut from '../components/ChartDoughnut';
-import Footer from './../components/Footer';
-import { isOauth } from './../utils/Auth';
+import SignupComp from '../components/SignupComp';
 
-
-
-function Home() {
+function SignupPage() {
     const constyled = {
         display: 'flex',
         justifyContent: 'space-evenly',
@@ -32,8 +25,9 @@ function Home() {
         flexDirection: 'column',
         padding: '0'
     }
-
-
+    useEffect(() => {
+        console.log('마운트 될때마다 실행');
+    }, []);
 
 
 
@@ -49,14 +43,7 @@ function Home() {
                 <Col md={6} style={col2sty}>
 
                     <Row style={constyled} className='d-flex mb-2 w-100'>
-
-                        {/* <KakaoLogin/> */}
-
-                        {/* <TimeNow /> */}
-                        <EueSuggest />
-                        <ChartLine />
-                        <ChartDoughnut />
-                        <Footer />
+                        <SignupComp />
                     </Row>
                 </Col>
             </Row>
@@ -65,4 +52,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default SignupPage;
