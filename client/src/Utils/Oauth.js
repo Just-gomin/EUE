@@ -30,20 +30,23 @@ export function LoginWithKakao() {
                     console.log(response.kakao_account.email);
 
                     const userEmail = response.kakao_account.email.split('@')[0];
-                    console.log(userEmail)
-                    localStorage.setItem('user_email',userEmail)
-
+                    localStorage.setItem('user_email', userEmail)
+                    const user_email = localStorage.getItem('user_email')
+                    console.log(user_email)
+                    // window.location.replace('/' + '?kakaoemail='+ `${user_email}`)
                 }
+
             });
-            // window.location.replace('/' + '?kakaoemail=', userEmail)
+
 
 
         },
         fail: function (err) {
             alert(JSON.stringify(err))
 
-        }
+        },
     })
+
 
 }
 

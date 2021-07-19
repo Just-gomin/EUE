@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Container, Row, Card, Table, Button, Col, Modal } from 'react-bootstrap';
+// import db from "../db/index"
 import '../App.css'
 import { LoginWithKakao } from '../utils/Oauth';
 
@@ -22,7 +23,6 @@ function LocalCode() {
     const btnstyled2 = {
         background: 'white',
         margin: 'auto',
-        // maxWidth: 'fit-content',
         borderWidth: '2px',
         fontSize: '0.5em',
         color: 'rgb(110, 189, 142)',
@@ -31,17 +31,22 @@ function LocalCode() {
     }
 
     const [localChange, setLocalChange] = useState(false)
+    const user_email = localStorage.getItem('user_email')
     return (
         <>
             <Col className='text-center pt-3 pb-2 px-0'>
                 <Card style={cardstyled} id='localName'>
                     <Card.Title>
-                        GUEST
-                        {LoginWithKakao.userEmail}
+                        {kakao_accToken ?
+                            `${user_email}`
+                            :
+                            <>
+                                GUEST
+                            </>
+                        }
                     </Card.Title>
                     <Row style={{ alignItems: 'center', margin: 'auto', whiteSpace: 'nowrap' }}>
                         <Card.Subtitle>
-                            
                             지역코드
                         </Card.Subtitle>
                         {kakao_accToken &&

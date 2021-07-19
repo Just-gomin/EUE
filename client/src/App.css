@@ -24,9 +24,9 @@ body {
 .card .card-subtitle {
   display: flex;
   color: rgb(129, 129, 129);
-  font-size: 0.8em;
-  height: 2em;
   align-items: center;
+  justify-content: center;
+  padding: 0.5em;
 }
 
 .form-group .form-control {

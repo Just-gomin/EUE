@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button, Form, Image, Row, ButtonGroup, Modal, Dropdown, Col } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import '../App.css'
-import LoginwithSocial from '../pages/LoginwithSocial';
+import LoginComp from './LoginComp';
 import { isLogined, isOauth } from '../utils/Auth';
 import LocalCode from '../components/LocalCode';
 // import { isOauthChecked } from './../utils/Auth';
@@ -61,8 +61,10 @@ function MainLayer() {
                         </Button>
                         :
                         //false
-                        <Button variant='light' style={btnstyled} onClick={() => setLogshow(true)}>
-                            로그인
+                        <Button variant='light' style={btnstyled}>
+                            <Link to='/login' id='btnlink'>
+                                로그인
+                            </Link>
                         </Button>
                     }
                     <Modal
@@ -71,7 +73,7 @@ function MainLayer() {
                         onHide={() => setLogshow(false)}
                         aria-labelledby="example-modal-sizes-title-sm"
                     >
-                        <LoginwithSocial />
+                        <LoginComp />
                     </Modal>
                     {!kakao_accToken ?
                         <Button variant='light' style={btnstyled}>
@@ -83,7 +85,7 @@ function MainLayer() {
                         :
                         <Button variant='light' style={btnstyled} onClick={unlinkApp}>
 
-                                연결끊기
+                            연결끊기
                         </Button>
 
                     }

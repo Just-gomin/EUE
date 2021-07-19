@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
 import '../App.css'
-import SignupComp from '../components/SignupComp';
+import LoginComp from '../components/LoginComp';
 
 function SignupPage() {
     const constyled = {
@@ -39,7 +39,7 @@ function SignupPage() {
                 <Col md={6} style={col2sty}>
 
                     <Row style={constyled} className='d-flex mb-2 w-100'>
-                        <SignupComp />
+                        <LoginComp />
                     </Row>
                 </Col>
             </Row>
