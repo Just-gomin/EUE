@@ -4,6 +4,7 @@
 
 | Category       | HTTP Method | URI                        | Description                                                 |
 | -------------- | ----------- | -------------------------- | ----------------------------------------------------------- |
+| Root Directory | ﹒          | /api                       | api 서버를 통해 들어오는 기본 경로                          |
 | Data Collector | GET         | /data/input?...            | 아두이노를 통해 수집한 자료 등록 (내부, 외부는 쿼리로 구분) |
 | Data - User    | GET         | /data/user/:id             | 사용자 지정 장소의 데이터 요청                              |
 | Data - Outside | GET         | /data/outside/:id          | 해당 지역구의 데이터 요청                                   |
