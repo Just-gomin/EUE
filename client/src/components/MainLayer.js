@@ -4,10 +4,9 @@ import { Button, Form, Image, Row, ButtonGroup, Modal, Dropdown, Col } from 'rea
 import { Link, useHistory } from 'react-router-dom';
 import '../App.css'
 import LoginComp from './LoginComp';
-import { isLogined, isOauth } from '../utils/Auth';
 import LocalCode from '../components/LocalCode';
 // import { isOauthChecked } from './../utils/Auth';
-import Oauth, { checkAuth, kakaoLogout, unlinkApp } from './../utils/Oauth';
+import { kakaoLogout } from '../utils/Oauth';
 
 
 function MainLayer() {

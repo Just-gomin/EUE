@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import '../App.css'
 import { Form, Modal, Button, Row, Col, Image, DropdownButton, ButtonGroup, Dropdown, Card } from 'react-bootstrap';
 // import { KAKAO_AUTH_URL } from '../components/Oauth';
-import { handleLogin } from '../utils/Auth';
-import { isOauth } from '../utils/Auth';
+// import { handleLogin } from '../utils/Auth';
+// import { isOauth } from '../utils/Auth';
 import { LoginWithKakao } from '../utils/Oauth';
 
 function SignupComp() {
