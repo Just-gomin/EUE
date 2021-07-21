@@ -31,7 +31,15 @@ function LoginComp() {
 
     function CheckEmailSend() {
         setEmailSent(!emailSent)
+
+    }
+
+    function addressUrl() {
         localStorage.setItem('Email-Address', emailAddress)
+        const afterAt = localStorage.getItem('Email-Address').split('@')[1]
+        console.log(afterAt)
+        const newLink = 'https://www.' + afterAt;
+        window.open(newLink);
     }
 
     const [emailAddress, setEmailAddress] = useState('')
@@ -41,7 +49,6 @@ function LoginComp() {
         console.log(emailAddress)
     }
 
-    const 
     return (
         <Row className='text-center w-100 my-2'>
             <Card style={cardstyled}>
@@ -59,7 +66,7 @@ function LoginComp() {
                                 <Col>
                                     😍 이메일 전송이 완료 되었습니다.
                                 </Col>
-                                <Alert.Link href='/' target='_blank' style={{ fontSize: '0.8em' }}>
+                                <Alert.Link href="" onClick={addressUrl} target='_blank' style={{ fontSize: '0.8em' }}>
                                     이메일 확인 하러가기 ➞
                                 </Alert.Link>
                             </Alert>
@@ -68,6 +75,9 @@ function LoginComp() {
                                 <Col>
                                     😭 이메일을 정확하게 적어주세요.
                                 </Col>
+                                <Alert.Link href="/signup" target='_blank' style={{ fontSize: '0.8em' }}>
+                                    회원가입 하러가기 ➞
+                                </Alert.Link>
                             </Alert>
                         }
                         <Button onClick={() => setAlertShow(true)}>보여주고</Button>
@@ -77,7 +87,8 @@ function LoginComp() {
                         <Form.Group controlId="formBasicEmail">
                             <Form.Control type="email" placeholder="Email" onChange={handleChange} />
                         </Form.Group>
-                        <Button variant='light' type="submit" id='formbtn' onClick={CheckEmailSend}>
+                        <Button variant='light' id='formbtn' onClick={CheckEmailSend}> 
+                        
                             LOGIN
                         </Button>
 

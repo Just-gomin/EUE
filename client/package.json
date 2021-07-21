@@ -30,6 +30,7 @@
     "react-use": "^17.2.4",
     "sass": "^1.35.1",
     "sequelize": "^6.6.5",
+    "sweetalert2": "^11.0.19",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

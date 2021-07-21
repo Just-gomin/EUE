@@ -109,7 +109,7 @@ function SignupComp() {
                         <Button onClick={() => setAlertShow(true)}>보여주고</Button>
                         <Button onClick={() => setAlertShow(false)}>안보여주고</Button>
                     </Row>
-                    
+
                     <Form style={inboxstyled}
                         onSubmit={handleSubmit}>
                         <Form.Group controlId="userEmail">
@@ -138,7 +138,8 @@ function SignupComp() {
                             </Row>
                         </Form.Group>
 
-                        <Button variant='light' className='mt-2' type="submit" id='formbtn' onClick={CheckUserExist}>
+                        <Button variant='light' className='mt-2' id='formbtn' onClick={CheckUserExist}>
+                        {/* type="submit" */}
                             Sign Up
                         </Button>
                     </Form>

@@ -38,6 +38,7 @@ function MainLayer() {
 
     return (
         <>
+        
             <Row className='d-flex align-items-center m-auto w-100'>
                 <Link to='/' className=' m-auto'>
                     <Image src='/images/EUE11.jpg' alt='EUE' style={boxstyled} />

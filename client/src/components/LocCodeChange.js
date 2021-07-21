@@ -1,9 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../App.css'
 import { Form, Button, Row, Col, Card, DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
-import { useState } from 'react';
 import axios from 'axios';
-// import { doeCode } from '../utils/Auth';
 
 function LocCodeChange() {
 
@@ -28,7 +26,6 @@ function LocCodeChange() {
         padding: '10px'
     }
 
-
     const btnstyled2 = {
         background: 'white',
         margin: '1px',
@@ -47,34 +44,32 @@ function LocCodeChange() {
         auth.style.visibility = 'visible'
     }
 
-    // console.log(typeof (locCode()))
-    // console.log(locCode())
-    // const [ddoe, setDdoe] = useState([])
+    const [does, setDoes] = useState([])
+    const [sggs, setSggs] = useState([])
+    // const [emds, setEmds] = useState([])
 
-    // async function DoeCode() {
-    //     await doeCode().then((res) => {
-    //         //     // // for (let i = 0; i < res.length; i++) {
-    //         //     //     console.log(res[0]['code_doe'])
-    //         //     //     console.log(0, res[0]['name_doe'])
-    //         ddoe.push(res[0]['name_doe'])
-    //         ddoe.push(res[1]['name_doe'])
-    //         console.log(ddoe)
-    //         console.log(typeof(ddoe))
-    //         //     // }
-    //     })
-    // }
-    
-    const res = axios.get("localhost:4500/d/loccode");
-    // const does = res.data["locCodes"]["DOE"]   // object
+    const does_array = []
+    const sggs_array = []
+    // const emds_array = []
+    does.map((doesObj) => does_array.push(doesObj['name_doe']))
+    sggs.map((sggsObj) => console.log(sggsObj['sgg']))
+    console.log('does :: ', does)
+    console.log('does_array:::', does_array)
 
+    async function getLocCode() {
+        const res = await axios.get("http://localhost:4500/api/data/loccode")
+        const local_codes = res.data.locCodes
+        console.log('local_codes::: ', local_codes)
+        setDoes(local_codes.DOE)
+        setSggs(local_codes.SGG)
+    }
+
+    useEffect(() => {
+        getLocCode()
+    }, [])
 
     return (
         <Row className='text-center w-100 my-2'>
-            {/* {DoeCode()} */}
-            {/* {data} */}
-
-            asd
-
             <Card style={cardstyled}>
                 <Card.Title id='impactTitle'>
                     Local Code
@@ -84,22 +79,34 @@ function LocCodeChange() {
                 </Card.Subtitle>
                 <hr />
                 <Card.Text>
+
                     <Form style={inboxstyled}>
                         <Row className='m-auto w-100 d-flex justify-content-center'>
                             <Col md={12} xs={12} style={{ padding: '0', display: 'flex', justifyContent: 'center', width: '100%' }}>
-                                {['도', '시군구', '읍면동'].map((localname) => (
-                                    <DropdownButton
-                                        variant='light'
-                                        style={btnstyled2}
-                                        title='지역코드'
-                                        as={ButtonGroup}
-                                        title={` ${localname} `}>
+                                <Form.Group style={btnstyled2}>
+                                    <Form.Control as='select' aria-label="Floating label select example">
+                                        <option>도</option>
+                                        {does.map((doe) => (
+                                            <option value={`${doe["code_doe"]}`}>
+                                                {`${doe["name_doe"]}`}</option>
+                                        ))}
+                                    </Form.Control>
+                                    <Form.Control as='select' aria-label="Floating label select example">
+                                        <option>시군구</option>
+                                        {does.map((doe) => (
+                                            <option value={`${doe["code_doe"]}`}>
+                                                {`${doe["name_doe"]}`}</option>
+                                        ))}
+                                    </Form.Control>
+                                    <Form.Control as='select' aria-label="Floating label select example">
+                                        <option>읍면동</option>
+                                        {does.map((doe) => (
+                                            <option value={`${doe["code_doe"]}`}>
+                                                {`${doe["name_doe"]}`}</option>
+                                        ))}
+                                    </Form.Control>
 
-                                        <Dropdown.Item></Dropdown.Item>
-                                        <Dropdown.Item>Another action</Dropdown.Item>
-                                        <Dropdown.Item>Something else here</Dropdown.Item>
-                                    </DropdownButton>
-                                ))}
+                                </Form.Group>
                                 <Button variant='light' style={btnstyled2} onClick={!locCodeShow && handleClickLoc}>확인</Button>
                             </Col>
                             <Col md={6} xs={4} id='loc-code' style={{
@@ -109,8 +116,8 @@ function LocCodeChange() {
                                 display: 'flex',
                                 justifyContent: 'center',
                                 padding: '2px',
-                                visibility: 'hidden',
-                                transition: 'all 4s'
+                                // visibility: 'hidden',
+                                transition: 'all 2s'
                             }}>
                                 지역코드
                             </Col>
