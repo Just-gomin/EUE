@@ -5,6 +5,7 @@
   "main": "init.js",
   "scripts": {
     "dev:server": "nodemon --exec babel-node src/init.js --delay 2",
+    "dev:server_window": "nodemon --exec\"npx babel-node src/init.js\" --delay 2",
     "start": "babel-node src/init.js"
   },
   "repository": {
