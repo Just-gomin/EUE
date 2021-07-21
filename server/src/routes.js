@@ -1,5 +1,5 @@
 // # Global Routes
-const HOME = "/";
+const BASE = "/api";
 
 // # Data Routes
 const DATA = "/data";
@@ -11,30 +11,26 @@ const DATA_OUTSIDE = "/outside";
 
 // # Local Code Data
 const LOCCODE = "/loccode";
-const DOE = "/doe";
-const SIGUNGU = "/si-gun-gu";
-const EUPMYEONDONG = "/eup-myeon-dong";
 
 // # Auth
 const SIGNUP = "/signup";
 const LOGIN = "/login";
+const CONFIRM = "/confirm";
 const EDIT_PROFILE = "/edit-profile";
 
 // # Detail Object
 const DETAIL = "/:id";
 
 const routes = {
-  home: HOME,
+  base: BASE,
   data: DATA,
   dataInput: DATA_INPUT,
   dataUser: DATA_USER,
   dataOutside: DATA_OUTSIDE,
   locCode: LOCCODE,
-  doe: DOE,
-  sigungu: SIGUNGU,
-  eupmyeondong: EUPMYEONDONG,
   signup: SIGNUP,
   login: LOGIN,
+  confirm: CONFIRM,
   editProfile: EDIT_PROFILE,
   Detail: (id) => {
     if (id) {

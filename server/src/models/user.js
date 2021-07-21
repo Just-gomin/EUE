@@ -18,6 +18,11 @@ export class User extends Model {
           allowNull: false,
           primaryKey: true,
         },
+        nick_name: {
+          type: DataTypes.STRING(16),
+          allowNull: false,
+          unique: true,
+        },
         password: {
           type: DataTypes.STRING(20),
           allowNull: false,

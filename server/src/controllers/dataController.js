@@ -1,4 +1,3 @@
-import fs from "fs";
 import fetch from "node-fetch";
 import { serverMSG, statusCode } from "../serverinfo";
 import db from "../db/index";
@@ -81,8 +80,54 @@ export const getDataInput = (req, res) => {
 // 사용자의 데이터 가져오기 및 예측 값 전송
 export const getUserWeatherData = (req, res) => {
   const {
-    params: { id },
+    params: { email },
   } = req;
 
+  /* 사용자 email에 따른 사용자 날씨 데이터 가져오기 */
+
   res.status(statusCode.ok).send(serverMSG.server_ok);
+};
+
+// 지역 코드 요청 처리
+export const getLocCode = async (req, res) => {
+  /* 통합 지역 코드 및 이름 json으로 생성 및 전송 */
+  let locCodes = [];
+
+  const does = await db.Doe.findAll({ logging: false });
+  const sggs = await db.Sgg.findAll({ logging: false });
+  const emds = await db.Emd.findAll({ logging: false });
+
+  let doe_sgg = [];
+  let sgg_emd = [];
+
+  does.map((info_doe) => {
+    let temp = {
+      name_doe: info_doe["name_doe"],
+      code_doe: info_doe["code_doe"],
+    };
+    temp.sgg = sggs.filter(
+      (info_sgg) => info_sgg["code_doe"] === info_doe["code_doe"]
+    );
+    doe_sgg.push(temp);
+  });
+
+  sggs.map((info_sgg) => {
+    let temp = {
+      code_doe: info_sgg["code_doe"],
+      name_sgg: info_sgg["name_sgg"],
+      code_sgg: info_sgg["code_sgg"],
+    };
+    temp.emd = emds.filter(
+      (info_emd) => info_emd["code_sgg"] === info_sgg["code_sgg"]
+    );
+    sgg_emd.push(temp);
+  });
+
+  res.status(statusCode.ok).json({
+    locCodes: {
+      DOE: does,
+      SGG: doe_sgg,
+      EMD: sgg_emd,
+    },
+  });
 };
