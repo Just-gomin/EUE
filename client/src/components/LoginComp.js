@@ -31,8 +31,17 @@ function LoginComp() {
 
     function CheckEmailSend() {
         setEmailSent(!emailSent)
+        localStorage.setItem('Email-Address', emailAddress)
     }
 
+    const [emailAddress, setEmailAddress] = useState('')
+
+    function handleChange(event) {
+        setEmailAddress(event.target.value)
+        console.log(emailAddress)
+    }
+
+    const 
     return (
         <Row className='text-center w-100 my-2'>
             <Card style={cardstyled}>
@@ -50,7 +59,7 @@ function LoginComp() {
                                 <Col>
                                     😍 이메일 전송이 완료 되었습니다.
                                 </Col>
-                                <Alert.Link href='/' style={{ fontSize: '0.8em' }}>
+                                <Alert.Link href='/' target='_blank' style={{ fontSize: '0.8em' }}>
                                     이메일 확인 하러가기 ➞
                                 </Alert.Link>
                             </Alert>
@@ -66,9 +75,8 @@ function LoginComp() {
                     </Row>
                     <Form style={inboxstyled}>
                         <Form.Group controlId="formBasicEmail">
-                            <Form.Control type="email" placeholder="Email" />
+                            <Form.Control type="email" placeholder="Email" onChange={handleChange} />
                         </Form.Group>
-
                         <Button variant='light' type="submit" id='formbtn' onClick={CheckEmailSend}>
                             LOGIN
                         </Button>
