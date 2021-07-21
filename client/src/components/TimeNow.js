@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import { Jumbotron, Container, Row, Card } from 'react-bootstrap';
+import React from 'react';
+import { Row, Card } from 'react-bootstrap';
 import Clock from 'react-live-clock'
 import '../App.css'
 
 
 function TimeNow() {
     const cardstyled = {
-        fontSize: '0.5em',
         margin: 'auto',
         padding: '1em',
         display: 'flex',

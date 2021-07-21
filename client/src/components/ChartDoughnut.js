@@ -1,28 +1,18 @@
 import React from 'react'
-import { Container, Row, Card, Table, Button } from 'react-bootstrap';
+import {  Row, Card } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2'
 
 function ChartDoughnut() {
     const cardstyled = {
-        fontSize: '0.5em',
         margin: 'auto',
         padding: '1em',
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
-        borderWidth: '1.5px',
+        borderWidth: '3px',
         borderRadius: '20px',
-        borderColor: '#04AB70',
-        color: 'rgb(110, 189, 142)'
-    }
-    const btnstyled = {
-        background: 'rgb(110, 189, 142)',
-        margin: '1px',
-        maxWidth: '100%',
-        borderWidth: '2px',
-        fontSize: '10px',
-        borderColor: 'rgba(195, 195, 195, 0.753)',
-        borderRadius: '20px',
+        borderColor: 'rgb(110, 189, 142)',
+        color: '#04AB70'
     }
 
     const options = {

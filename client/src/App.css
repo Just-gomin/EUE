@@ -5,8 +5,12 @@ body {
 
 }
 
-.a:hover {
-    color: white;
+#btnlink {
+  color: white !important;
+  text-decoration: none !important;
+  min-width: 100%;
+  margin: auto;
+  height: 100%;
 }
 
 .btn-primary:active {
@@ -15,8 +19,21 @@ body {
 }
 
 .card .card-title {
-  color: rgb(109, 110, 109);
-  /* background-color: ; */
+  color: rgb(70, 70, 70);
+  font-size: 1.5em;
+}
+
+#impactTitle {
+  margin: 1em;
+  font-size: 1.5em;
+}
+
+.card .card-subtitle {
+  display: flex;
+  color: rgb(129, 129, 129);
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
 }
 
 .form-group .form-control {
@@ -31,24 +48,26 @@ body {
 }
 
 #logpng {
-  width: 25px;
-  height: auto;
-  margin-right: 1em;
+  width: 50%;
+  height: 6em;
+  object-fit: cover;
 
 }
 
 #socialLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
   padding: 0.5em;
-  margin: 0.5em;
-  height: 2.5em;
   color: gray;
-  font-size: 10px;
+  font-size: 0.8em;
   width: fit-content;
 }
 
 @media (max-width: 767.98px) { 
   body {
-    padding: 10px;
+    padding: 30px;
     padding-left: 20px;
     padding-right: 20px;
     margin: auto;
@@ -59,7 +78,12 @@ body {
   }
   
   #stickyy {
-    max-width: 300px;
+    max-width: 400px;
+  }
+
+  #contour {
+    padding: 10px;
+    color: rgba(195, 195, 195, 0.753);
   }
   
  }
@@ -82,8 +106,12 @@ body {
     top: 40px;
     width: fit-content;
     height: fit-content;
-    max-width: 240px;
+    max-width: 300px;
 
+  }
+
+  #contour {
+    display: none;
   }
 
  }

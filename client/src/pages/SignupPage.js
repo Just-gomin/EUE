@@ -1,16 +1,10 @@
 import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
-import TimeNow from './../components/TimeNow';
 import '../App.css'
-import EueSuggest from '../components/EueSuggest';
-import ChartLine from '../components/ChartLine';
-import ChartDoughnut from '../components/ChartDoughnut';
-import Footer from './../components/Footer';
-import axios from 'axios';
+import SignupComp from '../components/SignupComp';
 
-
-function Home() {
+function SignupPage() {
     const constyled = {
         display: 'flex',
         justifyContent: 'space-evenly',
@@ -32,13 +26,6 @@ function Home() {
         padding: '0'
     }
 
-    axios({
-        method: 'get',
-        url: 'localhost:4500/loccode/doe'
-    }).then((res) => {
-        console.log(res)
-    })
-
 
     return (
         <Container fluid className='m-auto d-flex justify-content-center position-relative'>
@@ -52,12 +39,7 @@ function Home() {
                 <Col md={6} style={col2sty}>
 
                     <Row style={constyled} className='d-flex mb-2 w-100'>
-
-                        {/* <TimeNow /> */}
-                        <EueSuggest />
-                        <ChartLine />
-                        <ChartDoughnut />
-                        <Footer />
+                        <SignupComp />
                     </Row>
                 </Col>
             </Row>
@@ -66,4 +48,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default SignupPage;
