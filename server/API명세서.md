@@ -2,18 +2,16 @@
 
 ## API 명세 Table
 
-| Category       | HTTP Method | URI                        | Description                                                 |
-| -------------- | ----------- | -------------------------- | ----------------------------------------------------------- |
-| Root Directory | ﹒          | /api                       | api 서버를 통해 들어오는 기본 경로                          |
-| Data Collector | GET         | /data/input?...            | 아두이노를 통해 수집한 자료 등록 (내부, 외부는 쿼리로 구분) |
-| Data - User    | GET         | /data/user/:id             | 사용자 지정 장소의 데이터 요청                              |
-| Data - Outside | GET         | /data/outside/:id          | 해당 지역구의 데이터 요청                                   |
-| Local Code     | GET         | /loccode/doe               | 행정 구역 코드 '도' 요청                                    |
-| Local Code     | GET         | /loccode/si-gun-gu/:id     | 사용자 입력 '도'에 따른 행정 구역 코드 '시군구' 요청        |
-| Local Code     | GET         | /loccod/eup-myeon-dong/:id | 사용자 입력 '시군구'에 따른 행정 구역 코드 '읍면동' 요청    |
-| Auth           | POST        | /signup                    | 회원가입 요청                                               |
-| Auth           | POST        | /login                     | 로그인 요청                                                 |
-| Auth           | POST        | /:id/edit-profile          | 회원 정보 수정 요청                                         |
+| Category       | HTTP Method | URI               | Description                                                 |
+| :------------- | :---------: | :---------------- | :---------------------------------------------------------- |
+| Root           |     ﹒      | /api              | 서버의 기본 경로                                            |
+| Data Collector |     GET     | /data/input?...   | 아두이노를 통해 수집한 자료 등록 (내부, 외부는 쿼리로 구분) |
+| Data - User    |     GET     | /data/user/:id    | 사용자 지정 장소의 날씨 데이터 요청                         |
+| Data - Outside |     GET     | /data/outside/:id | 해당 지역구의 날씨 데이터 요청                              |
+| Local Code     |     GET     | /data/loccode     | 행정 구역 코드 요청                                         |
+| Auth           |    POST     | /signup           | 회원가입 요청                                               |
+| Auth           |    POST     | /login            | 로그인 요청                                                 |
+| Auth           |    POST     | /:id/edit-profile | 회원 정보 수정 요청                                         |
 
 <br><br>
 
@@ -47,3 +45,11 @@
 
 1. 도 정보를 가져오는 경로 수정
    : loccode/do -> loccode/doe
+
+### 2021.07.19 \_ 경로 수정
+
+1. API 서버로의 기본 주소 수정
+   : "/" -> "/api"
+
+2. 행정 구역 코드 데이터 주소 수정
+   : "도", "시/군/구", "읍/면/동"의 데이터를 따로 요청할 수 있던 것에서, 한번에 처리하도록 변경

@@ -1,7 +1,9 @@
 import db from "../db/index";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { serverMSG, statusCode } from "../serverinfo";
+import routes from "../routes";
 
 dotenv.config();
 
@@ -24,7 +26,11 @@ const postMail = async (email, token) => {
     from: `EUE Auth Supply <${process.env.NODEMAILER_USER}>`,
     to: email,
     subject: "EUE 사용자 계정 확인용 메일.",
-    text: `You enter locCode : ${locCode}.`,
+    html: `<a href="${process.env.HOST}:${process.env.PORT}${
+      routes.base + routes.confirm
+    }?token=${token}">${process.env.HOST}:${process.env.PORT}${
+      routes.base + routes.confirm
+    }?token=${token}</a>`,
   };
 
   try {
@@ -55,7 +61,7 @@ export const getLogin = (req, res) => {
 // Function for Signup Proccess.
 export const postSignup = async (req, res) => {
   const {
-    body: { email, locCode },
+    body: { email, nick_name },
   } = req;
 
   const result = db.User.findOne({
@@ -63,14 +69,18 @@ export const postSignup = async (req, res) => {
     logging: false,
   });
 
-  if (result) {
+  if (result.length != 0) {
     res.status(statusCode.err).json({
       msg: serverMSG.server_err,
       content: "You are aleady registered",
     });
   } else {
-    db.User.create({ email: email, locCode: locCode }, { logging: false });
+    db.User.create({ email: email, nick_name: nick_name }, { logging: false });
     // 로그인 페이지로 넘겨주기.
+    res.status(statusCode.ok).json({
+      msg: serverMSG.server_ok,
+      content: "Successfully create user.",
+    });
   }
 };
 
@@ -79,25 +89,44 @@ export const postLogin = (req, res) => {
     body: { email },
   } = req;
 
-  const result = db.User.findOne({
+  const result = db.User.findAll({
     where: { email: email },
     logging: false,
   });
 
-  if (result) {
+  if (result.length != 0) {
     // token 발행
-    const token = "ex Token";
+    const mail_token = jwt.sign(
+      {
+        email: email,
+        nick_name: resutl[0]["nick_name"],
+      },
+      process.env.AUTH_SECRETKEY,
+      {
+        expiresIn: 10 * 60,
+        issuer: "eue.com",
+        subject: "userInfo",
+      }
+    );
+
     // 토큰이 포함된 로그인 링크 전송
-    postLogin(email, token);
+    postMail(email, mail_token);
+
     res
       .status(statusCode.ok)
       .json({ msg: serverMSG.server_ok, content: "Send Mail Successfully." });
   } else {
-    res
-      .status(statusCode.err)
-      .json({
-        msg: serverMSG.server_err,
-        content: "You are still not our user.",
-      });
+    res.status(statusCode.err).json({
+      msg: serverMSG.server_err,
+      content: "You are not one of our user yet.",
+    });
   }
+};
+
+export const getConfirm = (req, res) => {
+  const {
+    params: { token },
+  } = req;
+
+  console.log(`Hi, test token : ${token}`);
 };
