@@ -1,6 +1,6 @@
 block content
     .signup-form_container 
-        form(action = routes.signup, method = "post")
+        form(action = routes.base + routes.signup, method = "post")
             input(type="email", name="email", require=true, placeholder="E-mail")
-            input(type="number", name="locCode")
+            input(type="text", name="nick_name")
             input(type="submit", value="Submit")

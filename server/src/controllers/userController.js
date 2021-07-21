@@ -26,9 +26,11 @@ const postMail = async (email, token) => {
     from: `EUE Auth Supply <${process.env.NODEMAILER_USER}>`,
     to: email,
     subject: "EUE 사용자 계정 확인용 메일.",
-    html: `<a href="${process.env.HOST}:${process.env.PORT}${
-      routes.base + routes.confirm
-    }?token=${token}">${process.env.HOST}:${process.env.PORT}${
+    html: `<a href="${process.env.PROTOCOL}://${process.env.HOST}:${
+      process.env.PORT
+    }${routes.base + routes.confirm}?token=${token}">${
+      process.env.PROTOCOL
+    }://${process.env.HOST}:${process.env.PORT}${
       routes.base + routes.confirm
     }?token=${token}</a>`,
   };
@@ -36,15 +38,9 @@ const postMail = async (email, token) => {
   try {
     const mailResult = await transporter.sendMail(mailOptions);
     console.log(`Mail sent - ID : ${mailResult.messageId}`);
-    res
-      .status(statusCode.ok)
-      .json({ msg: serverMSG.server_ok, content: mailResult.response });
   } catch (err) {
     console.log("Mail Sending Failuer.");
     console.log(err);
-    res
-      .status(statusCode.err)
-      .json({ msg: serverMSG.server_err, content: err });
   }
 };
 
@@ -64,12 +60,12 @@ export const postSignup = async (req, res) => {
     body: { email, nick_name },
   } = req;
 
-  const result = db.User.findOne({
+  const result = await db.User.findOne({
     where: { email: email },
     logging: false,
   });
 
-  if (result.length != 0) {
+  if (result) {
     res.status(statusCode.err).json({
       msg: serverMSG.server_err,
       content: "You are aleady registered",
@@ -84,22 +80,22 @@ export const postSignup = async (req, res) => {
   }
 };
 
-export const postLogin = (req, res) => {
+export const postLogin = async (req, res) => {
   const {
     body: { email },
   } = req;
 
-  const result = db.User.findAll({
+  const result = await db.User.findAll({
     where: { email: email },
     logging: false,
   });
 
-  if (result.length != 0) {
+  if (result) {
     // token 발행
     const mail_token = jwt.sign(
       {
         email: email,
-        nick_name: resutl[0]["nick_name"],
+        nick_name: result[0]["nick_name"],
       },
       process.env.AUTH_SECRETKEY,
       {
@@ -125,8 +121,11 @@ export const postLogin = (req, res) => {
 
 export const getConfirm = (req, res) => {
   const {
-    params: { token },
+    query: { token },
   } = req;
 
   console.log(`Hi, test token : ${token}`);
+  res
+    .status(statusCode.ok)
+    .json({ msg: serverMSG.server_ok, content: `Your token is : ${token}` });
 };
