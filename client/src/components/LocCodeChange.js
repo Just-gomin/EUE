@@ -1,9 +1,6 @@
 import React from 'react'
 import '../App.css'
-import { Form, Modal, Button, Row, Col, Image, Alert, Card, DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
-import Oauth, { LoginWithKakao } from '../utils/Oauth';
-import { useEffect } from 'react';
-import axios from 'axios';
+import { Form, Button, Row, Col, Card, DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { useState } from 'react';
 
 function LocCodeChange() {
@@ -68,8 +65,7 @@ function LocCodeChange() {
                                         style={btnstyled2}
                                         title='지역코드'
                                         as={ButtonGroup}
-                                        title={` ${localname} `}
-                                    >
+                                        title={` ${localname} `}>
                                         <Dropdown.Item>Action</Dropdown.Item>
                                         <Dropdown.Item>Another action</Dropdown.Item>
                                         <Dropdown.Item>Something else here</Dropdown.Item>

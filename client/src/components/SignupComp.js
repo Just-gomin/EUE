@@ -1,21 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import '../App.css'
-import { Form, Modal, Button, Row, Col, Image, DropdownButton, ButtonGroup, Dropdown, Card } from 'react-bootstrap';
-// import { KAKAO_AUTH_URL } from '../components/Oauth';
-// import { handleLogin } from '../utils/Auth';
-// import { isOauth } from '../utils/Auth';
+import { Form,  Button, Row, Col, Card } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
 
 function SignupComp() {
-
-    const noticestyled = {
-        display: 'flex',
-        justifyContent: 'center',
-        color: 'gray',
-        margin: 'auto',
-        fontSize: '0.8em',
-        visibility: 'hidden',
-    }
 
     const cardstyled = {
         margin: 'auto',
@@ -39,23 +27,13 @@ function SignupComp() {
         padding: '1rem'
     }
 
-    const aftershow = {
-        display: 'none'
-    }
-
     const initValues = {
-        email: ''
+        email: '',
+        name: ''
     }
 
     const [formValues, setFormValues] = useState(initValues)
-    const [formError, setFormError] = useState({})
     const [validated, setValidated] = useState(false)
-
-    function submitForm() {
-        console.log('formValues', formValues);
-        console.log(!formValues['username']);
-        console.log('Error', formError)
-    }
 
     function handleChange(event) {
         const { name, value } = event.target
@@ -78,11 +56,8 @@ function SignupComp() {
         // setFormError(validate(formValues))
         // setIsSubmit(true)
     }
-
-
-
     const [emailSubm, setEmailSubm] = useState(false)
-    
+
     function handleClickSubm() {
         // setEmailSubm(true);
         const subm = document.getElementById("subm-mailSent");
@@ -90,9 +65,9 @@ function SignupComp() {
         // const aftermail = document.getElementById('AftermailSent');
         // aftermail.style.display = ''
     }
-    
-  
-    console.log(emailSubm);
+
+
+    // console.log(emailSubm);
 
 
     return (
@@ -109,7 +84,21 @@ function SignupComp() {
                 <Card.Text>
                     <Form style={inboxstyled}
                         onSubmit={handleSubmit}>
-                        <Form.Group controlId="userEmail" className='mb-1'>
+                        <Form.Group controlId="userEmail">
+                            <Row className='m-auto mb-1 d-flex justify-content-center'>
+                                <Form.Control
+                                    type="text"
+                                    name="name"
+                                    placeholder="Name"
+                                    value={formValues.name}
+                                    onChange={handleChange}
+                                    // readOnly={emailSubm}
+                                    required
+                                />
+                            </Row>
+                            <Row>
+                                <p></p>
+                            </Row>
                             <Row className='m-auto d-flex justify-content-center'>
                                 <Form.Control
                                     type="email"
@@ -121,6 +110,7 @@ function SignupComp() {
                                     required
                                 />
                             </Row>
+
                         </Form.Group>
 
 

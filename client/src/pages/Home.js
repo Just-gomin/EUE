@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import React from 'react'
+import { Container, Row, Col } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
 import TimeNow from './../components/TimeNow';
 import '../App.css'
@@ -7,7 +7,7 @@ import EueSuggest from '../components/EueSuggest';
 import ChartLine from '../components/ChartLine';
 import ChartDoughnut from '../components/ChartDoughnut';
 import Footer from './../components/Footer';
-import db from '../db/index'
+import axios from 'axios';
 
 
 function Home() {
@@ -32,8 +32,12 @@ function Home() {
         padding: '0'
     }
 
-    console.log(db.user.findAll())
-
+    axios({
+        method: 'get',
+        url: 'localhost:4500/loccode/doe'
+    }).then((res) => {
+        console.log(res)
+    })
 
 
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Row, Card, Table, Button } from 'react-bootstrap';
+import { Row, Card } from 'react-bootstrap';
 import { Line } from 'react-chartjs-2'
 
 function ChartLine() {
@@ -14,15 +14,7 @@ function ChartLine() {
         borderColor: 'rgb(110, 189, 142)',
         color: '#04AB70'
     }
-    const btnstyled = {
-        background: 'rgb(110, 189, 142)',
-        margin: '1px',
-        maxWidth: '100%',
-        borderWidth: '2px',
-        fontSize: '10px',
-        borderColor: 'rgba(195, 195, 195, 0.753)',
-        borderRadius: '20px',
-    }
+
     const options = {
         legend: {
             display: true, // label 보이기 여부

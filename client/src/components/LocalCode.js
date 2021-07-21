@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Container, Row, Card, Table, Button, Col, Modal } from 'react-bootstrap';
+import { Row, Card, Button, Col, Modal } from 'react-bootstrap';
 // import db from "../db/index"
 import '../App.css'
-import { LoginWithKakao } from '../utils/Oauth';
 import { Link } from 'react-router-dom';
 
 

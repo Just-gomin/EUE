@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Jumbotron, Container, Row, Card } from 'react-bootstrap';
+import React from 'react';
+import { Row, Card } from 'react-bootstrap';
 import Clock from 'react-live-clock'
 import '../App.css'
 

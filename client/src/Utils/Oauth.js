@@ -1,6 +1,4 @@
-import axios from 'axios';
-import { Spinner, Button, Col, Row } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import { Spinner, Button, Row } from 'react-bootstrap';
 
 
 // export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
@@ -65,10 +63,8 @@ export function kakaoLogout() {
 
 
 export function Loading() {
-
     return (
         <Row className='d-block'>
-
             <Button id='formbtn' className='d-flex justify-content-center align-items-center m-auto' style={{ width: '200px', height: '200px', flexDirection: 'column' }} disabled>
                 <Spinner animation="border" role="status">
                     <span className="sr-only">Loading...</span>

@@ -1,16 +1,12 @@
 import React from 'react'
-import { useState } from 'react';
-import { Button, Form, Image, Row, ButtonGroup, Modal, Dropdown, Col } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { Button, Image, Row, ButtonGroup, } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import '../App.css'
-import LoginComp from './LoginComp';
 import LocalCode from '../components/LocalCode';
-// import { isOauthChecked } from './../utils/Auth';
 import { kakaoLogout } from '../utils/Oauth';
 
 
 function MainLayer() {
-    const history = useHistory()
 
     const boxstyled = {
         border: 'solid',

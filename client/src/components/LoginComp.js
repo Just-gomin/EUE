@@ -1,10 +1,7 @@
 import React from 'react'
 import '../App.css'
-import { Form, Modal, Button, Row, Col, Image, Alert, Card } from 'react-bootstrap';
-import Oauth, { LoginWithKakao } from '../utils/Oauth';
-import { useEffect } from 'react';
-import axios from 'axios';
-import { useState } from 'react';
+import { Form, Button, Row, Col,  Card } from 'react-bootstrap';
+import { LoginWithKakao } from '../utils/Oauth';
 
 function LoginComp() {
 
