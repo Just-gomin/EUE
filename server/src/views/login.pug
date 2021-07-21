@@ -1,5 +1,5 @@
 block content 
     .login-form_container 
-        form(action=routes.login, method="post")
+        form(action=routes.base + routes.login, method="post")
             input(type="email", name="email", require=true, placeholder="E-mail")
             input(type="submit", value="Submit")

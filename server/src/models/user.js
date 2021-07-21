@@ -23,10 +23,6 @@ export class User extends Model {
           allowNull: false,
           unique: true,
         },
-        password: {
-          type: DataTypes.STRING(20),
-          allowNull: false,
-        },
       },
       {
         sequelize,
