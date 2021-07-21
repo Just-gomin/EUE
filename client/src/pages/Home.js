@@ -40,8 +40,6 @@ function Home() {
     })
 
 
-
-
     return (
         <Container fluid className='m-auto d-flex justify-content-center position-relative'>
             <Row style={constyled} className='m-auto'>

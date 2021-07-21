@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react';
 import '../App.css'
-import { Form, Button, Row, Col,  Card } from 'react-bootstrap';
+import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
 
 function LoginComp() {
@@ -26,6 +26,12 @@ function LoginComp() {
         padding: '10px'
     }
 
+    const [emailSent, setEmailSent] = useState(false)
+    const [alertShow, setAlertShow] = useState(true)
+
+    function CheckEmailSend() {
+        setEmailSent(!emailSent)
+    }
 
     return (
         <Row className='text-center w-100 my-2'>
@@ -38,12 +44,32 @@ function LoginComp() {
                 </Card.Subtitle>
                 <hr />
                 <Card.Text>
+                    <Row className='m-auto d-flex justify-content-center' style={{ width: '80%' }}>
+                        {!emailSent ?
+                            <Alert show={alertShow} variant={'success'}>
+                                <Col>
+                                    😍 이메일 전송이 완료 되었습니다.
+                                </Col>
+                                <Alert.Link href='/' style={{ fontSize: '0.8em' }}>
+                                    이메일 확인 하러가기 ➞
+                                </Alert.Link>
+                            </Alert>
+                            :
+                            <Alert show={alertShow} variant={'danger'}>
+                                <Col>
+                                    😭 이메일을 정확하게 적어주세요.
+                                </Col>
+                            </Alert>
+                        }
+                        <Button onClick={() => setAlertShow(true)}>보여주고</Button>
+                        <Button onClick={() => setAlertShow(false)}>안보여주고</Button>
+                    </Row>
                     <Form style={inboxstyled}>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Control type="email" placeholder="Email" />
                         </Form.Group>
 
-                        <Button variant='light' type="submit" id='formbtn'>
+                        <Button variant='light' type="submit" id='formbtn' onClick={CheckEmailSend}>
                             LOGIN
                         </Button>
 

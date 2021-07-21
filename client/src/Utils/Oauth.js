@@ -16,8 +16,6 @@ export function LoginWithKakao() {
             console.log(JSON.stringify(authObj))
 
             console.log('accT ;;', authObj.access_token)
-            console.log(typeof (localStorage))
-            console.log(Object.keys(localStorage)[0])
 
             Kakao.API.request({
                 // 현재 로그인한 사용자의 카카오계정 정보 불러오기

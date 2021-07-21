@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import '../App.css'
-import { Form,  Button, Row, Col, Card } from 'react-bootstrap';
+import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
 
 function SignupComp() {
@@ -16,7 +16,6 @@ function SignupComp() {
         borderColor: 'rgb(110, 189, 142)',
         color: '#04AB70'
     }
-
 
     const inboxstyled = {
         display: 'flex',
@@ -67,7 +66,12 @@ function SignupComp() {
     }
 
 
-    // console.log(emailSubm);
+    const [userExist, setUserExist] = useState(false)
+    const [alertShow, setAlertShow] = useState(true)
+
+    function CheckUserExist() {
+        setUserExist(!userExist)
+    }
 
 
     return (
@@ -82,6 +86,30 @@ function SignupComp() {
                 </Card.Subtitle>
                 <hr />
                 <Card.Text>
+                    <Row className='m-auto d-flex justify-content-center' style={{ width: '80%' }}>
+                        {!userExist ?
+                            <Alert show={alertShow} variant={'success'}>
+                                <Col>
+                                    😊 계정 생성이 완료 되었습니다.
+                                </Col>
+                                <Alert.Link href='/login' style={{ fontSize: '0.8em' }}>
+                                    로그인 하러가기 ➞
+                                </Alert.Link>
+                            </Alert>
+                            :
+                            <Alert show={alertShow} variant={'danger'}>
+                                <Col>
+                                    🤔 이미 존재하는 계정입니다.
+                                </Col>
+                                <Alert.Link href='/login' style={{ fontSize: '0.8em' }}>
+                                    로그인 하러가기 ➞
+                                </Alert.Link>
+                            </Alert>
+                        }
+                        <Button onClick={() => setAlertShow(true)}>보여주고</Button>
+                        <Button onClick={() => setAlertShow(false)}>안보여주고</Button>
+                    </Row>
+                    
                     <Form style={inboxstyled}
                         onSubmit={handleSubmit}>
                         <Form.Group controlId="userEmail">
@@ -92,7 +120,6 @@ function SignupComp() {
                                     placeholder="Name"
                                     value={formValues.name}
                                     onChange={handleChange}
-                                    // readOnly={emailSubm}
                                     required
                                 />
                             </Row>
@@ -106,49 +133,12 @@ function SignupComp() {
                                     placeholder="Email Address"
                                     value={formValues.email}
                                     onChange={handleChange}
-                                    readOnly={emailSubm}
                                     required
                                 />
                             </Row>
-
                         </Form.Group>
 
-
-                        {/* 
-                        <Row className='m-auto w-100 d-flex justify-content-center'>
-                            <Col md={12} xs={12} style={{ padding: '0', display: 'flex', justifyContent: 'center', width: '100%' }}>
-                                {['도', '시군구', '읍면동'].map((localname) => (
-                                    <DropdownButton
-                                        variant='light'
-                                        style={btnstyled2}
-                                        title='지역코드'
-                                        as={ButtonGroup}
-                                        title={` ${localname} `}
-                                    >
-                                        <Dropdown.Item>Action</Dropdown.Item>
-                                        <Dropdown.Item>Another action</Dropdown.Item>
-                                        <Dropdown.Item>Something else here</Dropdown.Item>
-                                        <Dropdown.Divider />
-                                        <Dropdown.Item>Separated link</Dropdown.Item>
-                                    </DropdownButton>
-                                ))}
-                                <Button variant='light' style={btnstyled2} onClick={!locCodeShow && handleClickLoc}>확인</Button>
-                            </Col>
-                            <Col md={6} xs={4} id='loc-code' style={{
-                                margin: '5px',
-                                border: 'solid',
-                                borderColor: 'rgb(110, 189, 142)',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                padding: '2px',
-                                visibility: 'hidden',
-                                transition: 'all 4s'
-                            }}>
-                                지역코드
-                            </Col>
-                        </Row> */}
-
-                        <Button variant='light' className='mt-2' type="submit" id='formbtn'>
+                        <Button variant='light' className='mt-2' type="submit" id='formbtn' onClick={CheckUserExist}>
                             Sign Up
                         </Button>
                     </Form>
@@ -165,7 +155,6 @@ function SignupComp() {
 
                     <Row style={{ margin: 'auto', marginBottom: '5px', display: 'flex', justifyContent: 'center' }}>
                         <a href="#;" onClick={LoginWithKakao} id='socialLink' >
-                            {/* 세미콜론이 붙으면 최상단 이동 x */}
                             <img src='http://image.kmib.co.kr/online_image/2020/0626/611514110014734788_1.jpg' id='logpng' alt='KAKAO' />
                         </a>
                     </Row>

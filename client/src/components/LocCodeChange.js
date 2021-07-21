@@ -2,6 +2,8 @@ import React from 'react'
 import '../App.css'
 import { Form, Button, Row, Col, Card, DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { useState } from 'react';
+import axios from 'axios';
+// import { doeCode } from '../utils/Auth';
 
 function LocCodeChange() {
 
@@ -45,14 +47,40 @@ function LocCodeChange() {
         auth.style.visibility = 'visible'
     }
 
+    // console.log(typeof (locCode()))
+    // console.log(locCode())
+    // const [ddoe, setDdoe] = useState([])
+
+    // async function DoeCode() {
+    //     await doeCode().then((res) => {
+    //         //     // // for (let i = 0; i < res.length; i++) {
+    //         //     //     console.log(res[0]['code_doe'])
+    //         //     //     console.log(0, res[0]['name_doe'])
+    //         ddoe.push(res[0]['name_doe'])
+    //         ddoe.push(res[1]['name_doe'])
+    //         console.log(ddoe)
+    //         console.log(typeof(ddoe))
+    //         //     // }
+    //     })
+    // }
+    
+    const res = axios.get("localhost:4500/d/loccode");
+    // const does = res.data["locCodes"]["DOE"]   // object
+
+
     return (
         <Row className='text-center w-100 my-2'>
+            {/* {DoeCode()} */}
+            {/* {data} */}
+
+            asd
+
             <Card style={cardstyled}>
                 <Card.Title id='impactTitle'>
                     Local Code
                 </Card.Title>
                 <Card.Subtitle style={{ fontWeight: 'lighter' }}>
-                    Please select a region name
+                    Please select a your region
                 </Card.Subtitle>
                 <hr />
                 <Card.Text>
@@ -66,11 +94,10 @@ function LocCodeChange() {
                                         title='지역코드'
                                         as={ButtonGroup}
                                         title={` ${localname} `}>
-                                        <Dropdown.Item>Action</Dropdown.Item>
+
+                                        <Dropdown.Item></Dropdown.Item>
                                         <Dropdown.Item>Another action</Dropdown.Item>
                                         <Dropdown.Item>Something else here</Dropdown.Item>
-                                        <Dropdown.Divider />
-                                        <Dropdown.Item>Separated link</Dropdown.Item>
                                     </DropdownButton>
                                 ))}
                                 <Button variant='light' style={btnstyled2} onClick={!locCodeShow && handleClickLoc}>확인</Button>
