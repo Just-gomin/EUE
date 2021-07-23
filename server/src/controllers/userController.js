@@ -60,12 +60,12 @@ export const postSignup = async (req, res) => {
     body: { email, nick_name },
   } = req;
 
-  const result = await db.User.findOne({
+  const result = await db.User.findAll({
     where: { email: email },
     logging: false,
   });
 
-  if (result) {
+  if (result.length != 0) {
     res.status(statusCode.err).json({
       msg: serverMSG.server_err,
       content: "You are aleady registered",
@@ -73,10 +73,7 @@ export const postSignup = async (req, res) => {
   } else {
     db.User.create({ email: email, nick_name: nick_name }, { logging: false });
     // 로그인 페이지로 넘겨주기.
-    res.status(statusCode.ok).json({
-      msg: serverMSG.server_ok,
-      content: "Successfully create user.",
-    });
+    res.redirect("/api/login");
   }
 };
 
@@ -90,18 +87,17 @@ export const postLogin = async (req, res) => {
     logging: false,
   });
 
-  if (result) {
+  if (result.length != 0) {
     // token 발행
     const mail_token = jwt.sign(
       {
         email: email,
-        nick_name: result[0]["nick_name"],
       },
-      process.env.AUTH_SECRETKEY,
+      process.env.AUTH_MAIL_SECRETKEY,
       {
         expiresIn: 10 * 60,
         issuer: "eue.com",
-        subject: "userInfo",
+        subject: "auth_checker",
       }
     );
 
@@ -119,13 +115,46 @@ export const postLogin = async (req, res) => {
   }
 };
 
-export const getConfirm = (req, res) => {
+export const getConfirm = async (req, res) => {
   const {
     query: { token },
   } = req;
 
-  console.log(`Hi, test token : ${token}`);
-  res
-    .status(statusCode.ok)
-    .json({ msg: serverMSG.server_ok, content: `Your token is : ${token}` });
+  try {
+    const decoded = jwt.verify(token, process.env.AUTH_MAIL_SECRETKEY); // return payload.
+
+    const result = await db.User.findAll({
+      where: { email: decoded.email },
+      logging: false,
+    });
+    const user = result[0];
+
+    const payload = {
+      email: user.email,
+      nick_name: user.nick_name,
+      loc_code: user.loc_code,
+    };
+
+    const accessT = jwt.sign(payload, process.env.AUTH_ACCESS_SECRETKEY, {
+      expiresIn: "6h",
+      issuer: "eue.com",
+      subject: "userInfo",
+    });
+
+    const refreshT = jwt.sign(payload, process.env.AUTH_REFRESH_SECRETKEY, {
+      expiresIn: "14d",
+      issuer: "eue.com",
+      subject: "userInfo",
+    });
+
+    res
+      .status(statusCode.ok)
+      .cookie("access_token", accessT)
+      .cookie("refresh_token", refreshT)
+      .redirect("/api");
+  } catch (err) {
+    res
+      .status(statusCode.err)
+      .json({ msg: serverMSG.server_err, content: `${err}` });
+  }
 };
