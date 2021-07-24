@@ -7,7 +7,10 @@ import { Link } from 'react-router-dom';
 
 function LocalCode() {
 
-    const logined = localStorage.getItem('nickname')
+    const nickname = localStorage.getItem('nickname')
+    const localname_doe = localStorage.getItem('name_doe')
+    const localname_sgg = localStorage.getItem('name_sgg')
+    const localname_emd = localStorage.getItem('name_emd')
 
     const cardstyled = {
         margin: 'auto',
@@ -29,14 +32,13 @@ function LocalCode() {
         borderColor: 'rgba(195, 195, 195, 0.753)',
         borderRadius: '20px',
     }
-    const [localChange, setLocalChange] = useState(false)
-    const nickname = localStorage.getItem('nickname')
+
     return (
         <>
             <Col className='text-center pt-3 pb-2 px-0'>
                 <Card style={cardstyled} id='localName'>
                     <Card.Title>
-                        {logined ?
+                        {nickname ?
                             `${nickname}`
                             :
                             <>
@@ -44,31 +46,24 @@ function LocalCode() {
                             </>
                         }, 환영합니다.
                     </Card.Title>
-                    <Row style={{ alignItems: 'center', margin: 'auto', whiteSpace: 'nowrap' }}>
+                    <Row style={{ alignItems: 'center', margin: 'auto', whiteSpace: 'nowrap', justifyContent: 'center' }}>
                         <Card.Subtitle>
-                            지역코드
+                            {localname_emd ?
+                                `${localname_doe} ${localname_sgg} ${localname_emd}`
+                                :
+                                <>
+                                    지역을 입력해 주세요
+                                </>
+                            }
                         </Card.Subtitle>
-                        {logined &&
-                            <Button variant='light' className='ml-1' style={btnstyled2}>
+                        {nickname &&
+                            <Button variant='light' className='ml-1 m-auto' style={btnstyled2}>
                                 <Link to='/local_code' style={{ textDecoration: 'none', color: 'rgb(110, 189, 142)' }}>
                                     변경
                                 </Link>
                             </Button>
                         }
                     </Row>
-                    <Modal
-                        show={localChange}
-                        onHide={() => setLocalChange(false)}
-                    >
-                        <Modal.Header className='d-block text-center'>
-                            <Modal.Title>
-                                마이페이지
-                            </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            지역이름 (지역코드)
-                        </Modal.Body>
-                    </Modal>
 
                     환경을 향한 노력 <br />
                     <strong>OOO 일 째</strong>

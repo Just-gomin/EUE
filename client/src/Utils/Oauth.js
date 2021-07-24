@@ -1,4 +1,3 @@
-import { Spinner, Button, Row, Alert } from 'react-bootstrap';
 import Swal from 'sweetalert2'
 import '../App.css'
 
@@ -85,19 +84,4 @@ export function kakaoLogout() {
             }
         })
     })
-}
-
-
-export function Loading() {
-    return (
-        <Row className='d-block'>
-            <Button id='formbtn' className='d-flex justify-content-center align-items-center m-auto' style={{ width: '200px', height: '200px', flexDirection: 'column' }} disabled>
-                <Spinner animation="border" role="status">
-                    <span className="sr-only">Loading...</span>
-                </Spinner>
-                <br />
-                Loading...
-            </Button>
-        </Row>
-    )
 }

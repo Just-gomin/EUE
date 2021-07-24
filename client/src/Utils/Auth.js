@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { useState } from 'react';
-import Oauth from './Oauth';
 
 export function handleLogin({ userId, role, name, tel, email }) {
     localStorage.setItem('id', userId)
@@ -17,7 +15,7 @@ export async function handleLogout() {
 }
 
 export function isLogined() {
-    const userId = localStorage.getItem('id')
+    const userId = localStorage.getItem('nickname')
     if (userId) {
         return userId
     } else {
