@@ -13,7 +13,8 @@ function UserInfo() {
 
     const cardstyled = {
         margin: 'auto',
-        padding: '1em',
+        paddingTop: '1em',
+        paddingBottom: '1em',
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
@@ -51,7 +52,7 @@ function UserInfo() {
                         }, 환영합니다.
                     </Card.Title>
                     <Row style={{ alignItems: 'center', margin: 'auto', justifyContent: 'center' }}>
-                        <Card.Subtitle style={{fontSize: '0.8em', paddingTop: '1em', paddingBottom: '1em'}}>
+                        <Card.Subtitle className='py-3' style={{fontSize: '0.9em'}}>
                             {localname_emd ?
                                 `${localname_doe} ${localname_sgg} ${localname_emd}`
                                 :
