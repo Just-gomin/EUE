@@ -17,6 +17,7 @@ const SIGNUP = "/signup";
 const LOGIN = "/login";
 const CONFIRM = "/confirm";
 const EDIT_PROFILE = "/edit-profile";
+const SET_LOCCODE = "/set-loccode";
 
 // # Detail Object
 const DETAIL = "/:id";
@@ -32,6 +33,7 @@ const routes = {
   login: LOGIN,
   confirm: CONFIRM,
   editProfile: EDIT_PROFILE,
+  setLoccode: SET_LOCCODE,
   Detail: (id) => {
     if (id) {
       return `/${id}`;

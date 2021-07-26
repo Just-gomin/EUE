@@ -1,0 +1,5 @@
+block content
+    .signup-form_container 
+        form(action = routes.base + routes.setLoccode, method = "post")
+            input(type="number", name="loccode", require=true, placeholder="Local Code.")
+            input(type="submit", value="Submit")

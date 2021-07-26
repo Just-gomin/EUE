@@ -7,6 +7,7 @@ import routes from "../routes";
 
 dotenv.config();
 
+// 메일 전송 처리
 const postMail = async (email, token) => {
   const transporter = nodemailer.createTransport({
     service: process.env.NODEMAILER_SERVICE,
@@ -54,7 +55,12 @@ export const getLogin = (req, res) => {
   res.render("login", { pagename: "Log In" });
 };
 
-// Function for Signup Proccess.
+// Page for Development Test.
+export const getSetLoccode = (req, res) => {
+  res.render("setLoccode", { pagename: "Set Loccode" });
+};
+
+// 회원 가입 처리
 export const postSignup = async (req, res) => {
   const {
     body: { email, nick_name },
@@ -77,6 +83,7 @@ export const postSignup = async (req, res) => {
   }
 };
 
+// 메일 확인용 토큰 발행 및 전송 처리
 export const postLogin = async (req, res) => {
   const {
     body: { email },
@@ -115,6 +122,7 @@ export const postLogin = async (req, res) => {
   }
 };
 
+// 메일로 보낸 토큰의 유효성 검사 및 access 토큰 발행 처리
 export const getConfirm = async (req, res) => {
   const {
     query: { token },
@@ -147,4 +155,37 @@ export const getConfirm = async (req, res) => {
       .status(statusCode.err)
       .json({ msg: serverMSG.server_err, content: `${err}` });
   }
+};
+
+// 사용자의 지역 코드 설정 처리
+export const postSetLoccode = async (req, res) => {
+  const {
+    cookies: { acs_token },
+    body: { loccode },
+  } = req;
+
+  const decoded = jwt.decode(acs_token);
+  console.log(decoded);
+
+  await db.User.update(
+    { loccode: loccode },
+    { where: { email: decoded.email } }
+  );
+
+  const payload = {
+    email: decoded.email,
+    nick_name: decoded.nick_name,
+    loc_code: loccode,
+  };
+
+  const accessT = jwt.sign(payload, process.env.AUTH_ACCESS_SECRETKEY, {
+    expiresIn: "14d",
+    issuer: "eue.com",
+    subject: "userInfo",
+  });
+
+  res
+    .status(statusCode.ok)
+    .cookie("acs_token", accessT)
+    .json({ msg: serverMSG.server_ok, content: "Successfully Set Loccode" });
 };

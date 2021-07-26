@@ -16,12 +16,11 @@ export const localmiddleware = (req, res, next) => {
 */
 export const onlyPrivate = (req, res, next) => {
   const {
-    cookies: { acs_Token },
+    cookies: { acs_token },
   } = req;
 
   try {
-    const acs_decode = jwt.verify(acs_Token, process.env.AUTH_ACCESS_SECRETKEY);
-    console.log(`User[${acs_decode.email}] Data Access.`);
+    const acs_decode = jwt.verify(acs_token, process.env.AUTH_ACCESS_SECRETKEY);
     next();
   } catch (error) {
     console.log(error);

@@ -4,10 +4,13 @@ import { getHome } from "../controllers/globalController";
 import {
   getConfirm,
   getLogin,
+  getSetLoccode,
   getSignup,
   postLogin,
+  postSetLoccode,
   postSignup,
 } from "../controllers/userController";
+import { onlyPrivate } from "../middlewares";
 
 const globalRouter = express.Router();
 
@@ -16,8 +19,11 @@ globalRouter.get("/", getHome); // For development test.
 // Authentication
 globalRouter.get(routes.signup, getSignup); // For development test.
 globalRouter.get(routes.login, getLogin); // For development test.
+globalRouter.get(routes.setLoccode, onlyPrivate, getSetLoccode); // For development test.
+
 globalRouter.post(routes.signup, postSignup);
 globalRouter.post(routes.login, postLogin);
 globalRouter.get(routes.confirm, getConfirm);
+globalRouter.post(routes.setLoccode, onlyPrivate, postSetLoccode);
 
 export default globalRouter;
