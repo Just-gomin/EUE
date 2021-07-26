@@ -168,8 +168,8 @@ export const postSetLoccode = async (req, res) => {
   console.log(decoded);
 
   await db.User.update(
-    { loccode: loccode },
-    { where: { email: decoded.email } }
+    { loc_code: Number(loccode) },
+    { where: { email: decoded.email }, logging: false }
   );
 
   const payload = {

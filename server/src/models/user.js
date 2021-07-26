@@ -26,6 +26,10 @@ export class User extends Model {
           type: DataTypes.BOOLEAN,
           defaultValue: false,
         },
+        created_at: {
+          type: DataTypes.DATE,
+          defaultValue: Date.now(),
+        },
       },
       {
         sequelize,
