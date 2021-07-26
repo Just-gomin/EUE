@@ -102,9 +102,13 @@ void loop() {
 
       String date = "";         // 전송 시점 데이터
       date += String(tmYearToCalendar(tm.Year));
+      date += "-";
       date += tm.Month < 10 ? '0' + String(tm.Month) : String(tm.Month);
+      date += "-";
       date += tm.Day < 10 ? '0' + String(tm.Day) : String(tm.Day);
+      date += " ";
       date += tm.Hour < 10 ? '0' + String(tm.Hour): String(tm.Hour);
+      date += ":"
       date += tm.Minute < 10 ? '0' + String(tm.Minute) : String(tm.Minute);
     
       String type_ = "Out";
@@ -171,7 +175,7 @@ void sendData(String input){
   }
 
   // Get 방식을 이용한 전송
-  String msg = "GET /data/input?";
+  String msg = "GET /api/data/input?";
   msg += input;
   
   msg += " HTTP/1.0\r\n\r\n";

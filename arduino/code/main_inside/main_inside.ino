@@ -8,8 +8,7 @@
   2. String SSPW
   3. String EUEIP
   4. int EUEPORT
-  5. String ID
-  6. String locCode
+  5. String Email
   
   ## PC에 연결하여 동작 (시리얼 모니터 사용 O)
 
@@ -149,9 +148,13 @@ void loop() {
 
       String date = "";         // 전송 시점 데이터
       date += String(tmYearToCalendar(tm.Year));
+      date += "-";
       date += tm.Month < 10 ? '0' + String(tm.Month) : String(tm.Month);
+      date += "-";
       date += tm.Day < 10 ? '0' + String(tm.Day) : String(tm.Day);
+      date += " ";
       date += tm.Hour < 10 ? '0' + String(tm.Hour): String(tm.Hour);
+      date += ":"
       date += tm.Minute < 10 ? '0' + String(tm.Minute) : String(tm.Minute);
     
       sensors_event_t event;    // dht 모듈의 데이터 수집
@@ -171,12 +174,10 @@ void loop() {
       String str_Lights = isnan(lights) != 0 ? "none" : String(lights);
     
       String type_ = "In";
-      String ID = "eue_tester1";
-      String locCode = "3124053";
+      String Email = "eue_tester@example.com";
     
       input += "type=" + type_;
-      input += "&id=" + ID;
-      input += "&locCode=" + locCode;
+      input += "&email=" + Email;
       input += "&date=" + date;
       input += "&temp=" + str_Temp;
       input += "&humi=" + str_Humi;
@@ -233,7 +234,7 @@ void sendData(String input){
   }
 
   // Get 방식을 이용한 전송
-  String msg = "GET /data/input?";
+  String msg = "GET /api/data/input?";
   msg += input;
   
   msg += " HTTP/1.0\r\n\r\n";

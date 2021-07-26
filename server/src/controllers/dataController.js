@@ -36,7 +36,7 @@ const handleOutData = async (locCode, date, lat, lng) => {
 
 // 내부 수집기로 부터 들어온 정보 처리
 const handleInData = async (email, date, temp, humi, lights) => {
-  db.Weather_in.create(
+  await db.Weather_in.create(
     {
       host: email,
       collected_at: date,
@@ -59,16 +59,28 @@ export const getDataInput = (req, res) => {
         query: { locCode, date, lat, lng },
       } = req;
 
-      console.log(locCode, date, lat, lng);
-      handleOutData(locCode, date, lat, lng);
+      const trans_date = new Date(date);
+
+      console.log(
+        `Outside[${locCode}] Data(date: ${trans_date}/ lat: ${lat}/ lng: ${lng}) Input.`
+      );
+      handleOutData(locCode, trans_date, lat, lng);
+      res.status(statusCode.ok).send({
+        msg: serverMSG.server_ok,
+        content: `Outside[${locCode}] data Input.`,
+      });
     } else {
       // 내부 데이터 수집기 동작
       const {
-        query: { id, date, temp, humi, lights },
+        query: { email, date, temp, humi, lights },
       } = req;
 
-      console.log(id, date, temp, humi, lights);
-      handleInData(id, date, temp, humi, lights);
+      const trans_date = new Date(date);
+
+      console.log(
+        `User[${email}] Data(date: ${trans_date}/ temp: ${temp}/ humi: ${humi}/ lights: ${lights}) Input.`
+      );
+      handleInData(email, trans_date, temp, humi, lights);
     }
 
     res.status(statusCode.ok).send(serverMSG.server_ok);
