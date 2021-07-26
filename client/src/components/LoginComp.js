@@ -26,23 +26,29 @@ function LoginComp() {
         padding: '10px'
     }
 
-    const [emailSent, setEmailSent] = useState(false)
-    const [alertShow, setAlertShow] = useState(true)
+    const [emailSentAlert, setEmailSentAlert] = useState(false)
+    const [alertShow, setAlertShow] = useState(false)
+
+    const [emailAddress, setEmailAddress] = useState('')
 
     function CheckEmailSend() {
-        setEmailSent(!emailSent)
-
+        localStorage.setItem('login_email_Address', emailAddress)
+        const emailIs = localStorage.getItem('login_email_Address').split('@')[1]
+        if(emailIs) {
+            setAlertShow(true)
+            setEmailSentAlert(false)
+        }
+        else {
+            setAlertShow(true)
+            setEmailSentAlert(true)
+        }
     }
 
     function addressUrl() {
-        localStorage.setItem('Email-Address', emailAddress)
-        const afterAt = localStorage.getItem('Email-Address').split('@')[1]
-        console.log(afterAt)
+        const afterAt = localStorage.getItem('login_email_Address').split('@')[1]
         const newLink = 'https://www.' + afterAt;
         window.open(newLink);
     }
-
-    const [emailAddress, setEmailAddress] = useState('')
 
     function handleChange(event) {
         setEmailAddress(event.target.value)
@@ -61,7 +67,7 @@ function LoginComp() {
                 <hr />
                 <Card.Text>
                     <Row className='m-auto d-flex justify-content-center' style={{ width: '80%' }}>
-                        {!emailSent ?
+                        {!emailSentAlert ?
                             <Alert show={alertShow} variant={'success'}>
                                 <Col>
                                     😍 이메일 전송이 완료 되었습니다.
@@ -80,18 +86,15 @@ function LoginComp() {
                                 </Alert.Link>
                             </Alert>
                         }
-                        <Button onClick={() => setAlertShow(true)}>보여주고</Button>
-                        <Button onClick={() => setAlertShow(false)}>안보여주고</Button>
                     </Row>
+
                     <Form style={inboxstyled}>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Control type="email" placeholder="Email" onChange={handleChange} />
                         </Form.Group>
-                        <Button variant='light' id='formbtn' onClick={CheckEmailSend}> 
-                        
+                        <Button variant='light' className='mt-3' id='formbtn' onClick={CheckEmailSend}>
                             LOGIN
                         </Button>
-
                     </Form>
 
                     <Row className='d-flex align-items-center m-2'>

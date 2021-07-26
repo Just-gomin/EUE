@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import '../App.css'
-import { Form, Button, Row, Col, Card, DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
+import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
+import Swal from 'sweetalert2'
+
 
 function LocCodeChange() {
 
@@ -20,7 +22,6 @@ function LocCodeChange() {
     const inboxstyled = {
         display: 'flex',
         flexDirection: 'column',
-        maxWidth: '80%',
         justifyContent: 'center',
         margin: 'auto',
         padding: '10px'
@@ -28,45 +29,88 @@ function LocCodeChange() {
 
     const btnstyled2 = {
         background: 'white',
-        margin: '1px',
-        maxWidth: 'fit-content',
+        width: '50%',
         borderWidth: '2px',
         color: 'rgb(110, 189, 142)',
         borderColor: 'rgba(195, 195, 195, 0.753)',
-        borderRadius: '20px'
-    }
-
-    const [locCodeShow, setLocCodeShow] = useState(false)
-
-    function handleClickLoc() {
-        setLocCodeShow(true);
-        const auth = document.getElementById('loc-code')
-        auth.style.visibility = 'visible'
     }
 
     const [does, setDoes] = useState([])
     const [sggs, setSggs] = useState([])
-    // const [emds, setEmds] = useState([])
+    const [emds, setEmds] = useState([])
+    const [sggsArray, setSggsArray] = useState([])
+    const [emdsArray, setEmdsArray] = useState([])
 
-    const does_array = []
-    const sggs_array = []
-    // const emds_array = []
-    does.map((doesObj) => does_array.push(doesObj['name_doe']))
-    sggs.map((sggsObj) => console.log(sggsObj['sgg']))
-    console.log('does :: ', does)
-    console.log('does_array:::', does_array)
+    const doeSelect = document.getElementById('select-doe')
+    const sggSelect = document.getElementById('select-sgg')
+    const emdSelect = document.getElementById('select-emd')
+
+    function handleClickLoc() {
+        if (doeSelect.options[doeSelect.selectedIndex].text !== '도' && sggSelect.options[sggSelect.selectedIndex].text !== '시군구' && emdSelect.options[emdSelect.selectedIndex].text !== '읍면동') {
+            localStorage.setItem('code_doe', doeSelect.value)
+            localStorage.setItem('name_doe', doeSelect.options[doeSelect.selectedIndex].text)
+            localStorage.setItem('code_sgg', sggSelect.value)
+            localStorage.setItem('name_sgg', sggSelect.options[sggSelect.selectedIndex].text)
+            localStorage.setItem('code_emd', emdSelect.value)
+            localStorage.setItem('name_emd', emdSelect.options[emdSelect.selectedIndex].text)
+
+            if (localStorage.getItem('name_emd')) {
+                Swal.fire({
+                    title: '변경되었습니다.',
+                    text: '축하드립니다!👏',
+                    icon: 'success',
+                    customClass: 'swal-wide',
+                    confirmButtonText: '확인',
+                }).then((res) => {
+                    if (res.isConfirmed) {
+                        window.location.reload()
+                    }
+                    else {
+                        window.location.reload()
+                    }
+                })
+            }
+        }
+        else {
+            Swal.fire({
+                title: '실패',
+                text: '전부 선택해주세요',
+                icon: 'error',
+                customClass: 'swal-wide',
+                confirmButtonText: '확인'
+            })
+        }
+
+    }
 
     async function getLocCode() {
         const res = await axios.get("http://localhost:4500/api/data/loccode")
         const local_codes = res.data.locCodes
-        console.log('local_codes::: ', local_codes)
+
         setDoes(local_codes.DOE)
         setSggs(local_codes.SGG)
+        setEmds(local_codes.EMD)
     }
 
     useEffect(() => {
         getLocCode()
     }, [])
+
+
+    function selectLocal() {
+        sggs.map(function (sggvalue) {
+            if (doeSelect.value == sggvalue['code_doe']) {
+                setSggsArray(sggvalue['sgg'])
+            }
+        })
+        emds.map(function (emdvalue) {
+            if (sggSelect.value == emdvalue['code_sgg']) {
+                setEmdsArray(emdvalue['emd'])
+            }
+        })
+    }
+
+
 
     return (
         <Row className='text-center w-100 my-2'>
@@ -78,54 +122,62 @@ function LocCodeChange() {
                     Please select a your region
                 </Card.Subtitle>
                 <hr />
-                <Card.Text>
-
+                <Card.Text className='m-0'>
                     <Form style={inboxstyled}>
-                        <Row className='m-auto w-100 d-flex justify-content-center'>
-                            <Col md={12} xs={12} style={{ padding: '0', display: 'flex', justifyContent: 'center', width: '100%' }}>
-                                <Form.Group style={btnstyled2}>
-                                    <Form.Control as='select' aria-label="Floating label select example">
-                                        <option>도</option>
-                                        {does.map((doe) => (
-                                            <option value={`${doe["code_doe"]}`}>
-                                                {`${doe["name_doe"]}`}</option>
-                                        ))}
-                                    </Form.Control>
-                                    <Form.Control as='select' aria-label="Floating label select example">
-                                        <option>시군구</option>
-                                        {does.map((doe) => (
-                                            <option value={`${doe["code_doe"]}`}>
-                                                {`${doe["name_doe"]}`}</option>
-                                        ))}
-                                    </Form.Control>
-                                    <Form.Control as='select' aria-label="Floating label select example">
-                                        <option>읍면동</option>
-                                        {does.map((doe) => (
-                                            <option value={`${doe["code_doe"]}`}>
-                                                {`${doe["name_doe"]}`}</option>
-                                        ))}
-                                    </Form.Control>
+                        <Row md={12} xs={12} className='m-auto w-100 d-flex justify-content-center' style={{ padding: '0', display: 'flex', justifyContent: 'center', width: '100%' }}>
+                            <Form.Group className='m-auto w-100' style={btnstyled2}>
+                                <Row className='m-auto pb-3' onChange={selectLocal}>
+                                    <Col md={4} xs={4} style={{ padding: '2px' }}>
 
-                                </Form.Group>
-                                <Button variant='light' style={btnstyled2} onClick={!locCodeShow && handleClickLoc}>확인</Button>
-                            </Col>
-                            <Col md={6} xs={4} id='loc-code' style={{
-                                margin: '5px',
-                                border: 'solid',
-                                borderColor: 'rgb(110, 189, 142)',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                padding: '2px',
-                                // visibility: 'hidden',
-                                transition: 'all 2s'
-                            }}>
-                                지역코드
-                            </Col>
+                                        <Form.Control as='select' size="sm" id='select-doe'>
+                                            <option selected disabled>도</option>
+                                            {
+                                                does.map((doevalue) => (
+                                                    <option value={`${doevalue["code_doe"]}`}>
+                                                        {`${doevalue["name_doe"]}`}
+                                                    </option>
+                                                ))
+                                            }
+                                        </Form.Control>
+                                    </Col>
+
+                                    <Col md={4} xs={4} style={{ padding: '2px' }}>
+                                        <Form.Control as='select' size="sm" id='select-sgg'>
+                                            <option selected disabled>시군구</option>
+                                            {
+                                                sggsArray.map((sggvalue) => (
+                                                    <option value={`${sggvalue["code_sgg"]}`}>
+                                                        {`${sggvalue["name_sgg"]}`}
+                                                    </option>
+                                                ))
+                                            }
+                                        </Form.Control>
+                                    </Col>
+
+                                    <Col md={4} xs={4} style={{ padding: '2px' }}>
+                                        <Form.Control as='select' size="sm" id='select-emd'>
+                                            <option selected disabled>읍면동</option>
+                                            {
+                                                emdsArray.map((emdvalue) => (
+                                                    <option value={`${emdvalue["code_emd"]}`}>
+                                                        {`${emdvalue["name_emd"]}`}
+                                                    </option>
+                                                ))
+                                            }
+                                        </Form.Control>
+                                    </Col>
+                                </Row>
+                            </Form.Group>
                         </Row>
-
                     </Form>
-
                 </Card.Text>
+                <Row className='d-flex justify-content-center'>
+                    <Button
+                        variant='light' style={btnstyled2} onClick={handleClickLoc}>
+                        확인
+                    </Button>
+                </Row>
+
             </Card>
 
         </Row>

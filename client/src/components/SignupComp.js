@@ -27,16 +27,40 @@ function SignupComp() {
     }
 
     const initValues = {
-        email: '',
-        name: ''
+        name: '',
+        email: ''
     }
 
     const [formValues, setFormValues] = useState(initValues)
     const [validated, setValidated] = useState(false)
 
+    const [emailSubm, setEmailSubm] = useState(false)
+
+    const [userExist, setUserExist] = useState(false)
+    const [alertShow, setAlertShow] = useState(false)
+
     function handleChange(event) {
         const { name, value } = event.target
         setFormValues({ ...formValues, [name]: value })
+        console.log('???', formValues)
+    }
+
+    function CheckUserExist() {
+        localStorage.setItem('signup_username', formValues.name)
+        localStorage.setItem('signup_email_Address', formValues.email)
+
+        const signUser = localStorage.getItem('signup_username')
+        const signEmail = localStorage.getItem('signup_email_Address').split('@')[1]
+
+        if (signEmail && signUser) {
+            setAlertShow(true)
+            setUserExist(!userExist)
+        }
+        else
+            if (!signEmail) {
+                setAlertShow(false)
+                // setUserExist(true)
+            }
     }
 
     function handleSubmit(event) {
@@ -55,7 +79,6 @@ function SignupComp() {
         // setFormError(validate(formValues))
         // setIsSubmit(true)
     }
-    const [emailSubm, setEmailSubm] = useState(false)
 
     function handleClickSubm() {
         // setEmailSubm(true);
@@ -66,12 +89,6 @@ function SignupComp() {
     }
 
 
-    const [userExist, setUserExist] = useState(false)
-    const [alertShow, setAlertShow] = useState(true)
-
-    function CheckUserExist() {
-        setUserExist(!userExist)
-    }
 
 
     return (
@@ -106,13 +123,11 @@ function SignupComp() {
                                 </Alert.Link>
                             </Alert>
                         }
-                        <Button onClick={() => setAlertShow(true)}>보여주고</Button>
-                        <Button onClick={() => setAlertShow(false)}>안보여주고</Button>
                     </Row>
 
                     <Form style={inboxstyled}
                         onSubmit={handleSubmit}>
-                        <Form.Group controlId="userEmail">
+                        <Form.Group controlId="username">
                             <Row className='m-auto mb-1 d-flex justify-content-center'>
                                 <Form.Control
                                     type="text"
@@ -138,8 +153,8 @@ function SignupComp() {
                             </Row>
                         </Form.Group>
 
-                        <Button variant='light' className='mt-2' id='formbtn' onClick={CheckUserExist}>
-                        {/* type="submit" */}
+                        <Button variant='light' className='mt-3' id='formbtn' onClick={CheckUserExist}>
+                            {/* type="submit" */}
                             Sign Up
                         </Button>
                     </Form>

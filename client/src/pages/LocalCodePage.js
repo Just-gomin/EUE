@@ -37,10 +37,7 @@ function SignupPage() {
                 </Col>
 
                 <Col md={6} style={col2sty}>
-
-                    <Row style={constyled} className='d-flex mb-2 w-100'>
                         <LocCodeChange />
-                    </Row>
                 </Col>
             </Row>
         </Container>
