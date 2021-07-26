@@ -51,7 +51,7 @@ function UserInfo() {
                         }, 환영합니다.
                     </Card.Title>
                     <Row style={{ alignItems: 'center', margin: 'auto', justifyContent: 'center' }}>
-                        <Card.Subtitle>
+                        <Card.Subtitle style={{fontSize: '0.8em', paddingTop: '1em', paddingBottom: '1em'}}>
                             {localname_emd ?
                                 `${localname_doe} ${localname_sgg} ${localname_emd}`
                                 :
