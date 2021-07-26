@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../App.css'
-import { Form, Button, Row, Col, Card, DropdownButton, Dropdown, ButtonGroup, Collapse, Fade } from 'react-bootstrap';
+import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
@@ -45,11 +45,6 @@ function LocCodeChange() {
     const sggSelect = document.getElementById('select-sgg')
     const emdSelect = document.getElementById('select-emd')
 
-
-    // console.log(doeSelect.options[doeSelect.selectedIndex].text)
-    // console.log(sggSelect.options[sggSelect.selectedIndex].text)
-    // console.log(emdSelect.options[emdSelect.selectedIndex].text)
-
     function handleClickLoc() {
         if (doeSelect.options[doeSelect.selectedIndex].text !== '도' && sggSelect.options[sggSelect.selectedIndex].text !== '시군구' && emdSelect.options[emdSelect.selectedIndex].text !== '읍면동') {
             localStorage.setItem('code_doe', doeSelect.value)
@@ -88,9 +83,6 @@ function LocCodeChange() {
 
     }
 
-
-
-
     async function getLocCode() {
         const res = await axios.get("http://localhost:4500/api/data/loccode")
         const local_codes = res.data.locCodes
@@ -119,6 +111,7 @@ function LocCodeChange() {
     }
 
 
+
     return (
         <Row className='text-center w-100 my-2'>
             <Card style={cardstyled}>
@@ -129,8 +122,7 @@ function LocCodeChange() {
                     Please select a your region
                 </Card.Subtitle>
                 <hr />
-                <Card.Text>
-
+                <Card.Text className='m-0'>
                     <Form style={inboxstyled}>
                         <Row md={12} xs={12} className='m-auto w-100 d-flex justify-content-center' style={{ padding: '0', display: 'flex', justifyContent: 'center', width: '100%' }}>
                             <Form.Group className='m-auto w-100' style={btnstyled2}>
@@ -175,15 +167,17 @@ function LocCodeChange() {
                                         </Form.Control>
                                     </Col>
                                 </Row>
-                                <Button
-                                    variant='light' style={btnstyled2} onClick={handleClickLoc}>
-                                    확인
-                                </Button>
                             </Form.Group>
                         </Row>
                     </Form>
-
                 </Card.Text>
+                <Row className='d-flex justify-content-center'>
+                    <Button
+                        variant='light' style={btnstyled2} onClick={handleClickLoc}>
+                        확인
+                    </Button>
+                </Row>
+
             </Card>
 
         </Row>

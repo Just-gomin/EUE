@@ -17,18 +17,3 @@ function PrivateRoute({ path, children }) {
     }
 }
 export default PrivateRoute
-
-// Swal.fire({
-        //     title: '권한이 없습니다.',
-        //     text: ' 로그인을 진행해주세요',
-        //     icon: 'warning',
-        //     confirmButtonText: '확인',
-        // })
-        //     .then((res) => {
-        //         if (res.isConfirmed) {
-        //             window.location.replace('/')
-        //         }
-        //         else {
-        //             window.location.replace('/')
-        //         }
-        //     })

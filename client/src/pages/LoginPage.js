@@ -38,9 +38,7 @@ function SignupPage() {
 
                 <Col md={6} style={col2sty}>
 
-                    <Row style={constyled} className='d-flex mb-2 w-100'>
                         <LoginComp />
-                    </Row>
                 </Col>
             </Row>
         </Container>

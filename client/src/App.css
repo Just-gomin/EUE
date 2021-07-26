@@ -5,6 +5,10 @@ body {
 
 }
 
+.form-check-input:checked {
+  background-color: #04AB70 !important;
+}
+
 #btnlink {
   color: white !important;
   text-decoration: none !important;
@@ -35,6 +39,7 @@ body {
   justify-content: center;
   padding: 0.5em;
 }
+
 
 .form-group .form-control {
   border-radius: 40px;
