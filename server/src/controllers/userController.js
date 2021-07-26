@@ -136,22 +136,12 @@ export const getConfirm = async (req, res) => {
     };
 
     const accessT = jwt.sign(payload, process.env.AUTH_ACCESS_SECRETKEY, {
-      expiresIn: "6h",
-      issuer: "eue.com",
-      subject: "userInfo",
-    });
-
-    const refreshT = jwt.sign(payload, process.env.AUTH_REFRESH_SECRETKEY, {
       expiresIn: "14d",
       issuer: "eue.com",
       subject: "userInfo",
     });
 
-    res
-      .status(statusCode.ok)
-      .cookie("access_token", accessT)
-      .cookie("refresh_token", refreshT)
-      .redirect("/api");
+    res.status(statusCode.ok).cookie("acs_token", accessT).redirect("/api");
   } catch (err) {
     res
       .status(statusCode.err)

@@ -16,12 +16,20 @@ export class User extends Model {
         email: {
           type: DataTypes.STRING(320),
           allowNull: false,
-          primaryKey: true,
+          unique: true,
         },
         nick_name: {
           type: DataTypes.STRING(16),
           allowNull: false,
           unique: true,
+        },
+        using_oauth: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+        },
+        using_aircon: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
         },
       },
       {

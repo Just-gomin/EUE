@@ -1,7 +1,8 @@
-import fetch from "node-fetch";
-import { serverMSG, statusCode } from "../serverinfo";
 import db from "../db/index";
 import dotenv from "dotenv";
+import fetch from "node-fetch";
+import jwt from "jsonwebtoken";
+import { serverMSG, statusCode } from "../serverinfo";
 
 dotenv.config();
 
@@ -34,10 +35,10 @@ const handleOutData = async (locCode, date, lat, lng) => {
 };
 
 // 내부 수집기로 부터 들어온 정보 처리
-const handleInData = async (id, date, temp, humi, lights) => {
+const handleInData = async (email, date, temp, humi, lights) => {
   db.Weather_in.create(
     {
-      host: id,
+      host: email,
       collected_at: date,
       temp: temp,
       humi: humi,
@@ -59,15 +60,15 @@ export const getDataInput = (req, res) => {
       } = req;
 
       console.log(locCode, date, lat, lng);
-      // handleOutData(locCode, date, lat, lng);
+      handleOutData(locCode, date, lat, lng);
     } else {
       // 내부 데이터 수집기 동작
       const {
-        query: { id, locCode, date, temp, humi, lights },
+        query: { id, date, temp, humi, lights },
       } = req;
 
-      console.log(id, locCode, date, temp, humi, lights);
-      // handleInData(id, date, temp, humi, lights);
+      console.log(id, date, temp, humi, lights);
+      handleInData(id, date, temp, humi, lights);
     }
 
     res.status(statusCode.ok).send(serverMSG.server_ok);
@@ -80,19 +81,22 @@ export const getDataInput = (req, res) => {
 // 사용자의 데이터 가져오기 및 예측 값 전송
 export const getUserWeatherData = (req, res) => {
   const {
-    params: { email },
+    cookies: { acs_token },
   } = req;
 
   /* 사용자 email에 따른 사용자 날씨 데이터 가져오기 */
+  const decoded = jwt.decode(acs_token);
+  const result = db.Weather_in.findAll({
+    where: { host: decoded.email },
+    logging: false,
+  });
 
-  res.status(statusCode.ok).send(serverMSG.server_ok);
+  res.status(statusCode.ok).json({ msg: serverMSG.server_ok, content: result });
 };
 
 // 지역 코드 요청 처리
 export const getLocCode = async (req, res) => {
   /* 통합 지역 코드 및 이름 json으로 생성 및 전송 */
-  let locCodes = [];
-
   const does = await db.Doe.findAll({ logging: false });
   const sggs = await db.Sgg.findAll({ logging: false });
   const emds = await db.Emd.findAll({ logging: false });
