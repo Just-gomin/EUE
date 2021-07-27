@@ -6,12 +6,23 @@
 | :------------- | :---------: | :---------------- | :---------------------------------------------------------- |
 | Root           |     ﹒      | /api              | 서버의 기본 경로                                            |
 | Data Collector |     GET     | /data/input?...   | 아두이노를 통해 수집한 자료 등록 (내부, 외부는 쿼리로 구분) |
-| Data - User    |     GET     | /data/user/:id    | 사용자 지정 장소의 날씨 데이터 요청                         |
-| Data - Outside |     GET     | /data/outside/:id | 해당 지역구의 날씨 데이터 요청                              |
-| Local Code     |     GET     | /data/loccode     | 행정 구역 코드 요청                                         |
+| Data           |     GET     | /data/user        | 사용자 지정 장소의 날씨 데이터 요청                         |
+| Data           |     GET     | /data/outside/:id | 해당 지역구의 날씨 데이터 요청                              |
+| Data           |     GET     | /data/loccode     | 행정 구역 코드 요청                                         |
 | Auth           |    POST     | /signup           | 회원가입 요청                                               |
 | Auth           |    POST     | /login            | 로그인 요청                                                 |
-| Auth           |    POST     | /:id/edit-profile | 회원 정보 수정 요청                                         |
+| Auth           |     GET     | /confirm?...      | 메일 인증용 토큰의 유효성 확인 요청                         |
+| User Info      |     GET     | /user-info        | 회원 정보 요청                                              |
+| User Info      |    POST     | /edit-profile     | 회원 정보 수정 요청                                         |
+| User Info      |    POST     | /set-loccode      | 회원 지역 코드 설정 요청                                    |
+
+<br><br>
+
+## 주소 접근 방법
+
+      [ "http://localhost:[your_port]" or "your_domain"]/api/---[URI]--
+
+먼저 도메인을 입력 후, api서버의 기초 주소인 /api를 입력하고 위의 표 중 필요한 경로로 접근합니다.
 
 <br><br>
 
@@ -41,10 +52,14 @@
 
       2021.05.07 +) Data Collector의 경우 Post 방식으로 보내주는 것이 맞으나, 현재 Get방식을 이용하고 있습니다. 올해 초 부터 아두이노에서 POST로 전송을 하고자 여러 자료를 찾아 봤지만, 방법을 찾지 못해 일단 진행 하였습니다. 방법을 발견하면 수정을 진행하겠습니다.
 
+<br>
+
 ### 2021.07.12 \_ 경로 수정
 
 1. 도 정보를 가져오는 경로 수정
    : loccode/do -> loccode/doe
+
+<br>
 
 ### 2021.07.19 \_ 경로 수정
 
@@ -53,3 +68,19 @@
 
 2. 행정 구역 코드 데이터 주소 수정
    : "도", "시/군/구", "읍/면/동"의 데이터를 따로 요청할 수 있던 것에서, 한번에 처리하도록 변경
+
+<br>
+
+### 2021.07.26 \_ 경로 추가 및 분류 변경
+
+1. 사용자 정보 주소 추가
+   : 사용자의 정보를 요청하는 주소 추가 "/user-info"
+
+2. 사용자 지역 코드 수정 주소 추가
+   : 사용자의 지역 코드 수정 주소 "/set-loccode" 추가
+
+3. 사용자 인증 주소 추가
+   : 사용자가 메일을 통해 발급받은 주소로 이동시 토큰의 유효성을 검사하는 주소 "/confirm" 추가
+
+4. 사용자 인증과 사용자 정보 주소 분류 구분
+   : 사용자 인증에 관한 주소 "Auth", 사용자 정보에 관한 주소 "User Info" 분류 구분.

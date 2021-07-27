@@ -6,6 +6,8 @@ import {
   getLogin,
   getSetLoccode,
   getSignup,
+  getUserInfo,
+  postEditProfile,
   postLogin,
   postSetLoccode,
   postSignup,
@@ -14,16 +16,20 @@ import { onlyPrivate } from "../middlewares";
 
 const globalRouter = express.Router();
 
-globalRouter.get("/", getHome); // For development test.
+// For development test.
+globalRouter.get("/", getHome);
+globalRouter.get(routes.signup, getSignup);
+globalRouter.get(routes.login, getLogin);
+globalRouter.get(routes.setLoccode, onlyPrivate, getSetLoccode);
 
 // Authentication
-globalRouter.get(routes.signup, getSignup); // For development test.
-globalRouter.get(routes.login, getLogin); // For development test.
-globalRouter.get(routes.setLoccode, onlyPrivate, getSetLoccode); // For development test.
-
 globalRouter.post(routes.signup, postSignup);
 globalRouter.post(routes.login, postLogin);
 globalRouter.get(routes.confirm, getConfirm);
+
+// User Info
+globalRouter.get(routes.userinfo, onlyPrivate, getUserInfo);
+globalRouter.post(routes.editProfile, onlyPrivate, postEditProfile);
 globalRouter.post(routes.setLoccode, onlyPrivate, postSetLoccode);
 
 export default globalRouter;

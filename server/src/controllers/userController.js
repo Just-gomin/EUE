@@ -139,8 +139,6 @@ export const getConfirm = async (req, res) => {
 
     const payload = {
       email: user.email,
-      nick_name: user.nick_name,
-      loc_code: user.loc_code,
     };
 
     const accessT = jwt.sign(payload, process.env.AUTH_ACCESS_SECRETKEY, {
@@ -157,6 +155,32 @@ export const getConfirm = async (req, res) => {
   }
 };
 
+// 사용자 정보 요청 처리
+export const getUserInfo = async (req, res) => {
+  const {
+    cookies: { acs_token },
+  } = req;
+
+  const decoded = jwt.decode(acs_token);
+
+  const result = await db.User.findAll({ where: { email: decoded.email } });
+
+  res.status(statusCode.ok).json({ user_info: result });
+};
+
+// 사용자 정보 수정 요청 처리
+export const postEditProfile = (req, res) => {
+  const {
+    cookies: { acs_token },
+  } = req;
+
+  // 수신한 변경 내용들을 통해 DB Update.
+
+  res
+    .status(statusCode.ok)
+    .json({ msg: serverMSG.server_ok, content: "Server OK" });
+};
+
 // 사용자의 지역 코드 설정 처리
 export const postSetLoccode = async (req, res) => {
   const {
@@ -165,7 +189,6 @@ export const postSetLoccode = async (req, res) => {
   } = req;
 
   const decoded = jwt.decode(acs_token);
-  console.log(decoded);
 
   await db.User.update(
     { loc_code: Number(loccode) },

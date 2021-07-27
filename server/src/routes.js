@@ -16,8 +16,11 @@ const LOCCODE = "/loccode";
 const SIGNUP = "/signup";
 const LOGIN = "/login";
 const CONFIRM = "/confirm";
-const EDIT_PROFILE = "/edit-profile";
+
+// # User Info
+const USER_INFO = "/user-info";
 const SET_LOCCODE = "/set-loccode";
+const EDIT_PROFILE = "/edit-profile";
 
 // # Detail Object
 const DETAIL = "/:id";
@@ -32,6 +35,7 @@ const routes = {
   signup: SIGNUP,
   login: LOGIN,
   confirm: CONFIRM,
+  userinfo: USER_INFO,
   editProfile: EDIT_PROFILE,
   setLoccode: SET_LOCCODE,
   Detail: (id) => {

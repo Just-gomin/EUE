@@ -106,6 +106,14 @@ export const getUserWeatherData = (req, res) => {
   res.status(statusCode.ok).json({ msg: serverMSG.server_ok, content: result });
 };
 
+// 실외 날씨 데이터 요청 처리
+export const getOutWeatherData = (req, res) => {
+  // 실외 지역 번호를 통해 날씨 데이터 전송.
+  res
+    .status(statusCode.ok)
+    .json({ msg: serverMSG.server_ok, content: "Outside Weather Data" });
+};
+
 // 지역 코드 요청 처리
 export const getLocCode = async (req, res) => {
   /* 통합 지역 코드 및 이름 json으로 생성 및 전송 */
