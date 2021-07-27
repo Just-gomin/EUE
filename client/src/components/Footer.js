@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Row, Card,  Button, Col, Modal,  } from 'react-bootstrap';
+import { Row, Card, Button, Col, Modal, } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import '../App.css'
 
@@ -50,9 +50,11 @@ function Footer() {
         <Row className='text-center w-100 my-2'>
             <Card style={cardstyled}>
                 <Card.Title>
-                    서버비용 후원하기
+                    <p>
+                        서버비용 후원하기
+                    </p>
                 </Card.Title>
-                <Card.Subtitle style={{fontWeight: 'lighter'}}>
+                <Card.Subtitle>
                     이용하시는데 불편함이 없도록 광고 없이 운영하고 있습니다. <br />
                     서버비용 충당 후 후원금이 남을시 UNICEF 에 기부하겠습니다.
                 </Card.Subtitle>

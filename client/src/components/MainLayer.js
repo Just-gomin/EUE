@@ -35,13 +35,26 @@ function MainLayer() {
     }
 
     const logined = localStorage.getItem('nickname')
-
     const [airUsing, setAirUsing] = useState(false)
 
     function aircondiCheck() {
         setAirUsing(!airUsing)
         localStorage.setItem('using-aircondition', !airUsing);
     }
+
+    useEffect(() => {
+        const airUsingLocal = localStorage.getItem('using-aircondition')
+        if (airUsingLocal === 'true') {
+            console.log('!!', airUsing);
+            console.log(airUsingLocal);
+            return setAirUsing(true)
+        }
+        else {
+            console.log('%%', airUsing);
+            console.log(airUsingLocal);
+            return setAirUsing(false)
+        }
+    });
 
     return (
         <Col>
@@ -54,15 +67,19 @@ function MainLayer() {
             <Row className='m-auto d-flex justify-content-center w-100'>
                 <UserInfo />
             </Row>
-            <Form
-                key='checkbox' className="d-flex  justify-content-center w-100" style={{ flexDirection: 'row-reverse' }}>
-                <Form.Check
-                    type='switch'
-                    id='aircondition-checkbox'
-                    label='에어컨 사용중'
-                    onChange={aircondiCheck}
-                />
-            </Form>
+
+            {logined &&
+                <Form
+                    key='checkbox' className="d-flex  justify-content-center w-100" style={{ flexDirection: 'row-reverse' }}>
+                    <Form.Check
+                        type='switch'
+                        id='aircondition-checkbox'
+                        label='에어컨 사용중'
+                        onChange={aircondiCheck}
+                        checked={airUsing}
+                    />
+                </Form>
+            }
 
             <Row className='d-flex justify-content-center align-items-center my-2 mx-auto w-100'>
                 <ButtonGroup vertical className='m-auto' style={{ width: '100%', flexDirection: 'column' }}>

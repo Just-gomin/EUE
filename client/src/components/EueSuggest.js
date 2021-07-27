@@ -22,12 +22,14 @@ function EueSuggest() {
             <Card style={cardstyled}>
 
                 <Card.Title>
-                    EUE 제안
+                    <p>
+                        EUE 제안
+                    </p>
                 </Card.Title>
                 <Card.Text>
                     "에어컨을 줄이시면 더 효율적입니다."
                 </Card.Text>
-                
+
             </Card>
         </Row>
     )

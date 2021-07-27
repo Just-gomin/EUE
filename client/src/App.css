@@ -37,7 +37,7 @@ body {
   color: rgb(129, 129, 129);
   align-items: center;
   justify-content: center;
-  padding: 0.5em;
+  font-weight: 300;
 }
 
 
@@ -87,7 +87,7 @@ body {
   }
 
   #contour {
-    padding: 10px;
+    padding-bottom: 1em;
     color: rgba(195, 195, 195, 0.753);
   }
   

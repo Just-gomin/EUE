@@ -13,7 +13,9 @@ function UserInfo() {
 
     const cardstyled = {
         margin: 'auto',
-        padding: '1em',
+        padding: '1em 0.5em 1em 0.5em',
+        // paddingTop: '1em',
+        // paddingBottom: '1em',
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
@@ -42,22 +44,37 @@ function UserInfo() {
             <Col className='text-center pt-3 pb-2 px-0'>
                 <Card style={cardstyled} id='localName'>
                     <Card.Title>
-                        {nickname ?
-                            `${nickname}`
-                            :
-                            <>
-                                GUEST
-                            </>
-                        }, 환영합니다.
+                        <strong>
+                            {nickname ?
+                                <h2>
+                                    {`${nickname}`}
+                                </h2>
+                                :
+                                <h2>
+                                    GUEST
+                                </h2>
+                            }
+                        </strong>
+                        <p style={{ fontWeight: '300', margin: '0' }}>
+                            환영합니다
+                        </p>
                     </Card.Title>
+                    <hr />
                     <Row style={{ alignItems: 'center', margin: 'auto', justifyContent: 'center' }}>
                         <Card.Subtitle>
                             {localname_emd ?
-                                `${localname_doe} ${localname_sgg} ${localname_emd}`
+                                <p className='mb-2'>
+
+                                    {`${localname_doe}`}
+                                    <br />
+                                    {`${localname_sgg}`}
+                                    <br />
+                                    {`${localname_emd}`}
+                                </p>
                                 :
-                                <>
-                                    지역을 입력해 주세요
-                                </>
+                                <p className='mb-2'>
+                                    로그인 후 이용 가능합니다
+                                </p>
                             }
                         </Card.Subtitle>
                         {nickname &&
@@ -68,10 +85,14 @@ function UserInfo() {
                             </Button>
                         }
                     </Row>
-                    <hr />
+                    {nickname &&
+                        <p className='w-100 justify-content-center m-auto'>
+                            <hr />
 
-                    환경을 향한 노력 <br />
-                    <strong>OOO 일 째</strong>
+                            환경을 향한 노력 <br />
+                            <strong>OOO 일 째</strong>
+                        </p>
+                    }
                 </Card>
             </Col>
         </Row>
