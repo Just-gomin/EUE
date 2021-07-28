@@ -20,6 +20,8 @@ export const onlyPrivate = (req, res, next) => {
     cookies: { acs_token },
   } = req;
 
+  console.log('@@@@@@@@@@@@@@',req.cookies);
+
   try {
     const acs_decode = jwt.verify(acs_token, envs.secretKey.access_token);
     next();

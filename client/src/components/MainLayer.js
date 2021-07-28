@@ -5,6 +5,9 @@ import '../App.css'
 import UserInfo from './UserInfo';
 import { kakaoLogout } from '../utils/Oauth';
 import axios from 'axios';
+import { Swal } from 'sweetalert2';
+import { deleteCookie } from '../utils/Cookies';
+import { checkCookies } from './../utils/Cookies';
 
 
 function MainLayer() {
@@ -33,6 +36,7 @@ function MainLayer() {
         color: 'white'
     }
 
+
     const logined = localStorage.getItem('nickname')
     const [airUsing, setAirUsing] = useState(false)
 
@@ -51,6 +55,9 @@ function MainLayer() {
         }
     });
 
+    
+
+
     return (
         <Col>
             <Row className='d-flex align-items-center m-auto w-100 p-0'>
@@ -63,7 +70,7 @@ function MainLayer() {
                 <UserInfo />
             </Row>
 
-            {logined &&
+            {checkCookies() &&
                 <Form
                     key='checkbox' className="d-flex  justify-content-center w-100" style={{ flexDirection: 'row-reverse' }}>
                     <Form.Check
@@ -78,9 +85,9 @@ function MainLayer() {
 
             <Row className='d-flex justify-content-center align-items-center my-2 mx-auto w-100'>
                 <ButtonGroup vertical className='m-auto' style={{ width: '100%', flexDirection: 'column' }}>
-                    {logined ?
+                    {checkCookies() ?
                         //true
-                        <Button variant='light' style={btnstyled} onClick={kakaoLogout}>
+                        <Button variant='light' style={btnstyled} onClick={kakaoLogout || deleteCookie('acs_token')}>
                             로그아웃
                         </Button>
                         :
@@ -91,7 +98,7 @@ function MainLayer() {
                             </Link>
                         </Button>
                     }
-                    {!logined &&
+                    {!checkCookies() &&
                         <Button variant='light' style={btnstyled}>
                             <Link to='/signup' id='btnlink'>
                                 회원가입

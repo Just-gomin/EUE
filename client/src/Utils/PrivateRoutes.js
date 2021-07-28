@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { isLogined } from '../utils/Auth';
+import { isLogined } from './Auth';
 
 function PrivateRoute({ path, children }) {
     if (isLogined()) {

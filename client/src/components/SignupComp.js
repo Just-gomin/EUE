@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import '../App.css'
 import { Form, Button, Row, Col, Card, Alert, FloatingLabel } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
+import axios from 'axios';
 
 function SignupComp() {
 
@@ -28,7 +29,7 @@ function SignupComp() {
     }
 
     const initValues = {
-        name: '',
+        nick_name: '',
         email: ''
     }
 
@@ -43,54 +44,13 @@ function SignupComp() {
     function handleChange(event) {
         const { name, value } = event.target
         setFormValues({ ...formValues, [name]: value })
-        console.log('???', formValues)
     }
+    console.log('???', formValues)
 
-    function CheckUserExist() {
-        localStorage.setItem('signup_username', formValues.name)
-        localStorage.setItem('signup_email_Address', formValues.email)
-
-        const signUser = localStorage.getItem('signup_username')
-        const signEmail = localStorage.getItem('signup_email_Address').split('@')[1]
-
-        if (signEmail && signUser) {
-            setAlertShow(true)
-            setUserExist(!userExist)
-        }
-        else
-            if (!signEmail) {
-                setAlertShow(false)
-                // setUserExist(true)
-            }
+    async function handleSubmit(event) {
+        event.preventDefault();
+        await axios.post("/api/signup", formValues)
     }
-
-    function handleSubmit(event) {
-        const form = event.currentTarget;
-        console.log('formValues', formValues);
-        console.log('formValues.values', Object.values(formValues)[0].length);
-
-        // console.log(form)
-        // if (Object.values(formValues)[0].length !== 0) { //form.checkValidity() === false
-        //     event.preventDefault();
-        //     event.stopPropagation();
-        // }
-        console.log(validated)
-        setValidated(true);
-        // const form = event.current
-        // setFormError(validate(formValues))
-        // setIsSubmit(true)
-    }
-
-    function handleClickSubm() {
-        // setEmailSubm(true);
-        const subm = document.getElementById("subm-mailSent");
-        subm.style.visibility = 'visible'
-        // const aftermail = document.getElementById('AftermailSent');
-        // aftermail.style.display = ''
-    }
-
-
-
 
     return (
 
@@ -129,14 +89,13 @@ function SignupComp() {
                     <Form style={inboxstyled} onSubmit={handleSubmit}>
                         <FloatingLabel
                             controlId="floatingInput"
-                            label="Name"
+                            label="Nickname"
                             className='mb-3'
                         >
                             <Form.Control
                                 type="text"
-                                name="name"
-                                placeholder="Name"
-                                value={formValues.name}
+                                name="nick_name"
+                                placeholder="Nickname"
                                 onChange={handleChange}
                                 required
                             />
@@ -149,14 +108,13 @@ function SignupComp() {
                                 type="email"
                                 name="email"
                                 placeholder="Email Address"
-                                value={formValues.email}
                                 onChange={handleChange}
                                 required
                             />
                         </FloatingLabel>
 
-                        <Button variant='light' className='mt-3' id='formbtn' type='submit' onClick={CheckUserExist}>
-                            {/* type="submit" */}
+                        <Button variant='light' className='mt-3' id='formbtn' type='submit'>
+                            {/*  onClick={CheckUserExist} */}
                             Sign Up
                         </Button>
                     </Form>

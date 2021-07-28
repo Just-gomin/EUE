@@ -32,31 +32,33 @@ function Home() {
         padding: '0'
     }
 
-    const getusername = axios.get(`/api/user`)
-    console.log(getusername)
-
+    async function test() {
+        const res = await axios.get("/api/user-info", { withCredentials: true })
+        console.log("@@@@", res)
+    }
+    test()
 
     return (
-            <Container className='m-auto d-flex position-relative'
-                style={{ flexDirection: 'column' }} fluid>
-                <Row className='d-flex'>
-                    <Row style={constyled} className='m-auto'>
-                        <Col xs={12} md={6} className='d-flex justify-content-center' id='stickyy'>
-                            <Row style={col1sty} className='m-auto'>
-                                <MainLayer />
-                            </Row>
-                        </Col>
+        <Container className='m-auto d-flex position-relative'
+            style={{ flexDirection: 'column' }} fluid>
+            <Row className='d-flex'>
+                <Row style={constyled} className='m-auto'>
+                    <Col xs={12} md={6} className='d-flex justify-content-center' id='stickyy'>
+                        <Row style={col1sty} className='m-auto'>
+                            <MainLayer />
+                        </Row>
+                    </Col>
 
-                        <Col md={6} style={col2sty}>
-                            {/* <TimeNow /> */}
-                            <EueSuggest />
-                            <ChartLine />
-                            <ChartDoughnut />
-                            <Donation />
-                        </Col>
-                    </Row>
+                    <Col md={6} style={col2sty}>
+                        {/* <TimeNow /> */}
+                        <EueSuggest />
+                        <ChartLine />
+                        <ChartDoughnut />
+                        <Donation />
+                    </Col>
                 </Row>
-            </Container>
+            </Row>
+        </Container>
     );
 }
 

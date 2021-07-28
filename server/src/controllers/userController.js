@@ -148,7 +148,7 @@ export const getConfirm = async (req, res) => {
     res
       .status(server_status.code.ok)
       .cookie("acs_token", accessT)
-      .redirect("/api");
+      .redirect("http://localhost:3000/");
   } catch (err) {
     res
       .status(server_status.code.err)
