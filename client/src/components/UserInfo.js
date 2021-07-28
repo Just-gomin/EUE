@@ -82,7 +82,6 @@ function UserInfo() {
                                     변경
                                 </Link>
                             </Button>
-                            
                         }
                     </Row>
                     {nickname &&
