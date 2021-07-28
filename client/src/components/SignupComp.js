@@ -47,20 +47,6 @@ function SignupComp() {
     }
     console.log('???', formValues)
 
-    // function CheckUserExist() {
-    //     const signUser = localStorage.getItem('signup_username')
-    //     const signEmail = localStorage.getItem('signup_email_Address').split('@')[1]
-
-    //     if (signEmail && signUser) {
-    //         setAlertShow(true)
-    //         setUserExist(!userExist)
-    //     }
-    //     else
-    //         if (!signEmail) {
-    //             setAlertShow(false)
-    //         }
-    // }
-
     async function handleSubmit(event) {
         event.preventDefault();
         await axios.post("/api/signup", formValues)

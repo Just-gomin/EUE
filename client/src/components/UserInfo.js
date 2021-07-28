@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Row, Card, Button, Col, Modal } from 'react-bootstrap';
 import '../App.css'
 import { Link } from 'react-router-dom';
+import { checkCookies } from './../utils/Cookies';
 
 
 function UserInfo() {
@@ -44,7 +45,7 @@ function UserInfo() {
                 <Card style={cardstyled} id='localName'>
                     <Card.Title>
                         <strong>
-                            {nickname ?
+                            {checkCookies() ?
                                 <h2>
                                     {`${nickname}`}
                                 </h2>
@@ -76,7 +77,7 @@ function UserInfo() {
                                 </p>
                             }
                         </Card.Subtitle>
-                        {nickname &&
+                        {checkCookies() &&
                             <Button variant='light' className='m-auto d-flex' style={btnstyled2}>
                                 <Link to='/edit' className='w-100' style={{ textDecoration: 'none', color: 'rgb(110, 189, 142)' }}>
                                     변경
@@ -84,7 +85,7 @@ function UserInfo() {
                             </Button>
                         }
                     </Row>
-                    {nickname &&
+                    {checkCookies() &&
                         <p className='w-100 justify-content-center m-auto'>
                             <hr />
 
