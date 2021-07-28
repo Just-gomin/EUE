@@ -22,9 +22,11 @@ function LocCodeChange() {
     const inboxstyled = {
         display: 'flex',
         flexDirection: 'column',
+        maxWidth: '80%',
         justifyContent: 'center',
         margin: 'auto',
-        padding: '10px'
+        padding: '0.5em',
+        color: 'black'
     }
 
     const btnstyled2 = {
@@ -117,10 +119,10 @@ function LocCodeChange() {
         <Row className='text-center w-100 my-2'>
             <Card style={cardstyled}>
                 <Card.Title id='impactTitle'>
-                    Local Code
+                    지역 코드
                 </Card.Title>
                 <Card.Subtitle style={{ fontWeight: 'lighter' }}>
-                    Please select a your region
+                    본인의 지역을 선택해주세요
                 </Card.Subtitle>
                 <hr />
                 <Card.Text className='m-0'>

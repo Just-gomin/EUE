@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../App.css'
-import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
+import { Form, Button, Row, Col, Card, Alert, FloatingLabel } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
 
 function LoginComp() {
@@ -23,7 +23,8 @@ function LoginComp() {
         maxWidth: '80%',
         justifyContent: 'center',
         margin: 'auto',
-        padding: '10px'
+        padding: '0.5em',
+        color: 'black'
     }
 
     const [emailSentAlert, setEmailSentAlert] = useState(false)
@@ -34,7 +35,7 @@ function LoginComp() {
     function CheckEmailSend() {
         localStorage.setItem('login_email_Address', emailAddress)
         const emailIs = localStorage.getItem('login_email_Address').split('@')[1]
-        if(emailIs) {
+        if (emailIs) {
             setAlertShow(true)
             setEmailSentAlert(false)
         }
@@ -89,9 +90,13 @@ function LoginComp() {
                     </Row>
 
                     <Form style={inboxstyled}>
-                        <Form.Group controlId="formBasicEmail">
+                        <FloatingLabel
+                            controlId="floatingInput"
+                            label="Email"
+                        >
                             <Form.Control type="email" placeholder="Email" onChange={handleChange} />
-                        </Form.Group>
+
+                        </FloatingLabel>
                         <Button variant='light' className='mt-3' id='formbtn' onClick={CheckEmailSend}>
                             LOGIN
                         </Button>

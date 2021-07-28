@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import '../App.css'
-import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
+import { Form, Button, Row, Col, Card, Alert, FloatingLabel } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
 
 function SignupComp() {
@@ -23,7 +23,8 @@ function SignupComp() {
         maxWidth: '80%',
         justifyContent: 'center',
         margin: 'auto',
-        padding: '1rem'
+        padding: '0.5em',
+        color: 'black'
     }
 
     const initValues = {
@@ -125,35 +126,36 @@ function SignupComp() {
                         }
                     </Row>
 
-                    <Form style={inboxstyled}
-                        onSubmit={handleSubmit}>
-                        <Form.Group controlId="username">
-                            <Row className='m-auto mb-1 d-flex justify-content-center'>
-                                <Form.Control
-                                    type="text"
-                                    name="name"
-                                    placeholder="Name"
-                                    value={formValues.name}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Row>
-                            <Row>
-                                <p></p>
-                            </Row>
-                            <Row className='m-auto d-flex justify-content-center'>
-                                <Form.Control
-                                    type="email"
-                                    name="email"
-                                    placeholder="Email Address"
-                                    value={formValues.email}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Row>
-                        </Form.Group>
+                    <Form style={inboxstyled} onSubmit={handleSubmit}>
+                        <FloatingLabel
+                            controlId="floatingInput"
+                            label="Name"
+                            className='mb-3'
+                        >
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                placeholder="Name"
+                                value={formValues.name}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FloatingLabel>
+                        <FloatingLabel
+                            controlId="floatingInput"
+                            label="Email Address"
+                        >
+                            <Form.Control
+                                type="email"
+                                name="email"
+                                placeholder="Email Address"
+                                value={formValues.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FloatingLabel>
 
-                        <Button variant='light' className='mt-3' id='formbtn' onClick={CheckUserExist}>
+                        <Button variant='light' className='mt-3' id='formbtn' type='submit' onClick={CheckUserExist}>
                             {/* type="submit" */}
                             Sign Up
                         </Button>

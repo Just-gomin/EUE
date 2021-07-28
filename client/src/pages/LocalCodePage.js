@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
 import '../App.css'
 import LocCodeChange from '../components/LocCodeChange';
+import NicknameChange from '../components/NicknameChange';
 
 function SignupPage() {
     const constyled = {
@@ -39,6 +40,7 @@ function SignupPage() {
                     </Col>
 
                     <Col md={6} style={col2sty}>
+                        <NicknameChange />
                         <LocCodeChange />
                     </Col>
                 </Row>

@@ -8,7 +8,6 @@ import ChartLine from '../components/ChartLine';
 import ChartDoughnut from '../components/ChartDoughnut';
 import Donation from '../components/Donation';
 import axios from 'axios';
-import Footer from '../components/Footer';
 
 
 function Home() {
@@ -33,12 +32,8 @@ function Home() {
         padding: '0'
     }
 
-    axios({
-        method: 'get',
-        url: 'localhost:4500/loccode/doe'
-    }).then((res) => {
-        console.log(res)
-    })
+    const getusername = axios.get(`/api/user`)
+    console.log(getusername)
 
 
     return (

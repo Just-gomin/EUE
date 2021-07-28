@@ -14,6 +14,7 @@ function EueSuggest() {
         borderColor: 'rgb(110, 189, 142)',
         color: '#04AB70'
     }
+    
     const airUsing = localStorage.getItem('using-aircondition')
 
 
