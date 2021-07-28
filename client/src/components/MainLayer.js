@@ -5,6 +5,7 @@ import '../App.css'
 import UserInfo from './UserInfo';
 import { kakaoLogout } from '../utils/Oauth';
 import axios from 'axios';
+import { Swal } from 'sweetalert2';
 
 
 function MainLayer() {
@@ -33,6 +34,9 @@ function MainLayer() {
         color: 'white'
     }
 
+    const acctoken_cookies = document.cookie.split('=')[1];
+    // console.log(acctoken_cookies)
+
     const logined = localStorage.getItem('nickname')
     const [airUsing, setAirUsing] = useState(false)
 
@@ -51,6 +55,25 @@ function MainLayer() {
         }
     });
 
+    var deleteCookie = function (name) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+        Swal.fire({
+            title: '로그아웃 성공!',
+            text: '🙏 안녕히 가세요 🙏',
+            icon: 'warning',
+            customClass: 'swal-wide',
+            confirmButtonText: '확인',
+        }).then((res) => {
+            if (res.isConfirmed) {
+                window.location.replace('/')
+            }
+            else {
+                window.location.replace('/')
+            }
+        })
+    }
+
+
     return (
         <Col>
             <Row className='d-flex align-items-center m-auto w-100 p-0'>
@@ -63,7 +86,7 @@ function MainLayer() {
                 <UserInfo />
             </Row>
 
-            {logined &&
+            {acctoken_cookies &&
                 <Form
                     key='checkbox' className="d-flex  justify-content-center w-100" style={{ flexDirection: 'row-reverse' }}>
                     <Form.Check
@@ -78,9 +101,9 @@ function MainLayer() {
 
             <Row className='d-flex justify-content-center align-items-center my-2 mx-auto w-100'>
                 <ButtonGroup vertical className='m-auto' style={{ width: '100%', flexDirection: 'column' }}>
-                    {logined ?
+                    {acctoken_cookies ?
                         //true
-                        <Button variant='light' style={btnstyled} onClick={kakaoLogout}>
+                        <Button variant='light' style={btnstyled} onClick={kakaoLogout || deleteCookie('acs_token')}>
                             로그아웃
                         </Button>
                         :
@@ -91,7 +114,7 @@ function MainLayer() {
                             </Link>
                         </Button>
                     }
-                    {!logined &&
+                    {!acctoken_cookies &&
                         <Button variant='light' style={btnstyled}>
                             <Link to='/signup' id='btnlink'>
                                 회원가입

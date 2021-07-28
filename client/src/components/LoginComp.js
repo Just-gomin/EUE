@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../App.css'
 import { Form, Button, Row, Col, Card, Alert, FloatingLabel } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
+import axios from 'axios';
 
 function LoginComp() {
 
@@ -53,8 +54,16 @@ function LoginComp() {
 
     function handleChange(event) {
         setEmailAddress(event.target.value)
-        console.log(emailAddress)
     }
+
+    console.log(emailAddress)
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        const res = await axios.post("/api/login", { email: emailAddress })
+        console.log(res)
+    }
+
 
     return (
         <Row className='text-center w-100 my-2'>
@@ -89,7 +98,7 @@ function LoginComp() {
                         }
                     </Row>
 
-                    <Form style={inboxstyled}>
+                    <Form style={inboxstyled} onSubmit={handleSubmit}>
                         <FloatingLabel
                             controlId="floatingInput"
                             label="Email"
@@ -97,7 +106,7 @@ function LoginComp() {
                             <Form.Control type="email" placeholder="Email" onChange={handleChange} />
 
                         </FloatingLabel>
-                        <Button variant='light' className='mt-3' id='formbtn' onClick={CheckEmailSend}>
+                        <Button variant='light' className='mt-3' id='formbtn' onClick={CheckEmailSend} type='submit'>
                             LOGIN
                         </Button>
                     </Form>

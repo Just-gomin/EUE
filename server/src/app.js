@@ -18,7 +18,9 @@ const app = express();
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
-app.use(cors());
+app.use(cors({
+    credentials: true
+}));
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
