@@ -1,16 +1,14 @@
 import db from "../db/index";
-import dotenv from "dotenv";
+import envs from "../../config/config";
 import fetch from "node-fetch";
 import jwt from "jsonwebtoken";
-import { serverMSG, statusCode } from "../serverinfo";
-
-dotenv.config();
+import server_status from "../server_status";
 
 // 외부 수집기로 부터 들어온 정보 처리
 const handleOutData = async (locCode, date, lat, lng) => {
   // OpenWeatherAPI로 부터 지역의 날씨 정보획득을 위해 지역의 경도와 위도, API Key, 단위 기준 metric 전달
   const response = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.OPENWEATHERMAP_API_KEY}&units=metric`
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${envs.api.openweathermap.api_key}&units=metric`
   );
   const json = await response.json();
 
@@ -65,8 +63,8 @@ export const getDataInput = (req, res) => {
         `Outside[${locCode}] Data(date: ${trans_date}/ lat: ${lat}/ lng: ${lng}) Input.`
       );
       handleOutData(locCode, trans_date, lat, lng);
-      res.status(statusCode.ok).send({
-        msg: serverMSG.server_ok,
+      res.status(server_status.code.ok).send({
+        msg: server_status.msg.ok,
         content: `Outside[${locCode}] data Input.`,
       });
     } else {
@@ -83,10 +81,10 @@ export const getDataInput = (req, res) => {
       handleInData(email, trans_date, temp, humi, lights);
     }
 
-    res.status(statusCode.ok).send(serverMSG.server_ok);
+    res.status(server_status.code.ok).send(server_status.msg.ok);
   } catch (error) {
     console.log(error);
-    res.status(statusCode.err).send(serverMSG.server_err);
+    res.status(server_status.code.err).send(server_status.msg.err);
   }
 };
 
@@ -103,15 +101,17 @@ export const getUserWeatherData = (req, res) => {
     logging: false,
   });
 
-  res.status(statusCode.ok).json({ msg: serverMSG.server_ok, content: result });
+  res
+    .status(server_status.code.ok)
+    .json({ msg: server_status.msg.ok, content: result });
 };
 
 // 실외 날씨 데이터 요청 처리
 export const getOutWeatherData = (req, res) => {
   // 실외 지역 번호를 통해 날씨 데이터 전송.
   res
-    .status(statusCode.ok)
-    .json({ msg: serverMSG.server_ok, content: "Outside Weather Data" });
+    .status(server_status.code.ok)
+    .json({ msg: server_status.msg.ok, content: "Outside Weather Data" });
 };
 
 // 지역 코드 요청 처리
@@ -147,7 +147,7 @@ export const getLocCode = async (req, res) => {
     sgg_emd.push(temp);
   });
 
-  res.status(statusCode.ok).json({
+  res.status(server_status.code.ok).json({
     locCodes: {
       DOE: does,
       SGG: doe_sgg,

@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import dotenv from "dotenv";
+import envs from "../../config/config";
 import Doe from "../models/doe";
 import Sgg from "../models/sgg";
 import Emd from "../models/emd";
@@ -7,19 +7,16 @@ import User from "../models/user";
 import Weather_in from "../models/weather_in";
 import Weather_out from "../models/weather_out";
 
-dotenv.config();
-const envs = process.env;
-
 // DB의 정보를 모두 담고 있는 객체 생성
 const db = {};
 
 // PostgreSQL과 연결된 Sequelize 객체 생성
 const sequelize = new Sequelize(
-  envs.DB_DATABASE,
-  envs.DB_USER,
-  envs.DB_PASSWORD,
+  envs.db.database,
+  envs.db.user,
+  envs.db.password,
   {
-    host: envs.DB_HOST,
+    host: envs.db.host,
     dialect: "postgres",
   }
 );

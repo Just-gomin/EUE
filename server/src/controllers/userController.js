@@ -1,22 +1,20 @@
 import db from "../db/index";
-import dotenv from "dotenv";
+import envs from "../../config/config";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-import { serverMSG, statusCode } from "../serverinfo";
+import server_status from "../server_status";
 import routes from "../routes";
-
-dotenv.config();
 
 // 메일 전송 처리
 const postMail = async (email, token) => {
   const transporter = nodemailer.createTransport({
-    service: process.env.NODEMAILER_SERVICE,
+    service: envs.api.nodemailer.service,
     auth: {
       type: "OAuth2",
-      user: process.env.NODEMAILER_USER,
-      clientId: process.env.NODEMAILER_GAMIL_CLIENT_ID,
-      clientSecret: process.env.NODEMAILER_GMAIL_CLIENT_PASSWORD,
-      refreshToken: process.env.NODEMAILER_GMAIL_REFRESH_TOKEN,
+      user: envs.api.nodemailer.user,
+      clientId: envs.api.nodemailer.gmail_client_id,
+      clientSecret: envs.api.nodemailer.gmail_client_secret,
+      refreshToken: envs.api.nodemailer.gmail_refresh_token,
     },
     tls: {
       rejectUnauthorized: false,
@@ -24,14 +22,14 @@ const postMail = async (email, token) => {
   });
 
   const mailOptions = {
-    from: `EUE Auth Supply <${process.env.NODEMAILER_USER}>`,
+    from: `EUE Auth Supply <${envs.api.nodemailer.user}>`,
     to: email,
     subject: "EUE 사용자 계정 확인용 메일.",
-    html: `<a href="${process.env.PROTOCOL}://${process.env.HOST}:${
-      process.env.PORT
+    html: `<a href="${envs.server.protocol}://${envs.server.host}:${
+      envs.server.port
     }${routes.base + routes.confirm}?token=${token}">${
-      process.env.PROTOCOL
-    }://${process.env.HOST}:${process.env.PORT}${
+      envs.server.protocol
+    }://${envs.server.host}:${envs.server.port}${
       routes.base + routes.confirm
     }?token=${token}</a>`,
   };
@@ -72,8 +70,8 @@ export const postSignup = async (req, res) => {
   });
 
   if (result.length != 0) {
-    res.status(statusCode.err).json({
-      msg: serverMSG.server_err,
+    res.status(server_status.code.err).json({
+      msg: server_status.msg.err,
       content: "You are aleady registered",
     });
   } else {
@@ -100,7 +98,7 @@ export const postLogin = async (req, res) => {
       {
         email: email,
       },
-      process.env.AUTH_MAIL_SECRETKEY,
+      envs.secretKey.mail,
       {
         expiresIn: 10 * 60,
         issuer: "eue.com",
@@ -112,11 +110,11 @@ export const postLogin = async (req, res) => {
     postMail(email, mail_token);
 
     res
-      .status(statusCode.ok)
-      .json({ msg: serverMSG.server_ok, content: "Send Mail Successfully." });
+      .status(server_status.code.ok)
+      .json({ msg: server_status.msg.ok, content: "Send Mail Successfully." });
   } else {
-    res.status(statusCode.err).json({
-      msg: serverMSG.server_err,
+    res.status(server_status.code.err).json({
+      msg: server_status.msg.err,
       content: "You are not one of our user yet.",
     });
   }
@@ -129,7 +127,7 @@ export const getConfirm = async (req, res) => {
   } = req;
 
   try {
-    const decoded = jwt.verify(token, process.env.AUTH_MAIL_SECRETKEY); // return payload.
+    const decoded = jwt.verify(token, envs.secretKey.mail); // return payload.
 
     const result = await db.User.findAll({
       where: { email: decoded.email },
@@ -141,17 +139,20 @@ export const getConfirm = async (req, res) => {
       email: user.email,
     };
 
-    const accessT = jwt.sign(payload, process.env.AUTH_ACCESS_SECRETKEY, {
+    const accessT = jwt.sign(payload, envs.secretKey.access_token, {
       expiresIn: "14d",
       issuer: "eue.com",
       subject: "userInfo",
     });
 
-    res.status(statusCode.ok).cookie("acs_token", accessT).redirect("/api");
+    res
+      .status(server_status.code.ok)
+      .cookie("acs_token", accessT)
+      .redirect("/api");
   } catch (err) {
     res
-      .status(statusCode.err)
-      .json({ msg: serverMSG.server_err, content: `${err}` });
+      .status(server_status.code.err)
+      .json({ msg: server_status.msg.err, content: `${err}` });
   }
 };
 
@@ -165,7 +166,7 @@ export const getUserInfo = async (req, res) => {
 
   const result = await db.User.findAll({ where: { email: decoded.email } });
 
-  res.status(statusCode.ok).json({ user_info: result });
+  res.status(server_status.code.ok).json({ user_info: result });
 };
 
 // 사용자 정보 수정 요청 처리
@@ -177,8 +178,8 @@ export const postEditProfile = (req, res) => {
   // 수신한 변경 내용들을 통해 DB Update.
 
   res
-    .status(statusCode.ok)
-    .json({ msg: serverMSG.server_ok, content: "Server OK" });
+    .status(server_status.code.ok)
+    .json({ msg: server_status.msg.ok, content: "Server OK" });
 };
 
 // 사용자의 지역 코드 설정 처리
@@ -201,14 +202,14 @@ export const postSetLoccode = async (req, res) => {
     loc_code: loccode,
   };
 
-  const accessT = jwt.sign(payload, process.env.AUTH_ACCESS_SECRETKEY, {
+  const accessT = jwt.sign(payload, envs.secretKey.access_token, {
     expiresIn: "14d",
     issuer: "eue.com",
     subject: "userInfo",
   });
 
   res
-    .status(statusCode.ok)
+    .status(server_status.code.ok)
     .cookie("acs_token", accessT)
-    .json({ msg: serverMSG.server_ok, content: "Successfully Set Loccode" });
+    .json({ msg: server_status.msg.ok, content: "Successfully Set Loccode" });
 };

@@ -4,6 +4,7 @@ package-lock.json
 
 # Project Environments
 .env
+config/config.js
 
 # Project Data
 /data

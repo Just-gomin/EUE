@@ -1,5 +1,6 @@
 import routes from "./routes";
 import jwt from "jsonwebtoken";
+import envs from "../config/config";
 
 /*
   # localmiddleware
@@ -20,7 +21,7 @@ export const onlyPrivate = (req, res, next) => {
   } = req;
 
   try {
-    const acs_decode = jwt.verify(acs_token, process.env.AUTH_ACCESS_SECRETKEY);
+    const acs_decode = jwt.verify(acs_token, envs.secretKey.access_token);
     next();
   } catch (error) {
     console.log(error);
