@@ -78,7 +78,7 @@ function UserInfo() {
                         </Card.Subtitle>
                         {nickname &&
                             <Button variant='light' className='m-auto d-flex' style={btnstyled2}>
-                                <Link to='/local_code' className='w-100' style={{ textDecoration: 'none', color: 'rgb(110, 189, 142)' }}>
+                                <Link to='/edit' className='w-100' style={{ textDecoration: 'none', color: 'rgb(110, 189, 142)' }}>
                                     변경
                                 </Link>
                             </Button>

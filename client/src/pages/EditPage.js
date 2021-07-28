@@ -5,7 +5,7 @@ import '../App.css'
 import LocCodeChange from '../components/LocCodeChange';
 import NicknameChange from '../components/NicknameChange';
 
-function SignupPage() {
+function EditPage() {
     const constyled = {
         display: 'flex',
         justifyContent: 'space-evenly',
@@ -49,4 +49,4 @@ function SignupPage() {
     );
 }
 
-export default SignupPage;
+export default EditPage;

@@ -4,7 +4,7 @@ import './App.css';
 import Home from './pages/Home';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
-import LocalCodePage from './pages/LocalCodePage';
+import EditPage from './pages/EditPage';
 import PrivateRoute from './utils/PrivateRoutes';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
@@ -18,14 +18,14 @@ function App() {
         <Route exact path='/' component={Home} />
         <Route path='/signup' component={SignupPage} />
         <Route path='/login' component={LoginPage} />
-        <Route path='/loc' component={LocalCodePage} />
 
-        <PrivateRoute path='/local_code'>
-          <LocalCodePage />
+        <PrivateRoute path='/edit'>
+          <EditPage />
         </PrivateRoute>
 
         <Route component={PageNotFound} />
       </Switch>
+
       <Footer />
     </Router>
 
