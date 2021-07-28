@@ -22,9 +22,11 @@ function LocCodeChange() {
     const inboxstyled = {
         display: 'flex',
         flexDirection: 'column',
+        maxWidth: '80%',
         justifyContent: 'center',
         margin: 'auto',
-        padding: '10px'
+        padding: '0.5em',
+        color: 'black'
     }
 
     const btnstyled2 = {
@@ -44,6 +46,7 @@ function LocCodeChange() {
     const doeSelect = document.getElementById('select-doe')
     const sggSelect = document.getElementById('select-sgg')
     const emdSelect = document.getElementById('select-emd')
+
 
     function handleClickLoc() {
         if (doeSelect.options[doeSelect.selectedIndex].text !== '도' && sggSelect.options[sggSelect.selectedIndex].text !== '시군구' && emdSelect.options[emdSelect.selectedIndex].text !== '읍면동') {
@@ -116,10 +119,10 @@ function LocCodeChange() {
         <Row className='text-center w-100 my-2'>
             <Card style={cardstyled}>
                 <Card.Title id='impactTitle'>
-                    Local Code
+                    지역 코드
                 </Card.Title>
                 <Card.Subtitle style={{ fontWeight: 'lighter' }}>
-                    Please select a your region
+                    본인의 지역을 선택해주세요
                 </Card.Subtitle>
                 <hr />
                 <Card.Text className='m-0'>
@@ -170,16 +173,14 @@ function LocCodeChange() {
                             </Form.Group>
                         </Row>
                     </Form>
+                    <Row className='d-flex justify-content-center'>
+                        <Button
+                            variant='light' style={btnstyled2} onClick={handleClickLoc}>
+                            확인
+                        </Button>
+                    </Row>
                 </Card.Text>
-                <Row className='d-flex justify-content-center'>
-                    <Button
-                        variant='light' style={btnstyled2} onClick={handleClickLoc}>
-                        확인
-                    </Button>
-                </Row>
-
             </Card>
-
         </Row>
     )
 }

@@ -6,7 +6,7 @@ import '../App.css'
 import EueSuggest from '../components/EueSuggest';
 import ChartLine from '../components/ChartLine';
 import ChartDoughnut from '../components/ChartDoughnut';
-import Footer from './../components/Footer';
+import Donation from '../components/Donation';
 import axios from 'axios';
 
 
@@ -32,33 +32,31 @@ function Home() {
         padding: '0'
     }
 
-    axios({
-        method: 'get',
-        url: 'localhost:4500/loccode/doe'
-    }).then((res) => {
-        console.log(res)
-    })
+    const getusername = axios.get(`/api/user`)
+    console.log(getusername)
 
 
     return (
-        <Container fluid className='m-auto d-flex justify-content-center position-relative'>
-            <Row style={constyled} className='m-auto'>
-                <Col xs={12} md={6} className='d-flex justify-content-center' id='stickyy'>
-                    <Row style={col1sty} className='m-auto'>
-                        <MainLayer />
+            <Container className='m-auto d-flex position-relative'
+                style={{ flexDirection: 'column' }} fluid>
+                <Row className='d-flex'>
+                    <Row style={constyled} className='m-auto'>
+                        <Col xs={12} md={6} className='d-flex justify-content-center' id='stickyy'>
+                            <Row style={col1sty} className='m-auto'>
+                                <MainLayer />
+                            </Row>
+                        </Col>
+
+                        <Col md={6} style={col2sty}>
+                            {/* <TimeNow /> */}
+                            <EueSuggest />
+                            <ChartLine />
+                            <ChartDoughnut />
+                            <Donation />
+                        </Col>
                     </Row>
-                </Col>
-
-                <Col md={6} style={col2sty}>
-                        {/* <TimeNow /> */}
-                        <EueSuggest />
-                        <ChartLine />
-                        <ChartDoughnut />
-                        <Footer />
-                </Col>
-            </Row>
-        </Container>
-
+                </Row>
+            </Container>
     );
 }
 

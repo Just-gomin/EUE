@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import '../App.css'
 import UserInfo from './UserInfo';
 import { kakaoLogout } from '../utils/Oauth';
+import axios from 'axios';
 
 
 function MainLayer() {
@@ -13,10 +14,8 @@ function MainLayer() {
         color: 'rgba(195, 195, 195, 0.753)',
         borderRadius: '20px',
         borderWidth: '3px',
-        marginBottom: '1em',
         width: '100%',
         backgroundSize: 'contain',
-        margin: 'auto',
         textDecorationColor: 'none'
     }
 
@@ -45,21 +44,17 @@ function MainLayer() {
     useEffect(() => {
         const airUsingLocal = localStorage.getItem('using-aircondition')
         if (airUsingLocal === 'true') {
-            console.log('!!', airUsing);
-            console.log(airUsingLocal);
             return setAirUsing(true)
         }
         else {
-            console.log('%%', airUsing);
-            console.log(airUsingLocal);
             return setAirUsing(false)
         }
     });
 
     return (
         <Col>
-            <Row className='d-flex align-items-center m-auto w-100'>
-                <Link to='/' className=' m-auto'>
+            <Row className='d-flex align-items-center m-auto w-100 p-0'>
+                <Link to='/' className='p-0 m-auto'>
                     <Image src='/images/EUE11.jpg' alt='EUE' style={boxstyled} />
                 </Link>
             </Row>
@@ -73,7 +68,7 @@ function MainLayer() {
                     key='checkbox' className="d-flex  justify-content-center w-100" style={{ flexDirection: 'row-reverse' }}>
                     <Form.Check
                         type='switch'
-                        id='aircondition-checkbox'
+                        id='airconditioner'
                         label='에어컨 사용중'
                         onChange={aircondiCheck}
                         checked={airUsing}
