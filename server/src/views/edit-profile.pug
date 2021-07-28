@@ -1,0 +1,6 @@
+block content
+    .signup-form_container 
+        form(action = routes.base + routes.editProfile, method = "post")
+            input(type="text", name="nick_name", require=true, placeholder="Nick Name")
+            input(type="number", name="loc_code", require=true, placeholder="Local Code.")
+            input(type="submit", value="Submit")

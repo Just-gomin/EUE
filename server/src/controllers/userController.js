@@ -54,8 +54,8 @@ export const getLogin = (req, res) => {
 };
 
 // Page for Development Test.
-export const getSetLoccode = (req, res) => {
-  res.render("setLoccode", { pagename: "Set Loccode" });
+export const getEditProfile = (req, res) => {
+  res.render("edit-profile", { pagename: "Edit Profile" });
 };
 
 // 회원 가입 처리
@@ -170,46 +170,20 @@ export const getUserInfo = async (req, res) => {
 };
 
 // 사용자 정보 수정 요청 처리
-export const postEditProfile = (req, res) => {
+export const postEditProfile = async (req, res) => {
   const {
     cookies: { acs_token },
-  } = req;
-
-  // 수신한 변경 내용들을 통해 DB Update.
-
-  res
-    .status(server_status.code.ok)
-    .json({ msg: server_status.msg.ok, content: "Server OK" });
-};
-
-// 사용자의 지역 코드 설정 처리
-export const postSetLoccode = async (req, res) => {
-  const {
-    cookies: { acs_token },
-    body: { loccode },
+    body: { nick_name, loc_code },
   } = req;
 
   const decoded = jwt.decode(acs_token);
 
   await db.User.update(
-    { loc_code: Number(loccode) },
-    { where: { email: decoded.email }, logging: false }
+    { nick_name: nick_name, loc_code: loc_code },
+    { where: { email: decoded.email } }
   );
-
-  const payload = {
-    email: decoded.email,
-    nick_name: decoded.nick_name,
-    loc_code: loccode,
-  };
-
-  const accessT = jwt.sign(payload, envs.secretKey.access_token, {
-    expiresIn: "14d",
-    issuer: "eue.com",
-    subject: "userInfo",
-  });
 
   res
     .status(server_status.code.ok)
-    .cookie("acs_token", accessT)
-    .json({ msg: server_status.msg.ok, content: "Successfully Set Loccode" });
+    .json({ msg: server_status.msg.ok, content: "Update Successfully" });
 };

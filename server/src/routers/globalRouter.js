@@ -3,13 +3,12 @@ import routes from "../routes";
 import { getHome } from "../controllers/globalController";
 import {
   getConfirm,
+  getEditProfile,
   getLogin,
-  getSetLoccode,
   getSignup,
   getUserInfo,
   postEditProfile,
   postLogin,
-  postSetLoccode,
   postSignup,
 } from "../controllers/userController";
 import { onlyPrivate } from "../middlewares";
@@ -20,7 +19,7 @@ const globalRouter = express.Router();
 globalRouter.get("/", getHome);
 globalRouter.get(routes.signup, getSignup);
 globalRouter.get(routes.login, getLogin);
-globalRouter.get(routes.setLoccode, onlyPrivate, getSetLoccode);
+globalRouter.get(routes.editProfile, onlyPrivate, getEditProfile);
 
 // Authentication
 globalRouter.post(routes.signup, postSignup);
@@ -30,6 +29,5 @@ globalRouter.get(routes.confirm, getConfirm);
 // User Info
 globalRouter.get(routes.userinfo, onlyPrivate, getUserInfo);
 globalRouter.post(routes.editProfile, onlyPrivate, postEditProfile);
-globalRouter.post(routes.setLoccode, onlyPrivate, postSetLoccode);
 
 export default globalRouter;
