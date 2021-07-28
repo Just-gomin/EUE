@@ -45,6 +45,7 @@ function LocCodeChange() {
     const sggSelect = document.getElementById('select-sgg')
     const emdSelect = document.getElementById('select-emd')
 
+
     function handleClickLoc() {
         if (doeSelect.options[doeSelect.selectedIndex].text !== '도' && sggSelect.options[sggSelect.selectedIndex].text !== '시군구' && emdSelect.options[emdSelect.selectedIndex].text !== '읍면동') {
             localStorage.setItem('code_doe', doeSelect.value)
@@ -170,16 +171,14 @@ function LocCodeChange() {
                             </Form.Group>
                         </Row>
                     </Form>
+                    <Row className='d-flex justify-content-center'>
+                        <Button
+                            variant='light' style={btnstyled2} onClick={handleClickLoc}>
+                            확인
+                        </Button>
+                    </Row>
                 </Card.Text>
-                <Row className='d-flex justify-content-center'>
-                    <Button
-                        variant='light' style={btnstyled2} onClick={handleClickLoc}>
-                        확인
-                    </Button>
-                </Row>
-
             </Card>
-
         </Row>
     )
 }

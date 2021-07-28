@@ -40,7 +40,6 @@ function UserInfo() {
     }
 
     return (
-        <Row>
             <Col className='text-center pt-3 pb-2 px-0'>
                 <Card style={cardstyled} id='localName'>
                     <Card.Title>
@@ -95,7 +94,6 @@ function UserInfo() {
                     }
                 </Card>
             </Col>
-        </Row>
     )
 }
 export default UserInfo;

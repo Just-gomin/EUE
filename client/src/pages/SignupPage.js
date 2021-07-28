@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
 import '../App.css'
 import SignupComp from '../components/SignupComp';
+import Footer from './../components/Footer';
 
 function SignupPage() {
     const constyled = {
@@ -28,17 +29,20 @@ function SignupPage() {
 
 
     return (
-        <Container fluid className='m-auto d-flex justify-content-center position-relative'>
-            <Row style={constyled} className='m-auto'>
-                <Col xs={12} md={6} className='d-flex justify-content-center' id='stickyy'>
-                    <Row style={col1sty} className='m-auto'>
-                        <MainLayer />
-                    </Row>
-                </Col>
+        <Container className='m-auto d-flex position-relative'
+            style={{ flexDirection: 'column' }} fluid>
+            <Row className='d-flex'>
+                <Row style={constyled} className='m-auto'>
+                    <Col xs={12} md={6} className='d-flex justify-content-center' id='stickyy'>
+                        <Row style={col1sty} className='m-auto'>
+                            <MainLayer />
+                        </Row>
+                    </Col>
 
-                <Col md={6} style={col2sty}>
-                    <SignupComp />
-                </Col>
+                    <Col md={6} style={col2sty}>
+                        <SignupComp />
+                    </Col>
+                </Row>
             </Row>
         </Container>
 
