@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Button, Image, Row, ButtonGroup, Form, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import '../App.css'
 import UserInfo from './UserInfo';
 import { kakaoLogout } from '../utils/Oauth';
-import axios from 'axios';
-import { callUserInfo, deleteCookie } from '../utils/CheckDB';
-import { checkCookies } from '../utils/CheckDB';
+import UsingAircon from './UsingAircon';
+import { isLogined } from '../utils/Auth';
 
 
 function MainLayer() {
@@ -36,42 +35,9 @@ function MainLayer() {
     }
 
 
-    const [airUsing, setAirUsing] = useState(false)
-
-    useEffect(() => {
-        callUserInfo().then((res) => {
-            if (res !== []) {
-                console.log(res[0])
-            }
-            else {
-                console.log(res)
-            }
-        })
-    }, [])
-
-
-    async function airChange() {
-        setAirUsing(!airUsing)
-
-        await axios.post('/api/edit-profile', { using_aircon: !airUsing })
-            .then(function (response) {
-                console.log('res', response);
-                callUserInfo().then((res) => {
-                    if (res !== []) {
-                        console.log(res[0])
-                    }
-                    else {
-                        console.log(res)
-                    }
-                })
-            })
-            .catch(function (error) {
-                console.log('err', error);
-            });
-    }
-
 
     return (
+        
         <Col>
             <Row className='d-flex align-items-center m-auto w-100 p-0'>
                 <Link to='/' className='p-0 m-auto'>
@@ -83,26 +49,16 @@ function MainLayer() {
                 <UserInfo />
             </Row>
 
-            {checkCookies() &&
-                <Form
-                    key='checkbox' className="d-flex  justify-content-center w-100" style={{ flexDirection: 'row-reverse' }}>
-                    <Form.Check
-                        type='switch'
-                        id='airconditioner'
-                        label='에어컨 사용중'
-                        onChange={airChange}
-                        checked={airUsing}
-                    />
-                </Form>
+            {isLogined() &&
+                <UsingAircon/>
             }
 
             <Row className='d-flex justify-content-center align-items-center my-2 mx-auto w-100'>
                 <ButtonGroup vertical className='m-auto' style={{ width: '100%', flexDirection: 'column' }}>
 
-                    {checkCookies() ?
+                    {isLogined() ?
                         //true
                         <Button variant='light' style={btnstyled} onClick={kakaoLogout}>
-                            {/*  || deleteCookie('acs_token') */}
                             로그아웃
                         </Button>
                         :
@@ -114,7 +70,7 @@ function MainLayer() {
                         </Button>
                     }
 
-                    {!checkCookies() &&
+                    {!isLogined() &&
                         <Button variant='light' style={btnstyled}>
                             <Link to='/signup' id='btnlink'>
                                 회원가입

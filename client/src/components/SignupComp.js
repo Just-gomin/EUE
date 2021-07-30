@@ -3,7 +3,6 @@ import '../App.css'
 import { Form, Button, Row, Col, Card, Alert, FloatingLabel } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
 import axios from 'axios';
-import { callUserInfo } from '../utils/CheckDB';
 
 function SignupComp() {
 
@@ -43,30 +42,22 @@ function SignupComp() {
         const { name, value } = event.target
         setFormValues({ ...formValues, [name]: value })
     }
-    // console.log('???', formValues)
 
     async function handleSubmit(event) {
         event.preventDefault();
-        await axios.post("/api/signup", formValues)
-    }
-
-    const [userInfo, setUserInfo] = useState([])
-
-    function CheckUserExist() {
-        setUserInfo(callUserInfo())
+        const res = await axios.post("/api/signup", formValues)
+        console.log('existing_user : ', res.data.contents.existing_user)
+        setUserExist(res.data.contents.existing_user)
         setAlertShow(true)
-        if (userInfo) {
-            setUserExist(true)
-            // 기존회원
-        }
-        if (callUserInfo() === undefined) {
-
-            setUserExist(false)
-            // 신규회원
-        }
     }
-    console.log(callUserInfo())
-    console.log(userExist)
+
+    useEffect(() => {
+        async function test() {
+            const res = await axios.get('/api/signup')
+            console.log(res.contents)
+        }
+        test()
+    }, [])
 
 
     return (
@@ -128,7 +119,7 @@ function SignupComp() {
                             />
                         </FloatingLabel>
 
-                        <Button variant='light' className='mt-3' id='formbtn' type='submit' onClick={CheckUserExist}>
+                        <Button variant='light' className='mt-3' id='formbtn' type='submit'>
                             Sign Up
                         </Button>
                     </Form>

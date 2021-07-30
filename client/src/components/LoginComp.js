@@ -28,34 +28,21 @@ function LoginComp() {
         color: 'black'
     }
 
-    const [emailSentAlert, setEmailSentAlert] = useState(false)
     const [alertShow, setAlertShow] = useState(false)
-
     const [emailAddress, setEmailAddress] = useState('')
 
-    function CheckEmailSend() {
-        localStorage.setItem('login_email_Address', emailAddress)
-        const emailIs = localStorage.getItem('login_email_Address').split('@')[1]
-        if (emailIs) {
-            setAlertShow(true)
-            setEmailSentAlert(false)
-        }
-        else {
-            setAlertShow(true)
-            setEmailSentAlert(true)
-        }
-    }
+    const [mailSend, setMailSend] = useState(false)
 
     function addressUrl() {
-        const afterAt = localStorage.getItem('login_email_Address').split('@')[1]
+        const afterAt = emailAddress.split('@')[1]
         if (afterAt == ('naver.com' || 'gmail.com' || 'daum.net')) {
             const newLink = 'https://www.' + afterAt;
             window.open(newLink);
         }
-        if (afterAt == 'korea.ac.kr' ) {
+        if (afterAt == 'korea.ac.kr') {
             window.open('https://www.gmail.com');
         }
-        else { 
+        else {
             window.open();
         }
     }
@@ -64,12 +51,13 @@ function LoginComp() {
         setEmailAddress(event.target.value)
     }
 
-    console.log(emailAddress)
-
     async function handleSubmit(event) {
         event.preventDefault();
         const res = await axios.post("/api/login", { email: emailAddress })
-        console.log(res)
+        console.log('mail_sending : ', res.data.contents.mail_sending)
+        setMailSend(res.data.contents.mail_sending)
+        setAlertShow(true)
+        localStorage.setItem('login', true)
     }
 
 
@@ -85,7 +73,7 @@ function LoginComp() {
                 <hr />
                 <Card.Text>
                     <Row className='m-auto d-flex justify-content-center' style={{ width: '80%' }}>
-                        {!emailSentAlert ?
+                        {mailSend ?
                             <Alert show={alertShow} variant={'success'}>
                                 <Col>
                                     😍 이메일 전송이 완료 되었습니다.
@@ -107,13 +95,10 @@ function LoginComp() {
                     </Row>
 
                     <Form style={inboxstyled} onSubmit={handleSubmit}>
-                        <FloatingLabel
-                            label="Email"
-                        >
-                            <Form.Control type="email" placeholder="Email" onChange={handleChange} />
-
+                        <FloatingLabel label="Email">
+                            <Form.Control type="email" placeholder="Email" onChange={handleChange} required/>
                         </FloatingLabel>
-                        <Button variant='light' className='mt-3' id='formbtn' onClick={CheckEmailSend} type='submit'>
+                        <Button variant='light' className='mt-3' id='formbtn' type='submit'>
                             LOGIN
                         </Button>
                     </Form>

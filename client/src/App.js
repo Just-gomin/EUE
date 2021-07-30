@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
@@ -8,9 +8,13 @@ import EditPage from './pages/EditPage';
 import PrivateRoute from './utils/PrivateRoutes';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
+import { checkCookies } from './utils/CheckDB';
 
 
 function App() {
+  useEffect(() => {
+    localStorage.setItem('login', false)
+  }, [checkCookies()])
 
   return (
     <Router>
