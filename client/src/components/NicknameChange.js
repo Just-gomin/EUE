@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import { Row, Card, Col, Form, Button, FloatingLabel } from 'react-bootstrap';
+import { callUserInfo } from '../utils/CheckDB';
 
 function NicknameChange() {
 
@@ -25,18 +27,25 @@ function NicknameChange() {
         color: 'black'
     }
 
-    const exNick = localStorage.getItem('nickname')
-    console.log(exNick)
+    const [inputname, setInputname] = useState('')
 
-    function handleChange ({ target: { value } }) {
-        localStorage.setItem('nickname', value)
+    function handleChange({ target: { value } }) {
+        setInputname(value)
     }
+    console.log(inputname)
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
-        window.location.reload();
-    };
+        await axios.post('/api/edit-profile', { nick_name: inputname })
+            .then(function (response) {
+                console.log(response);
+            })
+            callUserInfo().then((res) => {
+                console.log('11', res[0])
+            })
 
+        // window.location.reload();
+    };
 
     return (
         <Row className='text-center w-100 my-2'>
@@ -47,25 +56,19 @@ function NicknameChange() {
                 <Card.Subtitle style={{ fontWeight: 'lighter' }}>
                     새로운 닉네임으로 변경해보세요
                 </Card.Subtitle>
-                <hr />
-                <Card.Text className='m-0'>
 
+                <hr />
+
+                <Card.Text className='m-0'>
                     <Form style={inboxstyled} onSubmit={handleSubmit}>
-                        <FloatingLabel
-                            controlId="floatingInput"
-                            label="Nickname"
-                        >
+                        <FloatingLabel label="Nickname">
                             <Form.Control type="text" placeholder="닉네임 변경" id='nickname' onChange={handleChange} />
                         </FloatingLabel>
                         <Button variant='light' className='mt-3' id='formbtn' type='submit'>
                             변 경
                         </Button>
                     </Form>
-
-
-
                 </Card.Text>
-
             </Card>
         </Row>
     )

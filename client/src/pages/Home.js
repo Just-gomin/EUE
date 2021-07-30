@@ -7,7 +7,7 @@ import EueSuggest from '../components/EueSuggest';
 import ChartLine from '../components/ChartLine';
 import ChartDoughnut from '../components/ChartDoughnut';
 import Donation from '../components/Donation';
-import axios from 'axios';
+
 
 
 function Home() {
@@ -32,11 +32,6 @@ function Home() {
         padding: '0'
     }
 
-    async function test() {
-        const res = await axios.get("/api/user-info", { withCredentials: true })
-        console.log("@@@@", res)
-    }
-    test()
 
     return (
         <Container className='m-auto d-flex position-relative'

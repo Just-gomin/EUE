@@ -5,9 +5,8 @@ import '../App.css'
 import UserInfo from './UserInfo';
 import { kakaoLogout } from '../utils/Oauth';
 import axios from 'axios';
-import { Swal } from 'sweetalert2';
-import { deleteCookie } from '../utils/Cookies';
-import { checkCookies } from './../utils/Cookies';
+import { callUserInfo, deleteCookie } from '../utils/CheckDB';
+import { checkCookies } from '../utils/CheckDB';
 
 
 function MainLayer() {
@@ -37,25 +36,39 @@ function MainLayer() {
     }
 
 
-    const logined = localStorage.getItem('nickname')
     const [airUsing, setAirUsing] = useState(false)
 
-    function aircondiCheck() {
-        setAirUsing(!airUsing)
-        localStorage.setItem('using-aircondition', !airUsing);
-    }
-
     useEffect(() => {
-        const airUsingLocal = localStorage.getItem('using-aircondition')
-        if (airUsingLocal === 'true') {
-            return setAirUsing(true)
-        }
-        else {
-            return setAirUsing(false)
-        }
-    });
+        callUserInfo().then((res) => {
+            if (res !== []) {
+                console.log(res[0])
+            }
+            else {
+                console.log(res)
+            }
+        })
+    }, [])
 
-    
+
+    async function airChange() {
+        setAirUsing(!airUsing)
+
+        await axios.post('/api/edit-profile', { using_aircon: !airUsing })
+            .then(function (response) {
+                console.log('res', response);
+                callUserInfo().then((res) => {
+                    if (res !== []) {
+                        console.log(res[0])
+                    }
+                    else {
+                        console.log(res)
+                    }
+                })
+            })
+            .catch(function (error) {
+                console.log('err', error);
+            });
+    }
 
 
     return (
@@ -77,7 +90,7 @@ function MainLayer() {
                         type='switch'
                         id='airconditioner'
                         label='에어컨 사용중'
-                        onChange={aircondiCheck}
+                        onChange={airChange}
                         checked={airUsing}
                     />
                 </Form>
@@ -85,9 +98,11 @@ function MainLayer() {
 
             <Row className='d-flex justify-content-center align-items-center my-2 mx-auto w-100'>
                 <ButtonGroup vertical className='m-auto' style={{ width: '100%', flexDirection: 'column' }}>
+
                     {checkCookies() ?
                         //true
-                        <Button variant='light' style={btnstyled} onClick={kakaoLogout || deleteCookie('acs_token')}>
+                        <Button variant='light' style={btnstyled} onClick={kakaoLogout}>
+                            {/*  || deleteCookie('acs_token') */}
                             로그아웃
                         </Button>
                         :
@@ -98,6 +113,7 @@ function MainLayer() {
                             </Link>
                         </Button>
                     }
+
                     {!checkCookies() &&
                         <Button variant='light' style={btnstyled}>
                             <Link to='/signup' id='btnlink'>

@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../App.css'
 import { Form, Button, Row, Col, Card, Alert, FloatingLabel } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
 import axios from 'axios';
+import { callUserInfo } from '../utils/CheckDB';
 
 function SignupComp() {
 
@@ -34,9 +35,6 @@ function SignupComp() {
     }
 
     const [formValues, setFormValues] = useState(initValues)
-    const [validated, setValidated] = useState(false)
-
-    const [emailSubm, setEmailSubm] = useState(false)
 
     const [userExist, setUserExist] = useState(false)
     const [alertShow, setAlertShow] = useState(false)
@@ -45,12 +43,31 @@ function SignupComp() {
         const { name, value } = event.target
         setFormValues({ ...formValues, [name]: value })
     }
-    console.log('???', formValues)
+    // console.log('???', formValues)
 
     async function handleSubmit(event) {
         event.preventDefault();
         await axios.post("/api/signup", formValues)
     }
+
+    const [userInfo, setUserInfo] = useState([])
+
+    function CheckUserExist() {
+        setUserInfo(callUserInfo())
+        setAlertShow(true)
+        if (userInfo) {
+            setUserExist(true)
+            // 기존회원
+        }
+        if (callUserInfo() === undefined) {
+
+            setUserExist(false)
+            // 신규회원
+        }
+    }
+    console.log(callUserInfo())
+    console.log(userExist)
+
 
     return (
 
@@ -88,7 +105,6 @@ function SignupComp() {
 
                     <Form style={inboxstyled} onSubmit={handleSubmit}>
                         <FloatingLabel
-                            controlId="floatingInput"
                             label="Nickname"
                             className='mb-3'
                         >
@@ -101,7 +117,6 @@ function SignupComp() {
                             />
                         </FloatingLabel>
                         <FloatingLabel
-                            controlId="floatingInput"
                             label="Email Address"
                         >
                             <Form.Control
@@ -113,8 +128,7 @@ function SignupComp() {
                             />
                         </FloatingLabel>
 
-                        <Button variant='light' className='mt-3' id='formbtn' type='submit'>
-                            {/*  onClick={CheckUserExist} */}
+                        <Button variant='light' className='mt-3' id='formbtn' type='submit' onClick={CheckUserExist}>
                             Sign Up
                         </Button>
                     </Form>
