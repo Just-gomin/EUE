@@ -127,10 +127,7 @@ export const postLogin = async (req, res) => {
 
 // 로그아웃 요청 처리
 export const getLogout = (req, res) => {
-  res.clearCookie("acs_token").redirect("/api");
-  // .redirect(
-  //   `${envs.client.protocol}://${envs.client.host}:${envs.client.port}`
-  // );
+  res.clearCookie("acs_token");
 };
 
 // 메일로 보낸 토큰의 유효성 검사 및 access 토큰 발행 처리
@@ -229,7 +226,7 @@ export const getUserInfo = async (req, res) => {
 export const postEditProfile = async (req, res) => {
   const {
     cookies: { acs_token },
-    body: { nick_name, loc_code, using_aircon },
+    body: { nick_name, loc_code },
   } = req;
 
   try {
@@ -243,15 +240,11 @@ export const postEditProfile = async (req, res) => {
 
     let new_nick_name = nick_name ? nick_name : user.nick_name;
     let new_loc_code = loc_code ? Number(loc_code) : Number(user.loc_code);
-    let new_using_aircon = using_aircon
-      ? using_aircon === "true"
-      : user.using_aircon;
 
     await db.User.update(
       {
         nick_name: new_nick_name,
         loc_code: new_loc_code,
-        using_aircon: new_using_aircon,
       },
       { where: { email: decoded.email } }
     );
@@ -264,6 +257,31 @@ export const postEditProfile = async (req, res) => {
       msg: resForm.msg.ok,
       contents: { user_info: result_after_user },
     });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: resForm.msg.err, contents: { error: err } });
+  }
+};
+
+// 에어컨 사용 변경 요청 처리
+export const getToggleAircon = async (req, res) => {
+  const {
+    cookies: { acs_token },
+  } = req;
+
+  try {
+    const decoded = jwt.decode(acs_token);
+    const result_preuser = await db.User.findAll({
+      where: { email: decoded.email },
+      logging: false,
+    });
+
+    await db.User.update(
+      { using_aircon: !result_preuser[0].using_aircon },
+      { where: { email: decoded.email } }
+    );
+
+    res.json({ msg: resForm.msg.ok, contents: {} });
   } catch (err) {
     console.log(err);
     res.json({ msg: resForm.msg.err, contents: { error: err } });
