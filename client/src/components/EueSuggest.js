@@ -15,8 +15,6 @@ function EueSuggest() {
         color: '#04AB70'
     }
     
-    const airUsing = localStorage.getItem('using-aircondition')
-
 
     return (
         <Row className='text-center w-100 my-2'>

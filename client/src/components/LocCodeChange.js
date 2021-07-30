@@ -84,7 +84,6 @@ function LocCodeChange() {
             && emdSelect.options[emdSelect.selectedIndex].text !== '읍면동') {
 
             const saveCodeEmd = emdSelect.value
-            console.log(saveCodeEmd)
 
             await axios.post('/api/edit-profile', { loc_code: saveCodeEmd }) // loccal code 수정
 
@@ -99,10 +98,10 @@ function LocCodeChange() {
                         confirmButtonText: '확인',
                     }).then((res) => {
                         if (res.isConfirmed) {
-                            window.location.reload()
+                            window.location.replace('/')
                         }
                         else {
-                            window.location.reload()
+                            window.location.replace('/')
                         }
                     })
                 }

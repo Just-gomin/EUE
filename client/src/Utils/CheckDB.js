@@ -4,7 +4,7 @@ import { Swal } from 'sweetalert2';
 
 export async function callUserInfo() {
     const res = await axios.get("/api/user-info")
-    return res.data.user_info
+    return res.data.contents.user_info
 }
 
 export function checkCookies() {

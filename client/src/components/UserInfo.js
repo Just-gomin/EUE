@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Row, Card, Button, Col } from 'react-bootstrap';
 import '../App.css'
 import { Link } from 'react-router-dom';
-import { callUserInfo, checkCookies } from '../utils/CheckDB';
-import axios from 'axios';
+import { callUserInfo } from '../utils/CheckDB';
 import { isLogined } from '../utils/Auth';
 
 
 function UserInfo() {
-
-    const islogin = localStorage.getItem('login')
 
     const cardstyled = {
         margin: 'auto',
@@ -48,51 +45,39 @@ function UserInfo() {
                 const day = now.getDate(); // 일
 
                 const stDate = new Date(dateStr[0], dateStr[1], dateStr[2]) // 가입 날짜
+
                 const endDate = new Date(year, month, day) // 현재 시간
 
                 const btMs = endDate.getTime() - stDate.getTime() // 주어진 날짜 사이의 경과 시간 (밀리 초)
+
                 const btDay = btMs / (1000 * 60 * 60 * 24) // 초 -> 일
 
                 setCreatedTime(btDay)
             }
-            else {
-                console.log('Not Logined')
-            }
         })
-    }, [checkCookies()])
+    }, [])
 
-
-    const codeInit = {
-        code_doe: '',
-        code_sgg: '',
-        code_emd: ''
-    }
-    const [codeValue, setCodeValue] = useState(codeInit)
+    const [showState, setShowState] = useState('')
+    const [localState, setLocalState] = useState([])
 
     useEffect(() => {
-
         // user-info 에서 loc_code
         callUserInfo().then((res) => {
             if (isLogined()) {
-                console.log(res[0].loc_code)
-                const newCode = res[0].loc_code
-                const newdoe = String(newCode).substring(0, 2)
-                const newsgg = String(newCode).substring(0, 5)
-                const newemd = String(newCode).substring(0,)
-
-                async function CompareCode() {
-                    await axios.get('/api/data/loccode').then((response) => {
-                        console.log(response.data.contents.loc_code)
-                    })
+                const dbloc = res[0].loc_code
+                if (dbloc === null) {
+                    setShowState('지역을 입력해주세요')
+                    const localstyle = document.getElementById('local_state')
+                    localstyle.style.display = 'none'
                 }
-                CompareCode()
-
-            }
-            else {
-                console.log(res)
+                else {
+                    const localName = res[0].loc_name
+                    setLocalState(localName)
+                }
             }
         })
     }, [])
+
 
     return (
         <Col className='text-center pt-3 pb-2 px-0'>
@@ -117,21 +102,27 @@ function UserInfo() {
                 <Row style={{ alignItems: 'center', margin: 'auto', justifyContent: 'center' }}>
                     <Card.Subtitle>
                         {isLogined() ?
-                            <p className='mb-2'>
-                                ????????
-                                {/* 
-                                {`${localname_doe}`}
-                                <br />
-                                {`${localname_sgg}`}
-                                <br />
-                                {`${localname_emd}`} */}
-                            </p>
+                            <div className='mb-2'>
+                                <div>
+                                    {showState}
+                                </div>
+
+                                <div id='local_state'>
+                                    {`${localState['doe']}`}
+                                    <br />
+                                    {`${localState['sgg']}`}
+                                    <br />
+                                    {`${localState['emd']}`}
+                                </div>
+
+                            </div>
                             :
-                            <p className='mb-2'>
+                            <div className='mb-2'>
                                 로그인 후 이용 가능합니다
-                            </p>
+                            </div>
                         }
                     </Card.Subtitle>
+
                     {isLogined() &&
                         <Button variant='light' className='m-auto d-flex' style={btnstyled2}>
                             <Link to='/edit' className='w-100' style={{ textDecoration: 'none', color: 'rgb(110, 189, 142)' }}>
@@ -141,7 +132,6 @@ function UserInfo() {
                     }
                 </Row>
                 {isLogined() &&
-
                     <Card.Text>
                         <hr />
                         <Row style={{ color: 'black' }}>
@@ -149,7 +139,7 @@ function UserInfo() {
                                 환경을 향한 노력
                             </p>
                             <h3 style={{ fontWeight: '300', color: '#2b90d9', margin: '0' }}>
-                                {createdTime}일차
+                                <strong>{createdTime}</strong> 일차
                             </h3>
 
                         </Row>

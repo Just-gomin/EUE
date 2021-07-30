@@ -5,7 +5,7 @@ import '../App.css'
 import UserInfo from './UserInfo';
 import { kakaoLogout } from '../utils/Oauth';
 import UsingAircon from './UsingAircon';
-import { isLogined } from '../utils/Auth';
+import { isLogined, localLogout } from '../utils/Auth';
 
 
 function MainLayer() {
@@ -34,10 +34,7 @@ function MainLayer() {
         color: 'white'
     }
 
-
-
     return (
-        
         <Col>
             <Row className='d-flex align-items-center m-auto w-100 p-0'>
                 <Link to='/' className='p-0 m-auto'>
@@ -49,16 +46,14 @@ function MainLayer() {
                 <UserInfo />
             </Row>
 
-            {isLogined() &&
-                <UsingAircon/>
-            }
+            <UsingAircon />
 
             <Row className='d-flex justify-content-center align-items-center my-2 mx-auto w-100'>
                 <ButtonGroup vertical className='m-auto' style={{ width: '100%', flexDirection: 'column' }}>
 
                     {isLogined() ?
                         //true
-                        <Button variant='light' style={btnstyled} onClick={kakaoLogout}>
+                        <Button variant='light' style={btnstyled} onClick={localLogout}>
                             로그아웃
                         </Button>
                         :

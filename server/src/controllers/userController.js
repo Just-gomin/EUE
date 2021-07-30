@@ -25,13 +25,10 @@ const postMail = async (email, token) => {
     from: `EUE Auth Supply <${envs.api.nodemailer.user}>`,
     to: email,
     subject: "EUE 사용자 계정 확인용 메일.",
-    html: `<a href="${envs.server.protocol}://${envs.server.host}:${
-      envs.server.port
-    }${routes.base + routes.confirm}?token=${token}">${
-      envs.server.protocol
-    }://${envs.server.host}:${envs.server.port}${
-      routes.base + routes.confirm
-    }?token=${token}</a>`,
+    html: `<a href="${envs.server.protocol}://${envs.server.host}:${envs.server.port
+      }${routes.base + routes.confirm}?token=${token}">${envs.server.protocol
+      }://${envs.server.host}:${envs.server.port}${routes.base + routes.confirm
+      }?token=${token}</a>`,
   };
 
   try {
@@ -127,10 +124,7 @@ export const postLogin = async (req, res) => {
 
 // 로그아웃 요청 처리
 export const getLogout = (req, res) => {
-  res.clearCookie("acs_token").redirect("/api");
-  // .redirect(
-  //   `${envs.client.protocol}://${envs.client.host}:${envs.client.port}`
-  // );
+  res.clearCookie("acs_token")
 };
 
 // 메일로 보낸 토큰의 유효성 검사 및 access 토큰 발행 처리
@@ -158,10 +152,10 @@ export const getConfirm = async (req, res) => {
       subject: "userInfo",
     });
 
-    res.cookie("acs_token", accessT).redirect("/api");
-    // .redirect(
-    //   `${envs.client.protocol}://${envs.client.host}:${envs.client.port}`
-    // );
+    res.cookie("acs_token", accessT)
+      .redirect(
+        "http://localhost:3000/first-local-code"
+      );
   } catch (err) {
     res.json({ msg: resForm.msg.err, contents: { error: err } });
   }
@@ -244,7 +238,7 @@ export const postEditProfile = async (req, res) => {
     let new_nick_name = nick_name ? nick_name : user.nick_name;
     let new_loc_code = loc_code ? Number(loc_code) : Number(user.loc_code);
     let new_using_aircon = using_aircon
-      ? using_aircon === "true"
+      ? using_aircon === 'true'
       : user.using_aircon;
 
     await db.User.update(

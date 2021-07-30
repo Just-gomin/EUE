@@ -1,6 +1,6 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { Row, Card, Col, Form, Button, FloatingLabel } from 'react-bootstrap';
+import React, { useState } from 'react'
+import { Row, Card, Form, Button, FloatingLabel } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
 function NicknameChange() {
@@ -53,12 +53,10 @@ function NicknameChange() {
                         })
                     }
                     else {
-                        console.log('ERROR')
+                        console.log(response.data.msg);
                     }
                 })
         }
-
-        // window.location.reload();
     };
 
     return (
@@ -76,7 +74,7 @@ function NicknameChange() {
                 <Card.Text className='m-0'>
                     <Form style={inboxstyled} onSubmit={handleSubmit}>
                         <FloatingLabel label="Nickname">
-                            <Form.Control type="text" placeholder="닉네임 변경" id='nickname' onChange={handleChange} required/>
+                            <Form.Control type="text" placeholder="닉네임 변경" id='nickname' onChange={handleChange} required />
                         </FloatingLabel>
                         <Button variant='light' className='mt-3' id='formbtn' type='submit'>
                             변 경

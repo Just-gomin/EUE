@@ -3,7 +3,6 @@ import { Container, Row, Col } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
 import '../App.css'
 import SignupComp from '../components/SignupComp';
-import Footer from './../components/Footer';
 
 function SignupPage() {
     const constyled = {

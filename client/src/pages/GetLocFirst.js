@@ -1,5 +1,5 @@
-import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react'
+import { Container, Row, Col, Modal } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
 import TimeNow from './../components/TimeNow';
 import '../App.css'
@@ -7,8 +7,9 @@ import EueSuggest from '../components/EueSuggest';
 import ChartLine from '../components/ChartLine';
 import ChartDoughnut from '../components/ChartDoughnut';
 import Donation from '../components/Donation';
+import LocCodeChange from '../components/LocCodeChange';
 
-function Home() {
+function GetLocFirst() {
     const constyled = {
         display: 'flex',
         justifyContent: 'space-evenly',
@@ -30,6 +31,13 @@ function Home() {
         padding: '0'
     }
 
+    useEffect(() => {
+        setTimeout(function () {
+            setShow(true)
+        }, 1500)
+    }, [])
+
+    const [show, setShow] = useState(false)
 
     return (
         <Container className='m-auto d-flex position-relative'
@@ -49,10 +57,23 @@ function Home() {
                         <ChartDoughnut />
                         <Donation />
                     </Col>
+
+                    <Modal
+                        show={show}
+                        backdrop="static"
+                        style={{ marginTop: '10%' }}>
+                        <Modal.Header className='d-flex justify-content-center top-10'>
+                            <Modal.Title>EUE에 오신걸 환영합니다</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body className='d-flex justify-content-center top-10'>
+                            <LocCodeChange />
+                        </Modal.Body>
+                    </Modal>
                 </Row>
             </Row>
         </Container>
     );
 }
 
-export default Home;
+
+export default GetLocFirst;
