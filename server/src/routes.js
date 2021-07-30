@@ -22,7 +22,7 @@ const CONFIRM = "/confirm";
 
 // # User Info
 const USER_INFO = "/user-info";
-const SET_LOCCODE = "/set-loccode";
+const TOGGLE_AIRCON = "/toggle-aircon";
 const EDIT_PROFILE = "/edit-profile";
 
 // # Detail Object
@@ -41,7 +41,7 @@ const routes = {
   confirm: CONFIRM,
   userinfo: USER_INFO,
   editProfile: EDIT_PROFILE,
-  setLoccode: SET_LOCCODE,
+  toggleAircon: TOGGLE_AIRCON,
   Detail: (id) => {
     if (id) {
       return `/${id}`;
