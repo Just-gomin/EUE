@@ -9,6 +9,7 @@ import {
   getUserInfo,
   postEditProfile,
   postLogin,
+  getLogout,
   postSignup,
 } from "../controllers/userController";
 import { onlyPrivate } from "../middlewares";
@@ -24,6 +25,7 @@ globalRouter.get(routes.editProfile, onlyPrivate, getEditProfile);
 // Authentication
 globalRouter.post(routes.signup, postSignup);
 globalRouter.post(routes.login, postLogin);
+globalRouter.get(routes.logout, onlyPrivate, getLogout);
 globalRouter.get(routes.confirm, getConfirm);
 
 // User Info

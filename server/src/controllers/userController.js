@@ -125,6 +125,14 @@ export const postLogin = async (req, res) => {
   }
 };
 
+// 로그아웃 요청 처리
+export const getLogout = (req, res) => {
+  res.clearCookie("acs_token").redirect("/api");
+  // .redirect(
+  //   `${envs.client.protocol}://${envs.client.host}:${envs.client.port}`
+  // );
+};
+
 // 메일로 보낸 토큰의 유효성 검사 및 access 토큰 발행 처리
 export const getConfirm = async (req, res) => {
   const {

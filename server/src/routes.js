@@ -17,6 +17,7 @@ const LOCCODE = "/loccode";
 // # Auth
 const SIGNUP = "/signup";
 const LOGIN = "/login";
+const LOGOUT = "/logout";
 const CONFIRM = "/confirm";
 
 // # User Info
@@ -36,6 +37,7 @@ const routes = {
   locCode: LOCCODE,
   signup: SIGNUP,
   login: LOGIN,
+  logout: LOGOUT,
   confirm: CONFIRM,
   userinfo: USER_INFO,
   editProfile: EDIT_PROFILE,

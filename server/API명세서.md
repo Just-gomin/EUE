@@ -11,6 +11,7 @@
 | Data           |     GET     | /data/loccode     | 행정 구역 코드 요청                                         |
 | Auth           |    POST     | /signup           | 회원가입 요청                                               |
 | Auth           |    POST     | /login            | 로그인 요청                                                 |
+| Auth           |     GET     | /logout           | 로그아웃 요청                                               |
 | Auth           |     GET     | /confirm?...      | 메일 인증용 토큰의 유효성 확인 요청                         |
 | User Info      |     GET     | /user-info        | 회원 정보 요청                                              |
 | User Info      |    POST     | /edit-profile     | 회원 정보 수정 요청                                         |
@@ -45,7 +46,7 @@
       loc_code : — 도/시군구/읍면동 이름과 코드 —,
       user_info : — 사용자 정보 —,
       weather_out : — 실외 날씨 데이터 —,
-      weather_user : — 실내 날씨 데이터 —,
+      weather_in : — 실내(사용자 개인) 날씨 데이터 —,
       error: — 에러 —,
    }
 }
@@ -180,3 +181,8 @@
    : 사용자 정보를 수정하는 "/edit-profile" 에서 처리
 
 2. 서버의 응답 형태와 전달 내용 작성
+
+### 2021.07.30 \_ 로그아웃 경로 추가
+
+1. 로그아웃 요청 주소 생성
+   : 로그아웃 요청 시 클라이언트의 쿠키에 저장된 토큰을 없애도록 처리.
