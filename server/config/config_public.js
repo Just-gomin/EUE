@@ -6,17 +6,35 @@
     - 개발 환경에 맞게 값들을 변경하여 사용합니다.
 */
 
+// State Production or Development.
+const PRODUCTION = false;
+
+// # Client Envs
+const CLIENT_PROTOCOL = PRODUCTION ? "https" : "http";
+const CLIENT_HOST = PRODUCTION ? "YOUR_PRODUCTION_HOST" : "localhost";
+const CLIENT_PORT = PRODUCTION
+  ? "YOUR_PRODUCTION_PORT"
+  : "YOUR_DEVELOPMENT_PORT";
+
 // # Server Envs
-const PROTOCOL = "http";
-const HOST = "localhost";
-const PORT = 4500;
+const SERVER_PROTOCOL = PRODUCTION ? "https" : "http";
+const SERVER_HOST = PRODUCTION ? "YOUR_PRODUCTION_HOST" : "localhost";
+const SERVER_PORT = PRODUCTION
+  ? "YOUR_PRODUCTION_PORT"
+  : "YOUR_DEVELOPMENT_PORT";
 
 // # DB Info.
-const DB_USER = "postgres";
-const DB_PASSWORD = "YOUR_PostgreSQL_PASSWORD";
+const DB_USER = PRODUCTION
+  ? "YOUR_PRODUCTION_DB_USER"
+  : "YOUR_DEVELOPMENT_DB_USER";
+const DB_PASSWORD = PRODUCTION
+  ? "YOUR_PRODUCTION_DB_PASSWORD"
+  : "YOUR_DEVELOPMENT_DB_PASSWORD";
 const DB_HOST = "localhost";
 const DB_PORT = "5432";
-const DB_DATABASE = "YOUR_DB_NAME";
+const DB_DATABASE = PRODUCTION
+  ? "YOUR_PRODUCTION_DB_NAME"
+  : "YOUR_DEVELOPMENT_DB_NAME";
 
 // # API.
 
@@ -27,7 +45,6 @@ const OPENWEATHERMAP_API_KEY = "YOUR_OpenWeatherMap_API_KEY";
 const NODEMAILER_SERVICE = "gmail";
 const NODEMAILER_USER = "YOUR_MAIL_ADDRESS";
 const NODEMAILER_GAMIL_CLIENT_ID = "YOUR_API_CLIENT_ID";
-const NODEMAILER_GMAIL_CLIENT_PASSWORD = "YOUR_API_CLIENT_PASSWORD";
 const NODEMAILER_GMAIL_REFRESH_TOKEN = "YOUR_GMAIL_REFRESH_TOKEN";
 
 // # Secret Key.
@@ -35,10 +52,16 @@ const AUTH_MAIL_SECRETKEY = "YOUR_MAIL_SECRETKEY";
 const AUTH_ACCESS_TOKEN_SECRETKEY = "YOUR_ACCESS_TOKEN_SECRETKEY";
 
 const envs = {
+  production: PRODUCTION,
+  client: {
+    protocol: CLIENT_PROTOCOL,
+    host: CLIENT_HOST,
+    port: CLIENT_PORT,
+  },
   server: {
-    protocol: PROTOCOL,
-    host: HOST,
-    port: PORT,
+    protocol: SERVER_PROTOCOL,
+    host: SERVER_HOST,
+    port: SERVER_PORT,
   },
   db: {
     user: DB_USER,
@@ -55,7 +78,7 @@ const envs = {
       service: NODEMAILER_SERVICE,
       user: NODEMAILER_USER,
       gmail_client_id: NODEMAILER_GAMIL_CLIENT_ID,
-      gmail_client_passowrd: NODEMAILER_GMAIL_CLIENT_PASSWORD,
+      gmail_client_secret: NODEMAILER_GMAIL_CLIENT_SECRET,
       gmail_refresh_token: NODEMAILER_GMAIL_REFRESH_TOKEN,
     },
   },

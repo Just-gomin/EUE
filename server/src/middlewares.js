@@ -1,6 +1,7 @@
 import routes from "./routes";
 import jwt from "jsonwebtoken";
 import envs from "../config/config";
+import resForm from "./resform";
 
 /*
   # localmiddleware
@@ -20,13 +21,11 @@ export const onlyPrivate = (req, res, next) => {
     cookies: { acs_token },
   } = req;
 
-  console.log('@@@@@@@@@@@@@@',req.cookies);
-
   try {
     const acs_decode = jwt.verify(acs_token, envs.secretKey.access_token);
     next();
-  } catch (error) {
-    console.log(error);
-    res.redirect("/api/login");
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: resForm.msg.err, contents: { error: err } });
   }
 };

@@ -2,7 +2,7 @@ import db from "../db/index";
 import envs from "../../config/config";
 import fetch from "node-fetch";
 import jwt from "jsonwebtoken";
-import server_status from "../server_status";
+import resForm from "../resForm";
 
 // 외부 수집기로 부터 들어온 정보 처리
 const handleOutData = async (locCode, date, lat, lng) => {
@@ -63,10 +63,6 @@ export const getDataInput = (req, res) => {
         `Outside[${locCode}] Data(date: ${trans_date}/ lat: ${lat}/ lng: ${lng}) Input.`
       );
       handleOutData(locCode, trans_date, lat, lng);
-      res.status(server_status.code.ok).send({
-        msg: server_status.msg.ok,
-        content: `Outside[${locCode}] data Input.`,
-      });
     } else {
       // 내부 데이터 수집기 동작
       const {
@@ -80,11 +76,10 @@ export const getDataInput = (req, res) => {
       );
       handleInData(email, trans_date, temp, humi, lights);
     }
-
-    res.status(server_status.code.ok).send(server_status.msg.ok);
-  } catch (error) {
-    console.log(error);
-    res.status(server_status.code.err).send(server_status.msg.err);
+    res.status(resForm.code.ok);
+  } catch (err) {
+    console.log(err);
+    res.status(resForm.code.err);
   }
 };
 
@@ -94,64 +89,86 @@ export const getUserWeatherData = (req, res) => {
     cookies: { acs_token },
   } = req;
 
-  /* 사용자 email에 따른 사용자 날씨 데이터 가져오기 */
-  const decoded = jwt.decode(acs_token);
-  const result = db.Weather_in.findAll({
-    where: { host: decoded.email },
-    logging: false,
-  });
+  try {
+    /* 사용자 email에 따른 사용자 날씨 데이터 가져오기 */
+    const decoded = jwt.decode(acs_token);
+    const result = db.Weather_in.findAll({
+      where: { host: decoded.email },
+      logging: false,
+    });
 
-  res
-    .status(server_status.code.ok)
-    .json({ msg: server_status.msg.ok, content: result });
+    res.json({ msg: resForm.msg.ok, contents: { weather_user: result } });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: resForm.msg.err, contents: { error: err } });
+  }
 };
 
 // 실외 날씨 데이터 요청 처리
 export const getOutWeatherData = (req, res) => {
-  // 실외 지역 번호를 통해 날씨 데이터 전송.
-  res
-    .status(server_status.code.ok)
-    .json({ msg: server_status.msg.ok, content: "Outside Weather Data" });
+  const {
+    body: { loc_code },
+  } = req;
+  try {
+    // 실외 지역 번호를 통해 날씨 데이터 전송.
+    const result = db.Weather_out.findAll({
+      where: { loc_code: loc_code },
+      logging: false,
+    });
+
+    res.json({ msg: resForm.msg.ok, contents: { weather_out: result } });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: resForm.msg.err, contents: { error: err } });
+  }
 };
 
 // 지역 코드 요청 처리
 export const getLocCode = async (req, res) => {
-  /* 통합 지역 코드 및 이름 json으로 생성 및 전송 */
-  const does = await db.Doe.findAll({ logging: false });
-  const sggs = await db.Sgg.findAll({ logging: false });
-  const emds = await db.Emd.findAll({ logging: false });
+  try {
+    /* 통합 지역 코드 및 이름 json으로 생성 및 전송 */
+    const does = await db.Doe.findAll({ logging: false });
+    const sggs = await db.Sgg.findAll({ logging: false });
+    const emds = await db.Emd.findAll({ logging: false });
 
-  let doe_sgg = [];
-  let sgg_emd = [];
+    let doe_sgg = [];
+    let sgg_emd = [];
 
-  does.map((info_doe) => {
-    let temp = {
-      name_doe: info_doe["name_doe"],
-      code_doe: info_doe["code_doe"],
-    };
-    temp.sgg = sggs.filter(
-      (info_sgg) => info_sgg["code_doe"] === info_doe["code_doe"]
-    );
-    doe_sgg.push(temp);
-  });
+    does.map((info_doe) => {
+      let temp = {
+        name_doe: info_doe["name_doe"],
+        code_doe: info_doe["code_doe"],
+      };
+      temp.sgg = sggs.filter(
+        (info_sgg) => info_sgg["code_doe"] === info_doe["code_doe"]
+      );
+      doe_sgg.push(temp);
+    });
 
-  sggs.map((info_sgg) => {
-    let temp = {
-      code_doe: info_sgg["code_doe"],
-      name_sgg: info_sgg["name_sgg"],
-      code_sgg: info_sgg["code_sgg"],
-    };
-    temp.emd = emds.filter(
-      (info_emd) => info_emd["code_sgg"] === info_sgg["code_sgg"]
-    );
-    sgg_emd.push(temp);
-  });
+    sggs.map((info_sgg) => {
+      let temp = {
+        code_doe: info_sgg["code_doe"],
+        name_sgg: info_sgg["name_sgg"],
+        code_sgg: info_sgg["code_sgg"],
+      };
+      temp.emd = emds.filter(
+        (info_emd) => info_emd["code_sgg"] === info_sgg["code_sgg"]
+      );
+      sgg_emd.push(temp);
+    });
 
-  res.status(server_status.code.ok).json({
-    locCodes: {
-      DOE: does,
-      SGG: doe_sgg,
-      EMD: sgg_emd,
-    },
-  });
+    res.json({
+      msg: resForm.msg.ok,
+      contents: {
+        loc_code: {
+          DOE: does,
+          SGG: doe_sgg,
+          EMD: sgg_emd,
+        },
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: resForm.msg.err, contents: { error: err } });
+  }
 };

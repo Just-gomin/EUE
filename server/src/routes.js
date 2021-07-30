@@ -1,5 +1,7 @@
+import envs from "../config/config";
+
 // # Global Routes
-const BASE = "/api";
+const BASE = envs.production ? "/app/eue/api" : "/api";
 
 // # Data Routes
 const DATA = "/data";

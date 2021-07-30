@@ -2,7 +2,7 @@ import db from "../db/index";
 import envs from "../../config/config";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-import server_status from "../server_status";
+import resForm from "../resForm";
 import routes from "../routes";
 
 // 메일 전송 처리
@@ -70,14 +70,10 @@ export const postSignup = async (req, res) => {
   });
 
   if (result.length != 0) {
-    res.status(server_status.code.err).json({
-      msg: server_status.msg.err,
-      content: "You are aleady registered",
-    });
+    res.json({ msg: resForm.msg.err, contents: { existing_user: true } });
   } else {
     db.User.create({ email: email, nick_name: nick_name }, { logging: false });
-    // 로그인 페이지로 넘겨주기.
-    res.redirect("/api/login");
+    res.json({ msg: resForm.msg.ok, contents: { existing_user: false } });
   }
 };
 
@@ -93,29 +89,38 @@ export const postLogin = async (req, res) => {
   });
 
   if (result.length != 0) {
-    // token 발행
-    const mail_token = jwt.sign(
-      {
-        email: email,
-      },
-      envs.secretKey.mail,
-      {
-        expiresIn: 10 * 60,
-        issuer: "eue.com",
-        subject: "auth_checker",
-      }
-    );
+    try {
+      // token 발행
+      const mail_token = jwt.sign(
+        {
+          email: email,
+        },
+        envs.secretKey.mail,
+        {
+          expiresIn: 10 * 60,
+          issuer: "eue.com",
+          subject: "auth_checker",
+        }
+      );
 
-    // 토큰이 포함된 로그인 링크 전송
-    postMail(email, mail_token);
+      // 토큰이 포함된 로그인 링크 전송
+      postMail(email, mail_token);
 
-    res
-      .status(server_status.code.ok)
-      .json({ msg: server_status.msg.ok, content: "Send Mail Successfully." });
+      res.json({
+        msg: resForm.msg.ok,
+        contents: { existing_user: true, mail_sending: true },
+      });
+    } catch (err) {
+      console.log(err);
+      res.json({
+        msg: resForm.msg.err,
+        contents: { existing_user: true, mail_sending: false, error: err },
+      });
+    }
   } else {
-    res.status(server_status.code.err).json({
-      msg: server_status.msg.err,
-      content: "You are not one of our user yet.",
+    res.json({
+      msg: resForm.msg.err,
+      contents: { existing_user: false, mail_sending: false },
     });
   }
 };
@@ -146,13 +151,10 @@ export const getConfirm = async (req, res) => {
     });
 
     res
-      .status(server_status.code.ok)
       .cookie("acs_token", accessT)
-      .redirect("http://localhost:3000/");
+      .redirect(`${envs.client.host}:${envs.client.port}`);
   } catch (err) {
-    res
-      .status(server_status.code.err)
-      .json({ msg: server_status.msg.err, content: `${err}` });
+    res.json({ msg: resForm.msg.err, contents: { error: err } });
   }
 };
 
@@ -166,24 +168,24 @@ export const getUserInfo = async (req, res) => {
 
   const result = await db.User.findAll({ where: { email: decoded.email } });
 
-  res.status(server_status.code.ok).json({ user_info: result });
+  res.status(resForm.code.ok).json({ user_info: result });
 };
 
 // 사용자 정보 수정 요청 처리
 export const postEditProfile = async (req, res) => {
   const {
     cookies: { acs_token },
-    body: { nick_name, loc_code },
+    body: { nick_name, loc_code, using_aircon },
   } = req;
 
   const decoded = jwt.decode(acs_token);
 
   await db.User.update(
-    { nick_name: nick_name, loc_code: loc_code },
+    { nick_name: nick_name, loc_code: loc_code, using_aircon },
     { where: { email: decoded.email } }
   );
 
-  res
-    .status(server_status.code.ok)
-    .json({ msg: server_status.msg.ok, content: "Update Successfully" });
+  const result = await db.User.findAll({ where: { email: decoded.email } });
+
+  res.json({ msg: resForm.msg.ok, contents: { user_info: result } });
 };
