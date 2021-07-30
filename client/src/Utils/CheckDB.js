@@ -1,12 +1,18 @@
-import React from 'react'
+import axios from 'axios';
 import { Swal } from 'sweetalert2';
+
+
+export async function callUserInfo() {
+    const res = await axios.get("/api/user-info")
+    return res.data.user_info
+}
 
 export function checkCookies() {
     const acctoken_cookies = document.cookie.split('=')[1];
     return acctoken_cookies;
 }
 
-export function deleteCookie (name) {
+export function deleteCookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     Swal.fire({
         title: '로그아웃 성공!',

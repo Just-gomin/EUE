@@ -48,8 +48,16 @@ function LoginComp() {
 
     function addressUrl() {
         const afterAt = localStorage.getItem('login_email_Address').split('@')[1]
-        const newLink = 'https://www.' + afterAt;
-        window.open(newLink);
+        if (afterAt == ('naver.com' || 'gmail.com' || 'daum.net')) {
+            const newLink = 'https://www.' + afterAt;
+            window.open(newLink);
+        }
+        if (afterAt == 'korea.ac.kr' ) {
+            window.open('https://www.gmail.com');
+        }
+        else { 
+            window.open();
+        }
     }
 
     function handleChange(event) {
@@ -100,7 +108,6 @@ function LoginComp() {
 
                     <Form style={inboxstyled} onSubmit={handleSubmit}>
                         <FloatingLabel
-                            controlId="floatingInput"
                             label="Email"
                         >
                             <Form.Control type="email" placeholder="Email" onChange={handleChange} />

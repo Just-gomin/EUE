@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { checkCookies } from './CheckDB';
 
 export function handleLogin({ userId, role, name, tel, email }) {
     localStorage.setItem('id', userId)
@@ -15,7 +16,7 @@ export async function handleLogout() {
 }
 
 export function isLogined() {
-    const userId = localStorage.getItem('nickname')
+    const userId = checkCookies()
     if (userId) {
         return userId
     } else {
