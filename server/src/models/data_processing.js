@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import User from "./user";
 
-export class Weather_In extends Model {
+export class Data_Processing extends Model {
   static init(sequelize) {
     return super.init(
       {
@@ -16,18 +16,10 @@ export class Weather_In extends Model {
         collected_at: {
           type: DataTypes.DATE,
           primaryKey: true,
+          defaultValue: Date.now(),
         },
-        temp: {
-          type: DataTypes.FLOAT,
-          defaultValue: 0,
-        },
-        humi: {
-          type: DataTypes.FLOAT,
-          defaultValue: 0,
-        },
-        lights: {
-          type: DataTypes.FLOAT,
-          defaultValue: 0,
+        params: {
+          type: DataTypes.JSON,
         },
       },
       {
@@ -39,12 +31,11 @@ export class Weather_In extends Model {
   }
 
   static associate(db) {
-    // weather_in 모델이 참조하는 테이블에 대한 외래키 설정.
-    db.Weather_In.belongsTo(db.User, {
+    db.Data_Processing.belongsTo(db.User, {
       foreignKey: "host",
       targetKey: "email",
     });
   }
 }
 
-export default Weather_In;
+export default Data_Processing;

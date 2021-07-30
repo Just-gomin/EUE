@@ -47,9 +47,15 @@ export class User extends Model {
     });
 
     // User 모델을 참조하는 테이블에 대한 외래키 설정.
-    db.User.hasMany(db.Weather_in, {
+    db.User.hasMany(db.Weather_In, {
       foreignKey: "host",
-      sourveKey: "email",
+      sourceKey: "email",
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    });
+    db.User.hasMany(db.Data_Processing, {
+      foreignKey: "host",
+      sourceKey: "email",
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
     });

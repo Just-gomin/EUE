@@ -49,7 +49,7 @@ export class Emd extends Model {
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
     });
-    db.Emd.hasMany(db.Weather_out, {
+    db.Emd.hasMany(db.Weather_Out, {
       foreignKey: "loc_code",
       sourceKey: "code_emd",
       onDelete: "CASCADE",

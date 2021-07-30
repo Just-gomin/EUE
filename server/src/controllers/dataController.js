@@ -17,7 +17,7 @@ const handleOutData = async (locCode, date, lat, lng) => {
   const press = json["main"]["pressure"];
   const wind_speed = json["wind"]["speed"];
 
-  await db.Weather_out.create(
+  await db.Weather_Out.create(
     {
       loc_code: Number(locCode),
       collected_at: date,
@@ -34,7 +34,7 @@ const handleOutData = async (locCode, date, lat, lng) => {
 
 // 내부 수집기로 부터 들어온 정보 처리
 const handleInData = async (email, date, temp, humi, lights) => {
-  await db.Weather_in.create(
+  await db.Weather_In.create(
     {
       host: email,
       collected_at: date,
@@ -92,12 +92,12 @@ export const getUserWeatherData = (req, res) => {
   try {
     /* 사용자 email에 따른 사용자 날씨 데이터 가져오기 */
     const decoded = jwt.decode(acs_token);
-    const result = db.Weather_in.findAll({
+    const result = db.Weather_In.findAll({
       where: { host: decoded.email },
       logging: false,
     });
 
-    res.json({ msg: resForm.msg.ok, contents: { weather_user: result } });
+    res.json({ msg: resForm.msg.ok, contents: { weather_in: result } });
   } catch (err) {
     console.log(err);
     res.json({ msg: resForm.msg.err, contents: { error: err } });
@@ -111,7 +111,7 @@ export const getOutWeatherData = (req, res) => {
   } = req;
   try {
     // 실외 지역 번호를 통해 날씨 데이터 전송.
-    const result = db.Weather_out.findAll({
+    const result = db.Weather_Out.findAll({
       where: { loc_code: loc_code },
       logging: false,
     });

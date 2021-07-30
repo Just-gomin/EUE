@@ -150,9 +150,10 @@ export const getConfirm = async (req, res) => {
       subject: "userInfo",
     });
 
-    res
-      .cookie("acs_token", accessT)
-      .redirect(`${envs.client.host}:${envs.client.port}`);
+    res.cookie("acs_token", accessT).redirect("/api");
+    // .redirect(
+    //   `${envs.client.protocol}://${envs.client.host}:${envs.client.port}`
+    // );
   } catch (err) {
     res.json({ msg: resForm.msg.err, contents: { error: err } });
   }
@@ -164,11 +165,56 @@ export const getUserInfo = async (req, res) => {
     cookies: { acs_token },
   } = req;
 
-  const decoded = jwt.decode(acs_token);
+  try {
+    const decoded = jwt.decode(acs_token);
 
-  const result = await db.User.findAll({ where: { email: decoded.email } });
+    const result_user = await db.User.findAll({
+      where: { email: decoded.email },
+      logging: false,
+    });
+    let user = {
+      email: result_user[0].email,
+      nick_name: result_user[0].nick_name,
+      using_aircon: result_user[0].using_aircon,
+      created_at: result_user[0].created_at,
+      loc_code: result_user[0].loc_code,
+    };
 
-  res.status(resForm.code.ok).json({ user_info: result });
+    if (user.loc_code) {
+      let loc_name = {};
+
+      const result_emd = await db.Emd.findAll({
+        where: {
+          code_emd: user.loc_code,
+        },
+        logging: false,
+      });
+
+      const result_doe = await db.Doe.findAll({
+        where: {
+          code_doe: result_emd[0].code_doe,
+        },
+        logging: false,
+      });
+
+      const result_sgg = await db.Sgg.findAll({
+        where: {
+          code_sgg: result_emd[0].code_sgg,
+        },
+        logging: false,
+      });
+
+      loc_name.doe = result_doe[0].name_doe;
+      loc_name.sgg = result_sgg[0].name_sgg;
+      loc_name.emd = result_emd[0].name_emd;
+
+      user.loc_name = loc_name;
+    }
+    res.json({ msg: resForm.msg.ok, contents: { user_info: [user] } });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: resForm.msg.err, contents: { error: err } });
+  }
 };
 
 // 사용자 정보 수정 요청 처리
@@ -178,14 +224,40 @@ export const postEditProfile = async (req, res) => {
     body: { nick_name, loc_code, using_aircon },
   } = req;
 
-  const decoded = jwt.decode(acs_token);
+  try {
+    const decoded = jwt.decode(acs_token);
 
-  await db.User.update(
-    { nick_name: nick_name, loc_code: loc_code, using_aircon },
-    { where: { email: decoded.email } }
-  );
+    const result_preuser = await db.User.findAll({
+      where: { email: decoded.email },
+      logging: false,
+    });
+    const user = result_preuser[0];
 
-  const result = await db.User.findAll({ where: { email: decoded.email } });
+    let new_nick_name = nick_name ? nick_name : user.nick_name;
+    let new_loc_code = loc_code ? Number(loc_code) : Number(user.loc_code);
+    let new_using_aircon = using_aircon
+      ? using_aircon === "true"
+      : user.using_aircon;
 
-  res.json({ msg: resForm.msg.ok, contents: { user_info: result } });
+    await db.User.update(
+      {
+        nick_name: new_nick_name,
+        loc_code: new_loc_code,
+        using_aircon: new_using_aircon,
+      },
+      { where: { email: decoded.email } }
+    );
+
+    const result_after_user = await db.User.findAll({
+      where: { email: decoded.email },
+    });
+
+    res.json({
+      msg: resForm.msg.ok,
+      contents: { user_info: result_after_user },
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: resForm.msg.err, contents: { error: err } });
+  }
 };

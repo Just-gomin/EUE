@@ -44,7 +44,7 @@ export class Weather_Out extends Model {
 
   static associate(db) {
     // weather_out 모델이 참조하는 테이블에 대한 외래키 설정.
-    db.Weather_out.belongsTo(db.Emd, {
+    db.Weather_Out.belongsTo(db.Emd, {
       foreignKey: "loc_code",
       targetKey: "code_emd",
     });
