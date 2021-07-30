@@ -4,9 +4,12 @@ import '../App.css'
 import { Link } from 'react-router-dom';
 import { callUserInfo, checkCookies } from '../utils/CheckDB';
 import axios from 'axios';
+import { isLogined } from '../utils/Auth';
 
 
 function UserInfo() {
+
+    const islogin = localStorage.getItem('login')
 
     const cardstyled = {
         margin: 'auto',
@@ -17,61 +20,76 @@ function UserInfo() {
         borderWidth: '3px',
         borderRadius: '20px',
         borderColor: 'rgba(195, 195, 195, 0.753)',
-
         color: 'rgb(110, 189, 142)',
-
-
     }
+
     const btnstyled2 = {
         background: 'white',
         margin: 'auto',
         borderWidth: '2px',
-        // padding: '0',
         fontSize: '0.7em',
         color: 'rgb(110, 189, 142)',
         borderColor: 'rgba(195, 195, 195, 0.753)',
-        // borderRadius: '20px',
         width: '50%'
     }
-
-    const localname_doe = localStorage.getItem('name_doe')
-    const localname_sgg = localStorage.getItem('name_sgg')
-    const localname_emd = localStorage.getItem('name_emd')
-    const localcode_emd = localStorage.getItem('code_emd')
 
     const [userNick, setUserNick] = useState('')
     const [createdTime, setCreatedTime] = useState('')
 
-
-
     useEffect(() => {
         callUserInfo().then((res) => {
-            if (res !== []) {
+            if (isLogined()) {
                 setUserNick(res[0]['nick_name'])
                 const dateStr = res[0]['created_at'].split('T')[0].split('-')
-                console.log(dateStr)
                 const now = new Date();
 
                 const year = now.getFullYear(); // 년
                 const month = now.getMonth() + 1; // 월 0부터 시작
                 const day = now.getDate(); // 일
 
-                const stDate = new Date(dateStr[0], dateStr[1], dateStr[2])
-                console.log(stDate)
-
-                const endDate = new Date(year, month, day)
-                console.log(endDate)
+                const stDate = new Date(dateStr[0], dateStr[1], dateStr[2]) // 가입 날짜
+                const endDate = new Date(year, month, day) // 현재 시간
 
                 const btMs = endDate.getTime() - stDate.getTime() // 주어진 날짜 사이의 경과 시간 (밀리 초)
-                console.log(btMs / 1000)
-
-                const btDay = btMs / (1000 * 60 * 60 * 24)
-                console.log(btDay)
+                const btDay = btMs / (1000 * 60 * 60 * 24) // 초 -> 일
 
                 setCreatedTime(btDay)
             }
             else {
                 console.log('Not Logined')
+            }
+        })
+    }, [checkCookies()])
+
+
+    const codeInit = {
+        code_doe: '',
+        code_sgg: '',
+        code_emd: ''
+    }
+    const [codeValue, setCodeValue] = useState(codeInit)
+
+    useEffect(() => {
+
+        // user-info 에서 loc_code
+        callUserInfo().then((res) => {
+            if (isLogined()) {
+                console.log(res[0].loc_code)
+                const newCode = res[0].loc_code
+                const newdoe = String(newCode).substring(0, 2)
+                const newsgg = String(newCode).substring(0, 5)
+                const newemd = String(newCode).substring(0,)
+
+                async function CompareCode() {
+                    await axios.get('/api/data/loccode').then((response) => {
+                        console.log(response.data.contents.loc_code)
+                    })
+                }
+                CompareCode()
+
+            }
+            else {
+                console.log(res)
             }
         })
     }, [])
@@ -81,7 +99,7 @@ function UserInfo() {
             <Card style={cardstyled} id='localName'>
                 <Card.Title>
                     <strong>
-                        {checkCookies() ?
+                        {isLogined() ?
                             <h3>
                                 {`${userNick}`}
                             </h3>
@@ -98,14 +116,15 @@ function UserInfo() {
                 <hr />
                 <Row style={{ alignItems: 'center', margin: 'auto', justifyContent: 'center' }}>
                     <Card.Subtitle>
-                        {localname_emd ?
+                        {isLogined() ?
                             <p className='mb-2'>
-
+                                ????????
+                                {/* 
                                 {`${localname_doe}`}
                                 <br />
                                 {`${localname_sgg}`}
                                 <br />
-                                {`${localname_emd}`}
+                                {`${localname_emd}`} */}
                             </p>
                             :
                             <p className='mb-2'>
@@ -113,7 +132,7 @@ function UserInfo() {
                             </p>
                         }
                     </Card.Subtitle>
-                    {checkCookies() &&
+                    {isLogined() &&
                         <Button variant='light' className='m-auto d-flex' style={btnstyled2}>
                             <Link to='/edit' className='w-100' style={{ textDecoration: 'none', color: 'rgb(110, 189, 142)' }}>
                                 변경
@@ -121,7 +140,7 @@ function UserInfo() {
                         </Button>
                     }
                 </Row>
-                {checkCookies() &&
+                {isLogined() &&
 
                     <Card.Text>
                         <hr />
@@ -129,7 +148,7 @@ function UserInfo() {
                             <p style={{ fontWeight: '300', margin: '0' }}>
                                 환경을 향한 노력
                             </p>
-                            <h3 style={{ fontWeight: '300', color: '#2b90d9',  margin: '0' }}>
+                            <h3 style={{ fontWeight: '300', color: '#2b90d9', margin: '0' }}>
                                 {createdTime}일차
                             </h3>
 

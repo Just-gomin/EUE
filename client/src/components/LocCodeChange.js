@@ -38,95 +38,91 @@ function LocCodeChange() {
         borderColor: 'rgba(195, 195, 195, 0.753)',
     }
 
-    const [does, setDoes] = useState([])
-    const [sggs, setSggs] = useState([])
-    const [emds, setEmds] = useState([])
-    const [sggsArray, setSggsArray] = useState([])
-    const [emdsArray, setEmdsArray] = useState([])
+    const [does, setDoes] = useState([]) // DOE
+    const [sggs, setSggs] = useState([]) // SGG
+    const [emds, setEmds] = useState([]) // EMD
+    const [sggsArray, setSggsArray] = useState([]) // DOE 와 SGG 내의 code_doe 같을 때 => sgg 값
+    const [emdsArray, setEmdsArray] = useState([]) // SGG 과 EMD 내의 code_sgg && DOE 와 EMD 내의 code_doe => emd 값
 
     const doeSelect = document.getElementById('select-doe')
     const sggSelect = document.getElementById('select-sgg')
     const emdSelect = document.getElementById('select-emd')
 
-    const saveCodeEmd = localStorage.getItem('code_emd')
-
-    async function handleClickLoc() {
-        if (doeSelect.options[doeSelect.selectedIndex].text !== '도' && sggSelect.options[sggSelect.selectedIndex].text !== '시군구' && emdSelect.options[emdSelect.selectedIndex].text !== '읍면동') {
-
-            await axios.post('/api/edit-profile', { loc_code: saveCodeEmd })
-                .then(function (response) {
-                    console.log('loc', response);
-                })
-            callUserInfo().then((res) => {
-                console.log('11', res[0])
-            })
-
-            localStorage.setItem('code_doe', doeSelect.value)
-            localStorage.setItem('name_doe', doeSelect.options[doeSelect.selectedIndex].text)
-            localStorage.setItem('code_sgg', sggSelect.value)
-            localStorage.setItem('name_sgg', sggSelect.options[sggSelect.selectedIndex].text)
-            localStorage.setItem('code_emd', emdSelect.value)
-            localStorage.setItem('name_emd', emdSelect.options[emdSelect.selectedIndex].text)
-
-            // if (localStorage.getItem('name_emd')) {
-            //     Swal.fire({
-            //         title: '변경되었습니다.',
-            //         text: '축하드립니다!👏',
-            //         icon: 'success',
-            //         customClass: 'swal-wide',
-            //         confirmButtonText: '확인',
-            //     }).then((res) => {
-            //         if (res.isConfirmed) {
-            //             window.location.reload()
-            //         }
-            //         else {
-            //             window.location.reload()
-            //         }
-            //     })
-            // }
-        }
-        // else {
-        //     Swal.fire({
-        //         title: '실패',
-        //         text: '전부 선택해주세요',
-        //         icon: 'error',
-        //         customClass: 'swal-wide',
-        //         confirmButtonText: '확인'
-        //     })
-        // }
-
-    }
-
-
-    async function getLocCode() {
-        const res = await axios.get("/api/data/loccode")
-        const local_codes = res.data.locCodes
-
-        setDoes(local_codes.DOE)
-        setSggs(local_codes.SGG)
-        setEmds(local_codes.EMD)
-    }
-
+    // Local code 받아오기
     useEffect(() => {
+        async function getLocCode() {
+            const res = await axios.get("/api/data/loccode")
+            const local_codes = res.data.contents.loc_code
+
+            setDoes(local_codes.DOE)
+            setSggs(local_codes.SGG)
+            setEmds(local_codes.EMD)
+        }
+
         getLocCode()
     }, [])
 
-
     function selectLocal() {
         sggs.map(function (sggvalue) {
-            if (doeSelect.value == sggvalue['code_doe']) {
+            if (Number(doeSelect.value) === sggvalue['code_doe']) {
                 setSggsArray(sggvalue['sgg'])
             }
         })
         emds.map(function (emdvalue) {
-            if (sggSelect.value == emdvalue['code_sgg'] && doeSelect.value == emdvalue['code_doe']) {
+            if ((Number(sggSelect.value) === emdvalue['code_sgg'])
+                && (Number(doeSelect.value) === emdvalue['code_doe'])) {
                 setEmdsArray(emdvalue['emd'])
-            }
-            else {
-                return false
             }
         })
     }
+
+
+    async function handleSubmit(event) {
+        event.preventDefault()
+        if (doeSelect.options[doeSelect.selectedIndex].text !== '도'
+            && sggSelect.options[sggSelect.selectedIndex].text !== '시군구'
+            && emdSelect.options[emdSelect.selectedIndex].text !== '읍면동') {
+
+            const saveCodeEmd = emdSelect.value
+            console.log(saveCodeEmd)
+
+            await axios.post('/api/edit-profile', { loc_code: saveCodeEmd }) // loccal code 수정
+
+            callUserInfo().then((res) => {
+                console.log('loc_code', res[0].loc_code)
+                if (res[0].loc_code) {
+                    Swal.fire({
+                        title: '변경되었습니다.',
+                        text: '축하드립니다!👏',
+                        icon: 'success',
+                        customClass: 'swal-wide',
+                        confirmButtonText: '확인',
+                    }).then((res) => {
+                        if (res.isConfirmed) {
+                            window.location.reload()
+                        }
+                        else {
+                            window.location.reload()
+                        }
+                    })
+                }
+            })
+
+
+        }
+        else {
+            Swal.fire({
+                title: '실패',
+                text: '전부 선택해주세요',
+                icon: 'error',
+                customClass: 'swal-wide',
+                confirmButtonText: '확인'
+            })
+        }
+
+    }
+
+
 
 
 
@@ -141,13 +137,13 @@ function LocCodeChange() {
                 </Card.Subtitle>
                 <hr />
                 <Card.Text className='m-0'>
-                    <Form style={inboxstyled} onChange={selectLocal}>
+                    <Form style={inboxstyled} onSubmit={handleSubmit}>
                         <Row md={12} xs={12} className='m-auto w-100 d-flex justify-content-center' style={{ padding: '0', display: 'flex', justifyContent: 'center', width: '100%' }}>
-                            <Form.Group className='m-auto w-100' style={btnstyled2}>
+                            <Form.Group className='m-auto w-100' style={btnstyled2} onChange={selectLocal}>
                                 <Row className='m-auto pb-3'>
                                     <Col md={4} xs={4} style={{ padding: '2px' }}>
 
-                                        <Form.Control as='select' size="sm" id='select-doe'>
+                                        <Form.Control as='select' size="sm" id='select-doe' required>
                                             <option selected disabled>도</option>
                                             {
                                                 does.map((doevalue) => (
@@ -160,7 +156,7 @@ function LocCodeChange() {
                                     </Col>
 
                                     <Col md={4} xs={4} style={{ padding: '2px' }}>
-                                        <Form.Control as='select' size="sm" id='select-sgg'>
+                                        <Form.Control as='select' size="sm" id='select-sgg' required>
                                             <option selected disabled>시군구</option>
                                             {
                                                 sggsArray.map((sggvalue) => (
@@ -173,7 +169,7 @@ function LocCodeChange() {
                                     </Col>
 
                                     <Col md={4} xs={4} style={{ padding: '2px' }}>
-                                        <Form.Control as='select' size="sm" id='select-emd'>
+                                        <Form.Control as='select' size="sm" id='select-emd' required>
                                             <option selected disabled>읍면동</option>
                                             {
                                                 emdsArray.map((emdvalue) => (
@@ -186,14 +182,12 @@ function LocCodeChange() {
                                     </Col>
                                 </Row>
                             </Form.Group>
+                            <Button
+                                variant='light' style={btnstyled2} type='submit'>
+                                확인
+                            </Button>
                         </Row>
                     </Form>
-                    <Row className='d-flex justify-content-center'>
-                        <Button
-                            variant='light' style={btnstyled2} onClick={handleClickLoc}>
-                            확인
-                        </Button>
-                    </Row>
                 </Card.Text>
             </Card>
         </Row>

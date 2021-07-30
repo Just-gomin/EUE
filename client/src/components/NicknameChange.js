@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Row, Card, Col, Form, Button, FloatingLabel } from 'react-bootstrap';
-import { callUserInfo } from '../utils/CheckDB';
+import Swal from 'sweetalert2';
 
 function NicknameChange() {
 
@@ -32,17 +32,31 @@ function NicknameChange() {
     function handleChange({ target: { value } }) {
         setInputname(value)
     }
-    console.log(inputname)
 
     async function handleSubmit(event) {
         event.preventDefault();
-        await axios.post('/api/edit-profile', { nick_name: inputname })
-            .then(function (response) {
-                console.log(response);
-            })
-            callUserInfo().then((res) => {
-                console.log('11', res[0])
-            })
+        if (inputname !== '') {
+            await axios.post('/api/edit-profile', { nick_name: inputname })
+                .then(function (response) {
+                    console.log(response.data.msg);
+                    if (response.data.msg === 'OK!') {
+                        Swal.fire({
+                            title: '변경되었습니다.',
+                            text: '축하드립니다!👏',
+                            icon: 'success',
+                            customClass: 'swal-wide',
+                            confirmButtonText: '확인',
+                        }).then(function (response) {
+                            if (response.isConfirmed) {
+                                window.location.reload()
+                            }
+                        })
+                    }
+                    else {
+                        console.log('ERROR')
+                    }
+                })
+        }
 
         // window.location.reload();
     };
@@ -62,7 +76,7 @@ function NicknameChange() {
                 <Card.Text className='m-0'>
                     <Form style={inboxstyled} onSubmit={handleSubmit}>
                         <FloatingLabel label="Nickname">
-                            <Form.Control type="text" placeholder="닉네임 변경" id='nickname' onChange={handleChange} />
+                            <Form.Control type="text" placeholder="닉네임 변경" id='nickname' onChange={handleChange} required/>
                         </FloatingLabel>
                         <Button variant='light' className='mt-3' id='formbtn' type='submit'>
                             변 경

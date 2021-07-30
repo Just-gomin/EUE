@@ -8,8 +8,6 @@ import ChartLine from '../components/ChartLine';
 import ChartDoughnut from '../components/ChartDoughnut';
 import Donation from '../components/Donation';
 
-
-
 function Home() {
     const constyled = {
         display: 'flex',
