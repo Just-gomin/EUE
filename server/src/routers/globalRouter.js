@@ -32,6 +32,6 @@ globalRouter.get(routes.confirm, getConfirm);
 // User Info
 globalRouter.get(routes.userinfo, onlyPrivate, getUserInfo);
 globalRouter.post(routes.editProfile, onlyPrivate, postEditProfile);
-globalRouter.post(routes.toggleAircon, onlyPrivate, getToggleAircon);
+globalRouter.get(routes.toggleAircon, onlyPrivate, getToggleAircon);
 
 export default globalRouter;
