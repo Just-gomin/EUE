@@ -24,6 +24,7 @@ function Donation() {
         color: 'rgb(110, 189, 142)',
         borderColor: 'rgba(195, 195, 195, 0.753)',
         borderRadius: '20px',
+        fontSize: '1em'
     }
 
     const [donateShow, setDonateShow] = useState(false);
@@ -58,7 +59,7 @@ function Donation() {
                     이용하시는데 불편함이 없도록 광고 없이 운영하고 있습니다. <br />
                     서버비용 충당 후 후원금이 남을시 UNICEF 에 기부하겠습니다.
                 </Card.Subtitle>
-                <Row className='my-2 d-flex justify-content-center'>
+                <Row className='py-3 d-flex justify-content-center'>
                     <Button variant='light' style={btnstyled2} onClick={() => setDonateShow(true)}>
                         ♥ 후원하기
                     </Button>
@@ -88,7 +89,7 @@ function Donation() {
                                                     margin: '5px',
                                                     maxWidth: 'fit-content',
                                                     borderWidth: '2px',
-                                                    fontSize: '14px',
+                                                    // fontSize: '14px',
                                                     color: 'black',
                                                     border: 'none',
                                                     whiteSpace: 'nowrap'
@@ -110,7 +111,7 @@ function Donation() {
                     </Modal>
                 </Row>
                 <Row className='d-flex justify-content-center flex-direction-column' style={{ color: 'rgb(109, 110, 109)', flexDirection: 'column', fontSize: '0.8em' }}>
-                    
+
                 </Row>
 
             </Card>

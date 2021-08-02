@@ -80,7 +80,7 @@ function UserInfo() {
 
 
     return (
-        <Col className='text-center pt-3 pb-2 px-0'>
+        <Col className='text-center pb-2 px-0'>
             <Card style={cardstyled} id='localName'>
                 <Card.Title>
                     <strong>
@@ -90,7 +90,7 @@ function UserInfo() {
                             </h3>
                             :
                             <h3>
-                                GUEST
+                                손 님
                             </h3>
                         }
                     </strong>

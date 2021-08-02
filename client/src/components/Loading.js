@@ -1,5 +1,5 @@
 import React from 'react'
-import { Spinner, Row, Button } from 'react-bootstrap';
+import { Spinner, Button } from 'react-bootstrap';
 
 function Loading() {
     return (

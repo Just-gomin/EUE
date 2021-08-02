@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Modal } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
-import TimeNow from './../components/TimeNow';
 import '../App.css'
 import EueSuggest from '../components/EueSuggest';
 import ChartLine from '../components/ChartLine';
@@ -66,7 +65,6 @@ function GetLocFirst() {
                     </Col>
 
                     <Col md={6} style={col2sty}>
-                        <TimeNow />
                         <EueSuggest />
                         <ChartLine />
                         <ChartDoughnut />
