@@ -25,13 +25,10 @@ const postMail = async (email, token) => {
     from: `EUE Auth Supply <${envs.api.nodemailer.user}>`,
     to: email,
     subject: "EUE 사용자 계정 확인용 메일.",
-    html: `<a href="${envs.server.protocol}://${envs.server.host}:${
-      envs.server.port
-    }${routes.base + routes.confirm}?token=${token}">${
-      envs.server.protocol
-    }://${envs.server.host}:${envs.server.port}${
-      routes.base + routes.confirm
-    }?token=${token}</a>`,
+    html: `<a href="${envs.server.protocol}://${envs.server.host}:${envs.server.port
+      }${routes.base + routes.confirm}?token=${token}">${envs.server.protocol
+      }://${envs.server.host}:${envs.server.port}${routes.base + routes.confirm
+      }?token=${token}</a>`,
   };
 
   try {
@@ -161,6 +158,7 @@ export const getConfirm = async (req, res) => {
         `${envs.client.protocol}://${envs.client.host}:${envs.client.port}/first-local-code`
       );
   } catch (err) {
+    console.log('22', err);
     res.json({ msg: resForm.msg.err, contents: { error: err } });
   }
 };

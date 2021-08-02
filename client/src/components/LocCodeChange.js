@@ -4,6 +4,7 @@ import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import { callUserInfo } from '../utils/CheckDB';
+import { routesClient } from '../routesClient';
 
 
 function LocCodeChange() {
@@ -51,7 +52,7 @@ function LocCodeChange() {
     // Local code 받아오기
     useEffect(() => {
         async function getLocCode() {
-            const res = await axios.get("/api/data/loccode")
+            const res = await axios.get(routesClient.localdata)
             const local_codes = res.data.contents.loc_code
 
             setDoes(local_codes.DOE)
@@ -85,7 +86,7 @@ function LocCodeChange() {
 
             const saveCodeEmd = emdSelect.value
 
-            await axios.post('/api/edit-profile', { loc_code: saveCodeEmd }) // loccal code 수정
+            await axios.post(routesClient.edit, { loc_code: saveCodeEmd }) // loccal code 수정
 
             callUserInfo().then((res) => {
                 console.log('loc_code', res[0].loc_code)

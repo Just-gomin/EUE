@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import '../App.css'
+import { routesClient } from './../routesClient';
 
 // export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
@@ -28,12 +29,13 @@ export function LoginWithKakao() {
                     console.log(response);
                     console.log(response.kakao_account.profile);
 
-                    const nickValue = Object.values(response.kakao_account.profile)
+                    const nickValue = response.kakao_account.profile['nickname']
+                    const emailValue = response.kakao_account.email
 
-                    await axios.post('/api/edit-profile', {nick_name: nickValue})
+                    await axios.post(routesClient.signup, { email: emailValue, nick_name: nickValue, isOauth: true })
                         .then((res) => console.log('kakao', res))
 
-                    localStorage.setItem('login', true)
+                    // localStorage.setItem('login', true)
                     Swal.fire({
                         title: '로그인 성공!',
                         text: '🙌 환영합니다 🙌',

@@ -1,10 +1,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { routesClient } from './../routesClient';
 
-export function isOauth(value) {
-  const TFoauth = value;
-  return TFoauth;
-}
 
 export function isLogined() {
   const whetherlogin = localStorage.getItem("login");
@@ -16,7 +13,7 @@ export function isLogined() {
 }
 
 export async function localLogout() {
-  await axios.get("/api/logout").then(function () {
+  await axios.get(routesClient.logout).then(function () {
     localStorage.clear();
     Swal.fire({
       title: "로그아웃 성공!",

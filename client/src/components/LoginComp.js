@@ -3,6 +3,7 @@ import '../App.css'
 import { Form, Button, Row, Col, Card, Alert, FloatingLabel } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
 import axios from 'axios';
+import { routesClient } from '../routesClient';
 
 function LoginComp() {
 
@@ -35,15 +36,12 @@ function LoginComp() {
 
     function addressUrl() {
         const afterAt = emailAddress.split('@')[1]
-        if (afterAt == ('naver.com' || 'gmail.com' || 'daum.net')) {
+        if (afterAt) {
             const newLink = 'https://www.' + afterAt;
-            window.open(newLink);
+            window.location.replace(newLink);
         }
-        if (afterAt == 'korea.ac.kr') {
-            window.open('https://www.gmail.com');
-        }
-        else {
-            window.open();
+        else if (afterAt == 'korea.ac.kr') {
+            window.location.replace('https://www.gmail.com');
         }
     }
 
@@ -53,7 +51,7 @@ function LoginComp() {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const res = await axios.post("/api/login", { email: emailAddress })
+        const res = await axios.post(routesClient.login, { email: emailAddress, isOauth: false })
         console.log('mail_sending : ', res.data.contents.mail_sending)
         setMailSend(res.data.contents.mail_sending)
         setAlertShow(true)
@@ -96,7 +94,7 @@ function LoginComp() {
 
                     <Form style={inboxstyled} onSubmit={handleSubmit}>
                         <FloatingLabel label="Email">
-                            <Form.Control type="email" placeholder="Email" onChange={handleChange} required/>
+                            <Form.Control type="email" placeholder="Email" onChange={handleChange} required />
                         </FloatingLabel>
                         <Button variant='light' className='mt-3' id='formbtn' type='submit'>
                             LOGIN

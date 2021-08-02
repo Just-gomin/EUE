@@ -3,6 +3,7 @@ import '../App.css'
 import { Form, Button, Row, Col, Card, Alert, FloatingLabel } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
 import axios from 'axios';
+import { routesClient } from './../routesClient';
 
 function SignupComp() {
 
@@ -30,7 +31,8 @@ function SignupComp() {
 
     const initValues = {
         nick_name: '',
-        email: ''
+        email: '',
+        isOauth: false
     }
 
     const [formValues, setFormValues] = useState(initValues)
@@ -45,20 +47,11 @@ function SignupComp() {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const res = await axios.post("/api/signup", formValues)
+        const res = await axios.post(routesClient.signup, formValues)
         console.log('existing_user : ', res.data.contents.existing_user)
         setUserExist(res.data.contents.existing_user)
         setAlertShow(true)
     }
-
-    useEffect(() => {
-        async function test() {
-            const res = await axios.get('/api/signup')
-            console.log(res.contents)
-        }
-        test()
-    }, [])
-
 
     return (
 

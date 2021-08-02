@@ -12,7 +12,7 @@ import GetLocFirst from './pages/GetLocFirst';
 
 
 function App() {
-
+  
   const isLs = localStorage.getItem('login')
 
   function loginDefault() {
@@ -29,7 +29,7 @@ function App() {
         <Route path='/signup' component={SignupPage} />
         <Route path='/login' component={LoginPage} />
         <Route path='/first-local-code' component={GetLocFirst} />
-        
+
         <PrivateRoute path='/edit'>
           <EditPage />
         </PrivateRoute>

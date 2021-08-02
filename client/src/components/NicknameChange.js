@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Row, Card, Form, Button, FloatingLabel } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import { routesClient } from './../routesClient';
 
 function NicknameChange() {
 
@@ -36,7 +37,7 @@ function NicknameChange() {
     async function handleSubmit(event) {
         event.preventDefault();
         if (inputname !== '') {
-            await axios.post('/api/edit-profile', { nick_name: inputname })
+            await axios.post(routesClient.edit, { nick_name: inputname })
                 .then(function (response) {
                     console.log(response.data.msg);
                     if (response.data.msg === 'OK!') {
