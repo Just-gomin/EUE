@@ -11,7 +11,8 @@ function Footer() {
                 style={{ fontSize: '0.8em' }}>
                 <hr />
                 <Col style={{ display: 'flex', color: 'gray', fontWeight: '300', alignItems: 'center', justifyContent: 'center' }}>
-                    © 2021 TEAM EUE. All rights reserved
+                    © 2021 TEAM EUE. All rights reserved <br />
+                    문의 : dev0gomgom@gmail.com
                 </Col>
                 <Col>
                     <a href='https://www.notion.so/EUE-047f1812c6c24096a528dfd3330c227d'
@@ -20,7 +21,9 @@ function Footer() {
                         <strong>
                             TEAM EUE
                         </strong>
-                    </a> <br />안강민, 박상호, 박예은
+                    </a>
+                    <br />
+                    안강민, 박상호, 박예은
                 </Col>
             </Row>
         </Container >
