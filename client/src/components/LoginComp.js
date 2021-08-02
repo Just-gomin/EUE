@@ -36,15 +36,12 @@ function LoginComp() {
 
     function addressUrl() {
         const afterAt = emailAddress.split('@')[1]
-        if (afterAt == ('naver.com' || 'gmail.com' || 'daum.net')) {
+        if (afterAt) {
             const newLink = 'https://www.' + afterAt;
-            window.open(newLink);
+            window.location.replace(newLink);
         }
-        if (afterAt == 'korea.ac.kr') {
-            window.open('https://www.gmail.com');
-        }
-        else {
-            window.open();
+        else if (afterAt == 'korea.ac.kr') {
+            window.location.replace('https://www.gmail.com');
         }
     }
 
@@ -97,7 +94,7 @@ function LoginComp() {
 
                     <Form style={inboxstyled} onSubmit={handleSubmit}>
                         <FloatingLabel label="Email">
-                            <Form.Control type="email" placeholder="Email" onChange={handleChange} required/>
+                            <Form.Control type="email" placeholder="Email" onChange={handleChange} required />
                         </FloatingLabel>
                         <Button variant='light' className='mt-3' id='formbtn' type='submit'>
                             LOGIN

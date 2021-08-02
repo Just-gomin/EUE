@@ -8,6 +8,7 @@ import ChartLine from '../components/ChartLine';
 import ChartDoughnut from '../components/ChartDoughnut';
 import Donation from '../components/Donation';
 import LocCodeChange from '../components/LocCodeChange';
+import { callUserInfo } from '../utils/CheckDB';
 
 function GetLocFirst() {
     const constyled = {
@@ -31,13 +32,28 @@ function GetLocFirst() {
         padding: '0'
     }
 
+    const [existLoc, setExistLoc] = useState('')
+    const [show, setShow] = useState(false)
+
+
     useEffect(() => {
-        setTimeout(function () {
-            setShow(true)
-        }, 1500)
+        callUserInfo().then((res) => {
+            setExistLoc(res[0]['loc_code'])
+        })
     }, [])
 
-    const [show, setShow] = useState(false)
+    useEffect(() => {
+        if (existLoc === '') {
+            setTimeout(function () {
+                setShow(true)
+            }, 1500)
+        }
+        else {
+            setShow(false)
+            window.location.replace('/')
+        }
+    }, [existLoc])
+
 
     return (
         <Container className='m-auto d-flex position-relative'

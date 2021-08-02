@@ -1,35 +1,26 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
-import { callUserInfo, checkCookies } from "../utils/CheckDB";
+import { callUserInfo } from "../utils/CheckDB";
 import { isLogined } from "./../utils/Auth";
 import { routesClient } from './../routesClient';
 
 function UsingAircon() {
-  const [airUsing, setAirUsing] = useState(false);
+  const [airUsing, setAirUsing] = useState('');
 
-  // useEffect(() => {
-  //     callUserInfo().then((res) => {
-  //         if (isLogined()) {
-  //             setAirUsing(res.using_aircon)
-  //         }
-  //         else {
-  //             console.log(res)
-  //         }
-  //     })
-  // }, [checkCookies()])
+  console.log("change airUsing", airUsing);
 
-  function airChange() {
+  async function airChange() {
     setAirUsing(!airUsing);
-    async function Useair() {
-      const res = await axios.get(routesClient.usingAircon);
-      console.log(res);
-    }
-
-    Useair();
+    await axios.get(routesClient.usingAircon, { using_aircon: !airUsing })
   }
 
-  console.log("airUsing", airUsing);
+  useEffect(() => {
+    callUserInfo().then((res) => {
+      setAirUsing(res[0]['using_aircon'])
+    })
+  }, [])
+
 
   return (
     <>
