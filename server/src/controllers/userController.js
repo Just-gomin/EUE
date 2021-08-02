@@ -127,7 +127,7 @@ export const postLogin = async (req, res) => {
 
 // 로그아웃 요청 처리
 export const getLogout = (req, res) => {
-  res.clearCookie("acs_token");
+  res.clearCookie("acs_token").json({ msg: resForm.msg.ok, contents: {} });
 };
 
 // 메일로 보낸 토큰의 유효성 검사 및 access 토큰 발행 처리

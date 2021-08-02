@@ -6,46 +6,56 @@ import resForm from "../resForm";
 
 // 외부 수집기로 부터 들어온 정보 처리
 const handleOutData = async (locCode, date, lat, lng) => {
-  // OpenWeatherAPI로 부터 지역의 날씨 정보획득을 위해 지역의 경도와 위도, API Key, 단위 기준 metric 전달
-  const response = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${envs.api.openweathermap.api_key}&units=metric`
-  );
-  const json = await response.json();
+  try {
+    // OpenWeatherAPI로 부터 지역의 날씨 정보획득을 위해 지역의 경도와 위도, API Key, 단위 기준 metric 전달
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${envs.api.openweathermap.api_key}&units=metric`
+    );
+    const json = await response.json();
 
-  const temp = json["main"]["temp"];
-  const humi = json["main"]["humidity"];
-  const press = json["main"]["pressure"];
-  const wind_speed = json["wind"]["speed"];
+    const temp = json["main"]["temp"];
+    const humi = json["main"]["humidity"];
+    const press = json["main"]["pressure"];
+    const wind_speed = json["wind"]["speed"];
 
-  await db.Weather_Out.create(
-    {
-      loc_code: Number(locCode),
-      collected_at: date,
-      temp: temp,
-      humi: humi,
-      press: press,
-      wind_speed: wind_speed,
-    },
-    {
-      logging: false,
-    }
-  );
+    await db.Weather_Out.create(
+      {
+        loc_code: Number(locCode),
+        collected_at: date,
+        temp: temp,
+        humi: humi,
+        press: press,
+        wind_speed: wind_speed,
+      },
+      {
+        logging: false,
+      }
+    );
+  } catch (err) {
+    console.log("Input Weather_Out Data Error.");
+    console.log(err);
+  }
 };
 
 // 내부 수집기로 부터 들어온 정보 처리
 const handleInData = async (email, date, temp, humi, lights) => {
-  await db.Weather_In.create(
-    {
-      host: email,
-      collected_at: date,
-      temp: temp,
-      humi: humi,
-      lights: lights,
-    },
-    {
-      logging: false,
-    }
-  );
+  try {
+    await db.Weather_In.create(
+      {
+        host: email,
+        collected_at: date,
+        temp: temp,
+        humi: humi,
+        lights: lights,
+      },
+      {
+        logging: false,
+      }
+    );
+  } catch (err) {
+    console.log("Input Weather_In Data Error.");
+    console.log(err);
+  }
 };
 
 // 데이터 수신 처리
@@ -63,6 +73,7 @@ export const getDataInput = (req, res) => {
         `Outside[${locCode}] Data(date: ${trans_date}/ lat: ${lat}/ lng: ${lng}) Input.`
       );
       handleOutData(locCode, trans_date, lat, lng);
+      console.log("Outside data successfully stored.");
     } else {
       // 내부 데이터 수집기 동작
       const {
@@ -75,6 +86,7 @@ export const getDataInput = (req, res) => {
         `User[${email}] Data(date: ${trans_date}/ temp: ${temp}/ humi: ${humi}/ lights: ${lights}) Input.`
       );
       handleInData(email, trans_date, temp, humi, lights);
+      console.log("Inside data successfully stored.");
     }
     res.status(resForm.code.ok);
   } catch (err) {
