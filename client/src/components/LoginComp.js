@@ -3,6 +3,7 @@ import '../App.css'
 import { Form, Button, Row, Col, Card, Alert, FloatingLabel } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
 import axios from 'axios';
+import { routesClient } from '../routesClient';
 
 function LoginComp() {
 
@@ -53,7 +54,7 @@ function LoginComp() {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const res = await axios.post("/api/login", { email: emailAddress })
+        const res = await axios.post(routesClient.login, { email: emailAddress, isOauth: false })
         console.log('mail_sending : ', res.data.contents.mail_sending)
         setMailSend(res.data.contents.mail_sending)
         setAlertShow(true)

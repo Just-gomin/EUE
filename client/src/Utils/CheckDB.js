@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { Swal } from 'sweetalert2';
+import { routesClient } from './../routesClient';
 
 
 export async function callUserInfo() {
-    const res = await axios.get("/api/user-info")
+    const res = await axios.get(routesClient.userinfo)
     return res.data.contents.user_info
 }
 

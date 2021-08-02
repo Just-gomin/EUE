@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { callUserInfo, checkCookies } from "../utils/CheckDB";
 import { isLogined } from "./../utils/Auth";
+import { routesClient } from './../routesClient';
 
 function UsingAircon() {
   const [airUsing, setAirUsing] = useState(false);
@@ -21,7 +22,7 @@ function UsingAircon() {
   function airChange() {
     setAirUsing(!airUsing);
     async function Useair() {
-      const res = await axios.get("/api/toggle-aircon");
+      const res = await axios.get(routesClient.usingAircon);
       console.log(res);
     }
 
