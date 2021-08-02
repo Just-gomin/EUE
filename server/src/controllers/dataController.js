@@ -139,9 +139,18 @@ export const getOutWeatherData = (req, res) => {
 export const getLocCode = async (req, res) => {
   try {
     /* 통합 지역 코드 및 이름 json으로 생성 및 전송 */
-    const does = await db.Doe.findAll({ logging: false });
-    const sggs = await db.Sgg.findAll({ logging: false });
-    const emds = await db.Emd.findAll({ logging: false });
+    const does = await db.Doe.findAll({
+      order: [["name_doe", "ASC"]],
+      logging: false,
+    });
+    const sggs = await db.Sgg.findAll({
+      order: [["name_sgg", "ASC"]],
+      logging: false,
+    });
+    const emds = await db.Emd.findAll({
+      order: [["name_emd", "ASC"]],
+      logging: false,
+    });
 
     let doe_sgg = [];
     let sgg_emd = [];

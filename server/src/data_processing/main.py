@@ -5,6 +5,7 @@
     - 진행된 후의 Weights를 파일로 저장합니다.
 """
 
+import datetime
 import sys
 import psycopg2
 
@@ -14,6 +15,13 @@ from preprocessing import preprocess
 dbconfig = {"host": sys.argv[1], "user": sys.argv[2],
             "password": sys.argv[3], "database": sys.argv[4]}
 
+today = datetime.datetime.today()
+year = str(today.year)
+month = str(today.month) if today.month >= 10 else '0'+str(today.month)
+day = str(today.day) if today.day >= 10 else '0'+str(today.day)
+collected_at = year + "-" + month + "-" + day
+
+
 # DB 연결
 connection = psycopg2.connect(
     database=dbconfig["database"], user=dbconfig["user"])
@@ -21,12 +29,22 @@ connection = psycopg2.connect(
 # DB에 대한 동작을 위한 cursor 생성
 cursor = connection.cursor()
 
-cursor.execute("SELECT email as host, loc_code, using_aircon FROM Users")
-hosts = cursor.fetchall()
+cursor.execute("SELECT email, loc_code, using_aircon FROM Users")
+users = cursor.fetchall()
 
-for host in hosts:
+for user in users:
+
+    host = {"email": user[0], "loc_code": user[1], "using_aircon": user[2]}
+
     # 데이터 전처리
     preprocess(cursor, host)
+
+    # 데이터 분석
+    params = "main_proceduer_function"
+
+    # 데이터 분석 결과 저장
+    cursor.execute("INSERT INTO \"Data_Processings\" (host,collected_at,params) VALUES (%s,%s,%s)",
+                   (host["email"], collected_at, params))
 
 # Cursor와 Connection 종료
 cursor.close()
