@@ -40,7 +40,7 @@ function LoginComp() {
             const newLink = 'https://www.' + afterAt;
             window.location.replace(newLink);
         }
-        else if (afterAt == 'korea.ac.kr') {
+        if (afterAt === 'korea.ac.kr') {
             window.location.replace('https://www.gmail.com');
         }
     }

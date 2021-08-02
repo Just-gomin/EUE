@@ -17,7 +17,9 @@ function UsingAircon() {
 
   useEffect(() => {
     callUserInfo().then((res) => {
-      setAirUsing(res[0]['using_aircon'])
+      if (isLogined()) {
+        setAirUsing(res[0]['using_aircon'])
+      }
     })
   }, [])
 
