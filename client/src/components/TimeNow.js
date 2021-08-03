@@ -22,11 +22,13 @@ function TimeNow() {
         <Clock format={"Y년 M월 D일"} />
       </Col>
       <Col className='d-flex justify-content-center'>
-        <Clock
-          format={"HH : mm : ss"}
-          ticking={true}
-          timezone={"Asia/Seoul"}
-        />
+        <strong>
+          <Clock
+            format={"HH : mm : ss"}
+            ticking={true}
+            timezone={"Asia/Seoul"}
+          />
+        </strong>
       </Col>
     </Row>
   );
