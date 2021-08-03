@@ -73,8 +73,8 @@ export function AuthWithKakao(isLogin) {
                 Swal.fire({
                   title: isLogin ? "로그인 실패!" : "회원가입 실패!",
                   text: isLogin
-                    ? "🙌  회원가입을 먼저 진행하세요! 🙌"
-                    : "🙌  이미 존재하는 사용자 입니다! 🙌",
+                    ? "😭  회원가입을 먼저 진행하세요! 😭"
+                    : "😭  이미 존재하는 사용자 입니다! 😭",
                   icon: "error",
                   customClass: "swal-wide",
                   confirmButtonText: "확인",
