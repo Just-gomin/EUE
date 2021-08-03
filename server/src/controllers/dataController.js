@@ -117,14 +117,15 @@ export const getUserWeatherData = (req, res) => {
 };
 
 // 실외 날씨 데이터 요청 처리
-export const getOutWeatherData = (req, res) => {
+export const getOutWeatherData = async (req, res) => {
   const {
-    body: { loc_code },
+    query: { locCode },
   } = req;
   try {
     // 실외 지역 번호를 통해 날씨 데이터 전송.
-    const result = db.Weather_Out.findAll({
-      where: { loc_code: loc_code },
+    const result = await db.Weather_Out.findAll({
+      where: { loc_code: locCode },
+      order: [["collected_at", "DESC"]],
       logging: false,
     });
 

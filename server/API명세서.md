@@ -2,20 +2,20 @@
 
 ## API 명세 Table
 
-| Category       | HTTP Method | URI               | Description                                                 |
-| :------------- | :---------: | :---------------- | :---------------------------------------------------------- |
-| Root           |     ﹒      | /api              | 서버의 기본 경로                                            |
-| Data Collector |     GET     | /data/input?...   | 아두이노를 통해 수집한 자료 등록 (내부, 외부는 쿼리로 구분) |
-| Data           |     GET     | /data/user        | 사용자 지정 장소의 날씨 데이터 요청                         |
-| Data           |     GET     | /data/outside/:id | 해당 지역구의 날씨 데이터 요청                              |
-| Data           |     GET     | /data/loccode     | 행정 구역 코드 요청                                         |
-| Auth           |    POST     | /signup           | 회원가입 요청                                               |
-| Auth           |    POST     | /login            | 로그인 요청                                                 |
-| Auth           |     GET     | /logout           | 로그아웃 요청                                               |
-| Auth           |     GET     | /confirm?...      | 메일 인증용 토큰의 유효성 확인 요청                         |
-| User Info      |     GET     | /user-info        | 회원 정보 요청                                              |
-| User Info      |    POST     | /edit-profile     | 회원 정보 수정 요청                                         |
-| User Info      |     GET     | /toggle-aircon    | 회원의 에어컨 사용 여부 정보 수정 요청                      |
+| Category       | HTTP Method | URI                   | Description                                                 |
+| :------------- | :---------: | :-------------------- | :---------------------------------------------------------- |
+| Root           |     ﹒      | /api                  | 서버의 기본 경로                                            |
+| Data Collector |     GET     | /data/input?...       | 아두이노를 통해 수집한 자료 등록 (내부, 외부는 쿼리로 구분) |
+| Data           |     GET     | /data/user            | 사용자 지정 장소의 날씨 데이터 요청                         |
+| Data           |     GET     | /data/outside?locCode | 해당 지역구의 날씨 데이터 요청                              |
+| Data           |     GET     | /data/loccode         | 행정 구역 코드 요청                                         |
+| Auth           |    POST     | /signup               | 회원가입 요청                                               |
+| Auth           |    POST     | /login                | 로그인 요청                                                 |
+| Auth           |     GET     | /logout               | 로그아웃 요청                                               |
+| Auth           |     GET     | /confirm?...          | 메일 인증용 토큰의 유효성 확인 요청                         |
+| User Info      |     GET     | /user-info            | 회원 정보 요청                                              |
+| User Info      |    POST     | /edit-profile         | 회원 정보 수정 요청                                         |
+| User Info      |     GET     | /toggle-aircon        | 회원의 에어컨 사용 여부 정보 수정 요청                      |
 
 <br><br>
 
