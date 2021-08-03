@@ -50,16 +50,16 @@ function UserInfo() {
 
                 const btMs = endDate.getTime() - stDate.getTime() // 주어진 날짜 사이의 경과 시간 (밀리 초)
 
-                const btDay = btMs / (1000 * 60 * 60 * 24) // 초 -> 일
+                const btDay = btMs / (1000 * 60 * 60 * 24) // Ms -> 일
 
                 setCreatedTime(btDay)
             }
         })
     }, [])
-
+    
     const [showState, setShowState] = useState('')
     const [localState, setLocalState] = useState([])
-
+    
     useEffect(() => {
         // user-info 에서 loc_code
         callUserInfo().then((res) => {
@@ -80,7 +80,7 @@ function UserInfo() {
 
 
     return (
-        <Col className='text-center pt-3 pb-2 px-0'>
+        <Col className='text-center pb-2 px-0'>
             <Card style={cardstyled} id='localName'>
                 <Card.Title>
                     <strong>
@@ -90,7 +90,7 @@ function UserInfo() {
                             </h3>
                             :
                             <h3>
-                                GUEST
+                                손 님
                             </h3>
                         }
                     </strong>

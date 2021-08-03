@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import '../App.css'
 import { Form, Button, Row, Col, Card, Alert, FloatingLabel } from 'react-bootstrap';
 import { LoginWithKakao } from '../utils/Oauth';
@@ -58,10 +58,10 @@ function SignupComp() {
         <Row className='text-center w-100 my-2'>
             <Card style={cardstyled}>
                 <Card.Title id='impactTitle'>
-                    Create an Account
+                    계정 생성하기
                 </Card.Title>
                 <Card.Subtitle style={{ fontWeight: 'lighter' }}>
-                    Sign up with your social media account or email address
+                    이메일 또는 소셜미디어로 계정을 생성하세요
                 </Card.Subtitle>
                 <hr />
                 <Card.Text>
@@ -113,7 +113,7 @@ function SignupComp() {
                         </FloatingLabel>
 
                         <Button variant='light' className='mt-3' id='formbtn' type='submit'>
-                            Sign Up
+                            회원가입
                         </Button>
                     </Form>
 

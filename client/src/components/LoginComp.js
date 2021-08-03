@@ -63,10 +63,10 @@ function LoginComp() {
         <Row className='text-center w-100 my-2'>
             <Card style={cardstyled}>
                 <Card.Title id='impactTitle'>
-                    LOGIN
+                    로그인
                 </Card.Title>
                 <Card.Subtitle style={{ fontWeight: 'lighter' }}>
-                    Log in with your social media account or email address
+                    이메일 또는 소셜미디어로 로그인하세요
                 </Card.Subtitle>
                 <hr />
                 <Card.Text>
@@ -97,7 +97,7 @@ function LoginComp() {
                             <Form.Control type="email" placeholder="Email" onChange={handleChange} required />
                         </FloatingLabel>
                         <Button variant='light' className='mt-3' id='formbtn' type='submit'>
-                            LOGIN
+                            로그인
                         </Button>
                     </Form>
 

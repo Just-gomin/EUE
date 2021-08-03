@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Modal } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
-import TimeNow from './../components/TimeNow';
 import '../App.css'
 import EueSuggest from '../components/EueSuggest';
 import ChartLine from '../components/ChartLine';
@@ -9,6 +8,7 @@ import ChartDoughnut from '../components/ChartDoughnut';
 import Donation from '../components/Donation';
 import LocCodeChange from '../components/LocCodeChange';
 import { callUserInfo } from '../utils/CheckDB';
+import { isLogined } from './../utils/Auth';
 
 function GetLocFirst() {
     const constyled = {
@@ -32,27 +32,25 @@ function GetLocFirst() {
         padding: '0'
     }
 
-    const [existLoc, setExistLoc] = useState('')
     const [show, setShow] = useState(false)
 
 
     useEffect(() => {
         callUserInfo().then((res) => {
-            setExistLoc(res[0]['loc_code'])
+            if (isLogined()) {
+                const existLoc = res[0]['loc_code']
+                if (existLoc === null) {
+                    setTimeout(function () {
+                        setShow(true)
+                    }, 1000)
+                }
+                else {
+                    console.log('Already has Loc_code')
+                    window.location.replace('/')
+                }
+            }
         })
     }, [])
-
-    useEffect(() => {
-        if (existLoc === '') {
-            setTimeout(function () {
-                setShow(true)
-            }, 1500)
-        }
-        else {
-            setShow(false)
-            window.location.replace('/')
-        }
-    }, [existLoc])
 
 
     return (
@@ -67,7 +65,6 @@ function GetLocFirst() {
                     </Col>
 
                     <Col md={6} style={col2sty}>
-                        <TimeNow />
                         <EueSuggest />
                         <ChartLine />
                         <ChartDoughnut />

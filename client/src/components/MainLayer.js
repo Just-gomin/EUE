@@ -1,11 +1,12 @@
 import React from 'react'
-import { Button, Image, Row, ButtonGroup, Form, Col } from 'react-bootstrap';
+import { Button, Image, Row, ButtonGroup, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import '../App.css'
 import UserInfo from './UserInfo';
 import { kakaoLogout } from '../utils/Oauth';
 import UsingAircon from './UsingAircon';
 import { isLogined, localLogout } from '../utils/Auth';
+import TimeNow from './TimeNow';
 
 
 function MainLayer() {
@@ -40,9 +41,11 @@ function MainLayer() {
                 <Link to='/' className='p-0 m-auto'>
                     <Image src='/images/EUE11.jpg' alt='EUE' style={boxstyled} />
                 </Link>
+
             </Row>
 
             <Row className='m-auto d-flex justify-content-center w-100'>
+                <TimeNow />
                 <UserInfo />
             </Row>
 
@@ -74,6 +77,7 @@ function MainLayer() {
                     }
 
                 </ButtonGroup>
+
             </Row>
             <Row className='m-auto justify-content-center w-100' id='contour'>
                 |
