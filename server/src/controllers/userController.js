@@ -25,10 +25,13 @@ const postMail = async (email, token) => {
     from: `EUE Auth Supply <${envs.api.nodemailer.user}>`,
     to: email,
     subject: "EUE 사용자 계정 확인용 메일.",
-    html: `<a href="${envs.server.protocol}://${envs.server.host}:${envs.server.port
-      }${routes.base + routes.confirm}?token=${token}">${envs.server.protocol
-      }://${envs.server.host}:${envs.server.port}${routes.base + routes.confirm
-      }?token=${token}</a>`,
+    html: `<a href="${envs.server.protocol}://${envs.server.host}:${
+      envs.server.port
+    }${routes.base + routes.confirm}?token=${token}">${
+      envs.server.protocol
+    }://${envs.server.host}:${envs.server.port}${
+      routes.base + routes.confirm
+    }?token=${token}</a>`,
   };
 
   try {
@@ -58,7 +61,7 @@ export const getEditProfile = (req, res) => {
 // 회원 가입 처리
 export const postSignup = async (req, res) => {
   const {
-    body: { email, nick_name },
+    body: { email, nick_name, isOAuth },
   } = req;
 
   const result = await db.User.findAll({
@@ -66,18 +69,44 @@ export const postSignup = async (req, res) => {
     logging: false,
   });
 
-  if (result.length != 0) {
+  if (result.length !== 0) {
     res.json({ msg: resForm.msg.err, contents: { existing_user: true } });
   } else {
-    db.User.create({ email: email, nick_name: nick_name }, { logging: false });
-    res.json({ msg: resForm.msg.ok, contents: { existing_user: false } });
+    await db.User.create(
+      { email: email, nick_name: nick_name },
+      { logging: false }
+    );
+
+    const result = await db.User.findAll({
+      where: { email: email },
+      logging: false,
+    });
+    const user_info = result[0];
+
+    if (isOAuth) {
+      const payload = {
+        email: email,
+      };
+
+      const accessT = jwt.sign(payload, envs.secretKey.access_token, {
+        expiresIn: "14d",
+        issuer: "eue.com",
+        subject: "userInfo",
+      });
+
+      res
+        .cookie("acs_token", accessT)
+        .json({ msg: resForm.msg.ok, contents: { existing_user: false } });
+    } else {
+      res.json({ msg: resForm.msg.ok, contents: { existing_user: false } });
+    }
   }
 };
 
 // 메일 확인용 토큰 발행 및 전송 처리
 export const postLogin = async (req, res) => {
   const {
-    body: { email },
+    body: { email, isOAuth },
   } = req;
 
   const result = await db.User.findAll({
@@ -85,34 +114,50 @@ export const postLogin = async (req, res) => {
     logging: false,
   });
 
-  if (result.length != 0) {
-    try {
-      // token 발행
-      const mail_token = jwt.sign(
-        {
-          email: email,
-        },
-        envs.secretKey.mail,
-        {
-          expiresIn: 10 * 60,
-          issuer: "eue.com",
-          subject: "auth_checker",
-        }
-      );
+  if (result.length !== 0) {
+    if (isOAuth) {
+      const payload = {
+        email: email,
+      };
 
-      // 토큰이 포함된 로그인 링크 전송
-      postMail(email, mail_token);
+      const accessT = jwt.sign(payload, envs.secretKey.access_token, {
+        expiresIn: "14d",
+        issuer: "eue.com",
+        subject: "userInfo",
+      });
 
-      res.json({
-        msg: resForm.msg.ok,
-        contents: { existing_user: true, mail_sending: true },
-      });
-    } catch (err) {
-      console.log(err);
-      res.json({
-        msg: resForm.msg.err,
-        contents: { existing_user: true, mail_sending: false, error: err },
-      });
+      res
+        .cookie("acs_token", accessT)
+        .json({ msg: resForm.msg.ok, contents: { existing_user: true } });
+    } else {
+      try {
+        // token 발행
+        const mail_token = jwt.sign(
+          {
+            email: email,
+          },
+          envs.secretKey.mail,
+          {
+            expiresIn: 10 * 60,
+            issuer: "eue.com",
+            subject: "auth_checker",
+          }
+        );
+
+        // 토큰이 포함된 로그인 링크 전송
+        postMail(email, mail_token);
+
+        res.json({
+          msg: resForm.msg.ok,
+          contents: { existing_user: true, mail_sending: true },
+        });
+      } catch (err) {
+        console.log(err);
+        res.json({
+          msg: resForm.msg.err,
+          contents: { existing_user: true, mail_sending: false, error: err },
+        });
+      }
     }
   } else {
     res.json({
@@ -158,7 +203,6 @@ export const getConfirm = async (req, res) => {
         `${envs.client.protocol}://${envs.client.host}:${envs.client.port}/first-local-code`
       );
   } catch (err) {
-    console.log('22', err);
     res.json({ msg: resForm.msg.err, contents: { error: err } });
   }
 };
