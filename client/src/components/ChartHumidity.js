@@ -1,8 +1,9 @@
 import React from 'react'
-import { Row, Card } from 'react-bootstrap';
-import { Line } from 'react-chartjs-2'
+import { Col } from 'react-bootstrap';
+import { Bar, Line } from 'react-chartjs-2'
 
-function ChartLine() {
+function ChartHumidity() {
+
     const cardstyled = {
         margin: 'auto',
         padding: '1em',
@@ -36,18 +37,18 @@ function ChartLine() {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [
             {
-                label: '온도',
-                fill: false,
+                label: '습도',
+                fill: true,
                 lineTension: 0.1,
                 backgroundColor: 'rgba(75,192,192,0.4)',
                 borderColor: 'rgba(75,192,192,1)',
                 borderCapStyle: 'butt',
-                borderDash: [2, 10], //점선 ex [2,10]
+                borderDash: [8, 8], //점선 ex [2,10]
                 borderDashOffset: 0.0,
                 borderJoinStyle: 'miter',
                 pointBorderColor: 'rgba(75,192,192,1)',
                 pointBackgroundColor: '#fff',
-                pointBorderWidth: 1,
+                pointBorderWidth: 6,
                 pointHoverRadius: 5,
                 pointHoverBackgroundColor: 'rgba(75,192,192,1)',
                 pointHoverBorderColor: 'rgba(220,220,220,1)',
@@ -60,16 +61,13 @@ function ChartLine() {
     };
 
     return (
-            <Row className='text-center w-100 my-2'>
-                <Card style={cardstyled}>
-                    <Line
-                        data={data}
-                        options={options}
-                        height={300}
-                    />
-                </Card>
-            </Row>
+        <Col id='chartTab'>
+            <Line
+                data={data}
+                options={options}
+            />
+        </Col>
     )
-}
+};
 
-export default ChartLine;
+export default ChartHumidity;
