@@ -6,6 +6,7 @@
 """
 
 import datetime
+from server.src.data_processing.model import modeling
 import sys
 import psycopg2
 
@@ -37,14 +38,14 @@ for user in users:
     host = {"email": user[0], "loc_code": user[1], "using_aircon": user[2]}
 
     # 데이터 전처리
-    preprocess(cursor, host)
+    standard_df, mean_df , std_df = preprocess(cursor, host)
 
     # 데이터 분석
-    params = "main_proceduer_function"
+    modeling(standard_df)
 
     # 데이터 분석 결과 저장
-    cursor.execute("INSERT INTO \"Data_Processings\" (host,collected_at,params) VALUES (%s,%s,%s)",
-                   (host["email"], collected_at, params))
+    # cursor.execute("INSERT INTO \"Data_Processings\" (host,collected_at,params) VALUES (%s,%s,%s)",
+    #                (host["email"], collected_at, params))
 
 # Cursor와 Connection 종료
 cursor.close()

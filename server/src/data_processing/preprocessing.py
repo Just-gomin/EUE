@@ -6,6 +6,10 @@
 
 """
 
+import pandas as pd
+import datetime
+import numpy as np
+
 def preprocess(cursor, host):
     """
         ### preprocess(cursor, host)
@@ -34,3 +38,27 @@ def preprocess(cursor, host):
             result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7]))
 
     file.close()
+
+
+    df = pd.read_csv("/src/dataprocessing/temp.csv")
+    date_time = pd.to_datetime(df['date'], format='%Y-%m-%d %H:%M')
+    timestamp_s = date_time.map(datetime.datetime.timestamp)
+
+    df = df[['temp_out','humi_out','press','wind_speed']]
+    day = 24*60*60
+    year = (365.2425)*day
+
+    df['Day sin'] = np.sin(timestamp_s * (2 * np.pi / day))
+    df['Day cos'] = np.cos(timestamp_s * (2 * np.pi / day))
+    df['Year sin'] = np.sin(timestamp_s * (2 * np.pi / year))
+    df['Year cos'] = np.cos(timestamp_s * (2 * np.pi / year))
+
+    def standard(dataframe):
+        mean = dataframe.mean()
+        std = dataframe.std()
+        zscore = ( dataframe - mean ) / std
+        return zscore, mean, std
+        
+    standard_df, mean_df , std_df = standard(df)
+
+    return standard_df, mean_df , std_df
