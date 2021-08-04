@@ -12,7 +12,7 @@ const handleListening = () => {
 
 // DB 연결
 db.sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log(db.msg.connection_success);
   })

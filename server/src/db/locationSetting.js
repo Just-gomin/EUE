@@ -60,15 +60,15 @@ export const setLocTables = () => {
 
   // Insert to DB.
   doeList.map(async (node) => {
-    await db.Doe.create(node, { logging: false });
+    await db.Doe.findOrCreate({ where: node, logging: false });
   });
 
   sggList.map(async (node) => {
-    await db.Sgg.create(node, { logging: false });
+    await db.Sgg.findOrCreate({ where: node, logging: false });
   });
 
   emdList.map(async (node) => {
-    await db.Emd.create(node, { logging: false });
+    await db.Emd.findOrCreate({ where: node, logging: false });
   });
 
   console.log("Finish the insertion!");
