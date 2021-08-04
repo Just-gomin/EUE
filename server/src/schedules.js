@@ -79,8 +79,10 @@ const make_date = () => {
     now.getMonth() + 1 < 10 ? `0${now.getMonth() + 1}` : now.getMonth() + 1;
   const date = now.getDate() < 10 ? `0${now.getDate()}` : now.getDate();
   const hour = now.getHours() < 10 ? `0${now.getHours()}` : now.getHours();
-  const minute =
-    now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes();
+
+  let minute = now.getMinutes();
+  minute = minute - (minute % 10);
+  minute = minute < 10 ? `0${minute}` : minute;
 
   const str_date = `${year}-${month}-${date}T${hour}:${minute}:00+09:00`;
   const collected_at = new Date(str_date);
