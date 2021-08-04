@@ -209,12 +209,12 @@ export const getConfirm = async (req, res) => {
 
 // 사용자 정보 요청 처리
 export const getUserInfo = async (req, res) => {
-  try {
-    const {
-      cookies: { acs_token },
-    } = req;
+  const {
+    cookies: { acs_token },
+  } = req;
 
-    const decoded = jwt.verify(acs_token);
+  try {
+    const decoded = jwt.decode(acs_token);
 
     const result_user = await db.User.findAll({
       where: { email: decoded.email },
@@ -266,9 +266,6 @@ export const getUserInfo = async (req, res) => {
     res.json({
       msg: resForm.msg.err,
       contents: {
-        user_info: {
-          loc_code: 3743011,
-        },
         error: err,
       },
     });

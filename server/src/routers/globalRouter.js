@@ -30,7 +30,7 @@ globalRouter.get(routes.logout, onlyPrivate, getLogout);
 globalRouter.get(routes.confirm, getConfirm);
 
 // User Info
-globalRouter.get(routes.userinfo, getUserInfo);
+globalRouter.get(routes.userinfo, onlyPrivate, getUserInfo);
 globalRouter.post(routes.editProfile, onlyPrivate, postEditProfile);
 globalRouter.get(routes.toggleAircon, onlyPrivate, getToggleAircon);
 
