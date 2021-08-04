@@ -76,7 +76,7 @@ function UserInfo() {
   }, []);
 
   return (
-    <Col className="text-center pb-2 px-0">
+    <Col className="text-center pt-2 px-0">
       <Card style={cardstyled} id="localName">
         <Card.Title>
           <strong>

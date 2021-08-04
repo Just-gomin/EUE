@@ -22,6 +22,8 @@ function ChartTabs() {
 
     const [key, setKey] = useState('temp');
 
+    //3743011 default
+
     return (
         <Row className='text-center w-100 my-2'>
             <Card style={cardstyled}>

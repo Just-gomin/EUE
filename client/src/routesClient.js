@@ -4,9 +4,11 @@ export const routesClient = {
   login: '/api/login',
   edit: '/api/edit-profile',
   localdata: '/api/data/loccode',
+  outsideLoc: '/api/data/outside?loccode=',
   usingAircon : '/api/toggle-aircon',
   logout: '/api/logout',
-  userinfo : '/api/user-info'
+  userinfo : '/api/user-info',
+
 }
 
 

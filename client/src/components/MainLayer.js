@@ -45,7 +45,6 @@ function MainLayer() {
             </Row>
 
             <Row className='m-auto d-flex justify-content-center w-100'>
-                <TimeNow />
                 <UserInfo />
             </Row>
 
@@ -77,6 +76,7 @@ function MainLayer() {
                     }
 
                 </ButtonGroup>
+                <TimeNow />
 
             </Row>
             <Row className='m-auto justify-content-center w-100' id='contour'>

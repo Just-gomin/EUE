@@ -18,7 +18,7 @@ function ChartPressure() {
                 }
             }]
         },
-        // maintainAspectRatio: false
+        maintainAspectRatio: false
     }
     const data = {
         labels: ['1', '2', '3', '4', '5', '6', '77', '88', '99'],
@@ -39,22 +39,7 @@ function ChartPressure() {
         <Col id='chartTab'>
             <Line
                 data={data}
-                options={{
-                    legend: {
-                        display: true, // label 보이기 여부
-                    },
-                    scales: {
-                        yAxes: [{
-                            display: true,
-                            ticks: {
-                                min: 900,
-                                max: 1100,
-                                stepSize: 20
-                            }
-                        }]
-                    },
-                    // maintainAspectRatio: false
-                }}
+                options={options}
             />
         </Col>
     )
