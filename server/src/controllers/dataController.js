@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import resForm from "../resForm";
 
 // 외부 수집기로 부터 들어온 정보 처리
-const handleOutData = async (locCode, date, lat, lng) => {
+export const handleOutData = async (locCode, date, lat, lng) => {
   try {
     // OpenWeatherAPI로 부터 지역의 날씨 정보획득을 위해 지역의 경도와 위도, API Key, 단위 기준 metric 전달
     const response = await fetch(
@@ -31,6 +31,8 @@ const handleOutData = async (locCode, date, lat, lng) => {
         logging: false,
       }
     );
+
+    console.log("Outside data successfully stored.");
   } catch (err) {
     console.log("Input Weather_Out Data Error.");
     console.log(err);
@@ -52,6 +54,8 @@ const handleInData = async (email, date, temp, humi, lights) => {
         logging: false,
       }
     );
+
+    console.log("Inside data successfully stored.");
   } catch (err) {
     console.log("Input Weather_In Data Error.");
     console.log(err);
@@ -73,7 +77,6 @@ export const getDataInput = (req, res) => {
         `Outside[${locCode}] Data(date: ${trans_date}/ lat: ${lat}/ lng: ${lng}) Input.`
       );
       handleOutData(locCode, trans_date, lat, lng);
-      console.log("Outside data successfully stored.");
     } else {
       // 내부 데이터 수집기 동작
       const {
@@ -86,12 +89,11 @@ export const getDataInput = (req, res) => {
         `User[${email}] Data(date: ${trans_date}/ temp: ${temp}/ humi: ${humi}/ lights: ${lights}) Input.`
       );
       handleInData(email, trans_date, temp, humi, lights);
-      console.log("Inside data successfully stored.");
     }
-    res.status(resForm.code.ok);
+    res.status(resForm.code.ok).json({ msg: resForm.msg.ok });
   } catch (err) {
     console.log(err);
-    res.status(resForm.code.err);
+    res.status(resForm.code.err).json({ msg: resForm.msg.err });
   }
 };
 
@@ -119,12 +121,12 @@ export const getUserWeatherData = (req, res) => {
 // 실외 날씨 데이터 요청 처리
 export const getOutWeatherData = async (req, res) => {
   const {
-    query: { locCode },
+    query: { loccode },
   } = req;
   try {
     // 실외 지역 번호를 통해 날씨 데이터 전송.
     const result = await db.Weather_Out.findAll({
-      where: { loc_code: locCode },
+      where: { loc_code: loccode },
       order: [["collected_at", "DESC"]],
       logging: false,
     });

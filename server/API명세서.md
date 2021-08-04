@@ -7,7 +7,7 @@
 | Root           |     ﹒      | /api                  | 서버의 기본 경로                                            |
 | Data Collector |     GET     | /data/input?...       | 아두이노를 통해 수집한 자료 등록 (내부, 외부는 쿼리로 구분) |
 | Data           |     GET     | /data/user            | 사용자 지정 장소의 날씨 데이터 요청                         |
-| Data           |     GET     | /data/outside?locCode | 해당 지역구의 날씨 데이터 요청                              |
+| Data           |     GET     | /data/outside?loccode | 해당 지역구의 날씨 데이터 요청                              |
 | Data           |     GET     | /data/loccode         | 행정 구역 코드 요청                                         |
 | Auth           |    POST     | /signup               | 회원가입 요청                                               |
 | Auth           |    POST     | /login                | 로그인 요청                                                 |
