@@ -209,12 +209,12 @@ export const getConfirm = async (req, res) => {
 
 // 사용자 정보 요청 처리
 export const getUserInfo = async (req, res) => {
-  const {
-    cookies: { acs_token },
-  } = req;
-
   try {
-    const decoded = jwt.decode(acs_token);
+    const {
+      cookies: { acs_token },
+    } = req;
+
+    const decoded = jwt.verify(acs_token);
 
     const result_user = await db.User.findAll({
       where: { email: decoded.email },
@@ -261,7 +261,17 @@ export const getUserInfo = async (req, res) => {
     res.json({ msg: resForm.msg.ok, contents: { user_info: [user] } });
   } catch (err) {
     console.log(err);
-    res.json({ msg: resForm.msg.err, contents: { error: err } });
+
+    // Return error message and default user.(독도)
+    res.json({
+      msg: resForm.msg.err,
+      contents: {
+        user_info: {
+          loc_code: 3743011,
+        },
+        error: err,
+      },
+    });
   }
 };
 
