@@ -3,9 +3,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
 import '../App.css'
 import EueSuggest from '../components/EueSuggest';
-import ChartLine from '../components/ChartLine';
-import ChartDoughnut from '../components/ChartDoughnut';
 import Donation from '../components/Donation';
+import ChartTabs from '../components/ChartTabs';
 
 function Home() {
     const constyled = {
@@ -43,8 +42,7 @@ function Home() {
 
                     <Col md={6} style={col2sty}>
                         <EueSuggest />
-                        <ChartLine />
-                        <ChartDoughnut />
+                        <ChartTabs />
                         <Donation />
                     </Col>
                 </Row>

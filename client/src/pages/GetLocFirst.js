@@ -3,7 +3,7 @@ import { Container, Row, Col, Modal } from 'react-bootstrap';
 import MainLayer from '../components/MainLayer';
 import '../App.css'
 import EueSuggest from '../components/EueSuggest';
-import ChartLine from '../components/ChartLine';
+import ChartTemp from '../components/ChartTemp';
 import ChartDoughnut from '../components/ChartDoughnut';
 import Donation from '../components/Donation';
 import LocCodeChange from '../components/LocCodeChange';
@@ -66,7 +66,7 @@ function GetLocFirst() {
 
                     <Col md={6} style={col2sty}>
                         <EueSuggest />
-                        <ChartLine />
+                        <ChartTemp />
                         <ChartDoughnut />
                         <Donation />
                     </Col>
