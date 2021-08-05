@@ -3,8 +3,11 @@ import { Row, Container } from 'react-bootstrap';
 import Loading from './Loading';
 
 function PageNotFound() {
+
     useEffect(() => {
-        setTimeout(window.location.replace('/'), 5000);
+        setTimeout(function () {
+            window.location.replace('/')
+        }, 3000);
     }, [])
 
     return (
@@ -17,7 +20,7 @@ function PageNotFound() {
                     PAGE NOT FOUND
                 </h1>
                 <br />
-                <h3 className='d-flex justify-content-center' style={{fontWeight: '300'}}>
+                <h3 className='d-flex justify-content-center' style={{ fontWeight: '300' }}>
                     잘못된 접근 입니다.
                 </h3>
             </Row>

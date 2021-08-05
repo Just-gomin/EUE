@@ -1,20 +1,42 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useState, useEffect } from 'react'
 import { Col } from 'react-bootstrap';
 import { Bar, Line } from 'react-chartjs-2'
+import { callUserInfo } from '../utils/CheckDB';
+import { routesClient } from './../routesClient';
+import { isLogined } from './../utils/Auth';
 
 function ChartHumidity() {
 
-    const cardstyled = {
-        margin: 'auto',
-        padding: '1em',
-        display: 'flex',
-        justifyContent: 'center',
-        width: '100%',
-        borderWidth: '3px',
-        borderRadius: '20px',
-        borderColor: 'rgb(110, 189, 142)',
-        color: '#04AB70'
-    }
+    const [humi, setHumi] = useState([])
+    const [newLabel, setNewLabel] = useState([])
+
+    useEffect(() => {
+        if (isLogined()) {
+            callUserInfo().then((res) => {
+                const outs = axios.get(routesClient.outsideLoc + res['loc_code'])
+                console.log('>>', outs)
+            })
+        }
+        else {
+            const locDefault = localStorage.getItem('local-code')
+            axios.get(routesClient.outsideLoc + locDefault)
+                .then((res) => {
+                    const outWeather = res.data.contents.weather_out
+                    const Array = []
+                    const Array2 = []
+                    for (let i = 0; i < outWeather.length; i++) {
+                        Array.push(outWeather[i].humi)
+                        Array2.push(outWeather[i].collected_at.split('T')[1].split('.')[0])
+                        // const colHour = outWeather[i].collected_at.split('T')[1].split('.')[0].split(':')[0]
+                        // const colMin = outWeather[i].collected_at.split('T')[1].split('.')[0].split(':')[1]
+                    }
+                    setHumi(Array)
+                    setNewLabel(Array2)
+                })
+        }
+    }, [])
+
 
     const options = {
         legend: {
@@ -34,28 +56,26 @@ function ChartHumidity() {
         maintainAspectRatio: false
     }
     const data = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        labels: newLabel,
         datasets: [
             {
                 label: '습도',
-                fill: true,
+                data: humi,
                 lineTension: 0.1,
-                backgroundColor: 'rgba(75,192,192,0.4)',
+                borderWidth: '2',
+                fill: true,
+                backgroundColor: 'rgba(75,192,192,0.1)',
                 borderColor: 'rgba(75,192,192,1)',
-                borderCapStyle: 'butt',
-                borderDash: [8, 8], //점선 ex [2,10]
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
+                borderCapStyle: 'round',
                 pointBorderColor: 'rgba(75,192,192,1)',
                 pointBackgroundColor: '#fff',
-                pointBorderWidth: 6,
+                pointBorderWidth: 5,
                 pointHoverRadius: 5,
                 pointHoverBackgroundColor: 'rgba(75,192,192,1)',
                 pointHoverBorderColor: 'rgba(220,220,220,1)',
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: [-10, -2, 13, 18, 22, 25, 31, 28, 25, 18, 6, -8]
             }
         ]
     };

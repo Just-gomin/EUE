@@ -5,6 +5,8 @@ import ChartHumidity from './ChartHumidity';
 import ChartWindSpeed from './ChartWindSpeed';
 import ChartPressure from './ChartPressure';
 import '../App.css'
+import { getWeatherOut } from './../utils/CheckDB';
+import { isLogined } from './../utils/Auth';
 
 function ChartTabs() {
 
@@ -20,9 +22,11 @@ function ChartTabs() {
         color: '#04AB70'
     }
 
-    const [key, setKey] = useState('temp');
 
     //3743011 default
+
+
+    const [key, setKey] = useState('temp');
 
     return (
         <Row className='text-center w-100 my-2'>

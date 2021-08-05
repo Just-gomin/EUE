@@ -39,10 +39,10 @@ export function AuthWithKakao(isLogin) {
               isLogin
                 ? { email: emailValue, isOAuth: true }
                 : {
-                    email: emailValue,
-                    nick_name: nickValue,
-                    isOAuth: true,
-                  }
+                  email: emailValue,
+                  nick_name: nickValue,
+                  isOAuth: true,
+                }
             )
             .then((res) => {
               console.log("kakao", res);
@@ -53,6 +53,7 @@ export function AuthWithKakao(isLogin) {
               ) {
                 // 회원 가입 또는 로그인 성공
                 localStorage.setItem("login", true);
+                localStorage.removeItem('local-code');
 
                 Swal.fire({
                   title: isLogin ? "로그인 성공!" : "회원가입 성공!",

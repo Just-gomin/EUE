@@ -2,8 +2,18 @@ import axios from 'axios';
 import { Swal } from 'sweetalert2';
 import { routesClient } from './../routesClient';
 
-export function getTempEtc() {
+
+export async function callUserInfo() {
+    const res = await axios.get(routesClient.userinfo)
+    return res.data.contents.user_info
+}
+
+export function getWeatherOut() {
     callUserInfo().then((res) => {
+        console.log(res)
+        // if (res['loc_code'] === null) {
+            res['loc_code'] = 3743011
+        // }
         const outs = axios.get(routesClient.outsideLoc + res['loc_code'])
         return outs
             .then((res) => {
@@ -21,11 +31,6 @@ export function getTempEtc() {
                 // setTemp(tempArray)
             })
     })
-}
-export async function callUserInfo() {
-    const res = await axios.get(routesClient.userinfo)
-    console.log(res.data.contents.user_info)
-    return res.data.contents.user_info
 }
 
 export function checkCookies() {
