@@ -9,25 +9,24 @@ import { routesClient } from "./../routesClient";
 function ChartTemp() {
   const [temp, setTemp] = useState([]);
 
-  // useEffect(() => {
-  //     callUserInfo().then((res) => {
-  //         const outs = axios.get(routesClient.outsideLoc + res['loc_code'])
-  //         return outs
-  //             .then((res) => {
-  //                 const outWeather = res.data.contents.weather_out
-  //                 console.log(res.data.contents.weather_out)
-  //                 let i = 0;
-  //                 // setTemp(res.data.contents.weather_out[0].temp)
-  //                 const tempArray = []
-  //                 for (i; i < 3; i++) {
-  //                     console.log(i)
-  //                     console.log(outWeather[i])
-  //                     tempArray.push(outWeather[i].temp)
-  //                 }
-  //                 setTemp(tempArray)
-  //             })
-  //     })
-  // }, [])
+  useEffect(() => {
+    callUserInfo().then((res) => {
+      const outs = axios.get(routesClient.outsideLoc + res["loc_code"]);
+      return outs.then((res) => {
+        const outWeather = res.data.contents.weather_out;
+        console.log(res.data.contents.weather_out);
+        let i = 0;
+        // setTemp(res.data.contents.weather_out[0].temp)
+        const tempArray = [];
+        for (i; i < 3; i++) {
+          console.log(i);
+          console.log(outWeather[i]);
+          tempArray.push(outWeather[i].temp);
+        }
+        setTemp(tempArray);
+      });
+    });
+  }, []);
 
   console.log(temp);
 
