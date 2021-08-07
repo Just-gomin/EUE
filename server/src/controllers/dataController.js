@@ -104,14 +104,43 @@ export const getUserWeatherData = (req, res) => {
   } = req;
 
   try {
-    /* 사용자 email에 따른 사용자 날씨 데이터 가져오기 */
+    /*
+        # 사용자 email에 따른 사용자 날씨 데이터 가져오기 
+
+        - 2021.08.07 기준, 데이터 수집기의 동작 오류로 인해 외부날씨 반환으로 대체.
+        - 예측 날씨 반환 준비되는대로 업데이트
+        
+    */
     const decoded = jwt.decode(acs_token);
-    const result = db.Weather_In.findAll({
-      where: { host: decoded.email },
+
+    // const result = db.Weather_In.findAll({
+    //   where: { host: decoded.email },
+    //   logging: false,
+    // });
+
+    const result_user = db.User.findAll({
+      where: {
+        email: decoded.email,
+      },
+      logging: false,
+    });
+    user_info = result_user[0];
+
+    const result_weather = db.Weather_Out.findAll({
+      where: {
+        loc_code: user_info.loc_code,
+      },
+      order: [["date", "ASC"]],
       logging: false,
     });
 
-    res.json({ msg: resForm.msg.ok, contents: { weather_in: result } });
+    const weather_out = result_weather.slice(-9, -3);
+    const weather_predict = result_weather.slice(-3);
+
+    res.json({
+      msg: resForm.msg.ok,
+      contents: { weather_in: weather_out, weather_predict: weather_predict },
+    });
   } catch (err) {
     console.log(err);
     res.json({ msg: resForm.msg.err, contents: { error: err } });
@@ -127,11 +156,13 @@ export const getOutWeatherData = async (req, res) => {
     // 실외 지역 번호를 통해 날씨 데이터 전송.
     const result = await db.Weather_Out.findAll({
       where: { loc_code: loccode },
-      order: [["collected_at", "DESC"]],
+      order: [["collected_at", "ASC"]],
       logging: false,
     });
 
-    res.json({ msg: resForm.msg.ok, contents: { weather_out: result } });
+    const weather_out = result.slice(-9);
+
+    res.json({ msg: resForm.msg.ok, contents: { weather_out: weather_out } });
   } catch (err) {
     console.log(err);
     res.json({ msg: resForm.msg.err, contents: { error: err } });
