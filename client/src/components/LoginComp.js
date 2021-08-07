@@ -66,6 +66,7 @@ function LoginComp() {
     setMailSend(res.data.contents.mail_sending);
     setAlertShow(true);
     localStorage.setItem("login", true);
+    localStorage.removeItem('local-code');
   }
 
   return (

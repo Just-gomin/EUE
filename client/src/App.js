@@ -5,19 +5,24 @@ import Home from './pages/Home';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import EditPage from './pages/EditPage';
-import PrivateRoute from './utils/PrivateRoutes';
+import OnlyUser from './utils/OnlyUser';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
 import GetLocFirst from './pages/GetLocFirst';
+import { isLogined } from './utils/Auth';
 
 
 function App() {
-  
+
   const isLs = localStorage.getItem('login')
 
   function loginDefault() {
     if (isLs === null) {
       localStorage.setItem('login', false)
+    }
+    if (isLs === false || isLs === null) {
+      localStorage.setItem('local-code', '3743011')
+
     }
   }
 
@@ -26,13 +31,22 @@ function App() {
       {loginDefault()}
       <Switch>
         <Route exact path='/' component={Home} />
-        <Route path='/signup' component={SignupPage} />
-        <Route path='/login' component={LoginPage} />
+        {isLogined() ?
+          <Route path='/signup' component={PageNotFound} />
+          :
+          <Route path='/signup' component={SignupPage} />
+        }
+
+        {isLogined() ?
+          <Route path='/login' component={PageNotFound} />
+          :
+          <Route path='/login' component={LoginPage} />
+        }
         <Route path='/first-local-code' component={GetLocFirst} />
 
-        <PrivateRoute path='/edit'>
+        <OnlyUser path='/edit'>
           <EditPage />
-        </PrivateRoute>
+        </OnlyUser>
 
         <Route component={PageNotFound} />
       </Switch>

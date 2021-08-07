@@ -3,7 +3,6 @@ import { Button, Image, Row, ButtonGroup, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import '../App.css'
 import UserInfo from './UserInfo';
-import { kakaoLogout } from '../utils/Oauth';
 import UsingAircon from './UsingAircon';
 import { isLogined, localLogout } from '../utils/Auth';
 import TimeNow from './TimeNow';
@@ -48,7 +47,6 @@ function MainLayer() {
                 <UserInfo />
             </Row>
 
-            <UsingAircon />
 
             <Row className='d-flex justify-content-center align-items-center my-2 mx-auto w-100'>
                 <ButtonGroup vertical className='m-auto' style={{ width: '100%', flexDirection: 'column' }}>
@@ -76,6 +74,8 @@ function MainLayer() {
                     }
 
                 </ButtonGroup>
+                <UsingAircon />
+
                 <TimeNow />
 
             </Row>
