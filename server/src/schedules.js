@@ -26,6 +26,7 @@ const dataProcessingJob = schedule.scheduleJob(rule_dataProcessing, () => {
   const pyprocess = spawn("python", [
     DATA_PROCESSING_DIR,
     envs.db.host,
+    envs.db.port,
     envs.db.user,
     envs.db.password,
     envs.db.database,
@@ -57,11 +58,22 @@ const rules_weather_out_store = {
 };
 
 rules_weather_out_store["00m"].minute = 0;
+rules_weather_out_store["00m"].second = 0;
+
 rules_weather_out_store["10m"].minute = 10;
+rules_weather_out_store["10m"].second = 0;
+
 rules_weather_out_store["20m"].minute = 20;
+rules_weather_out_store["20m"].second = 0;
+
 rules_weather_out_store["30m"].minute = 30;
+rules_weather_out_store["30m"].second = 0;
+
 rules_weather_out_store["40m"].minute = 40;
+rules_weather_out_store["40m"].second = 0;
+
 rules_weather_out_store["50m"].minute = 50;
+rules_weather_out_store["50m"].second = 0;
 
 // 임의의 사용자 데이터 등록
 const coordinates = [
