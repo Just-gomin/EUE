@@ -20,10 +20,6 @@ function App() {
     if (isLs === null) {
       localStorage.setItem('login', false)
     }
-    if (isLs === false || isLs === null) {
-      localStorage.setItem('local-code', '3743011')
-
-    }
   }
 
   return (

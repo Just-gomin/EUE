@@ -13,14 +13,23 @@ function ChartPressure() {
 
     useEffect(() => {
         if (isLogined()) {
-            callUserInfo().then((res) => {
-                const outs = axios.get(routesClient.outsideLoc + res['loc_code'])
-                console.log('>>', outs)
-            })
+            axios.get(routesClient.userWeather, { withCredentials: true })
+                .then((res) => {
+                    console.log('press', res.data.contents)
+                    const userWeather = res.data.contents.weather_in
+                    const Array = []
+                    const Array2 = []
+                    for (let i = 0; i < userWeather.length; i++) {
+                        Array.push(userWeather[i].press)
+                        Array2.push(userWeather[i].collected_at.split('T')[1].split('.')[0])
+                    }
+                    setPress(Array)
+                    setNewLabel(Array2)
+
+                })
         }
         else {
-            const locDefault = localStorage.getItem('local-code')
-            axios.get(routesClient.outsideLoc + locDefault)
+            axios.get(routesClient.outsideLoc + `3743011`)
                 .then((res) => {
                     const outWeather = res.data.contents.weather_out
                     const Array = []

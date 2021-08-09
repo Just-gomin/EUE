@@ -5,7 +5,6 @@ import '../App.css'
 import EueSuggest from '../components/EueSuggest';
 import Donation from '../components/Donation';
 import ChartTabs from '../components/ChartTabs';
-import ChartDoughnut from '../components/ChartDoughnut';
 
 function Home() {
     const constyled = {
@@ -44,7 +43,6 @@ function Home() {
                     <Col md={6} style={col2sty}>
                         <EueSuggest />
                         <ChartTabs />
-                        <ChartDoughnut />
                         <Donation />
                     </Col>
                 </Row>

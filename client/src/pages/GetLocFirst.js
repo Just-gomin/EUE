@@ -4,7 +4,6 @@ import MainLayer from '../components/MainLayer';
 import '../App.css'
 import EueSuggest from '../components/EueSuggest';
 import ChartTemp from '../components/ChartTemp';
-import ChartDoughnut from '../components/ChartDoughnut';
 import Donation from '../components/Donation';
 import LocCodeChange from '../components/LocCodeChange';
 import { callUserInfo } from '../utils/CheckDB';
@@ -67,7 +66,6 @@ function GetLocFirst() {
                     <Col md={6} style={col2sty}>
                         <EueSuggest />
                         <ChartTemp />
-                        <ChartDoughnut />
                         <Donation />
                     </Col>
 

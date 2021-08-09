@@ -8,6 +8,8 @@ export const routesClient = {
   usingAircon : '/api/toggle-aircon',
   logout: '/api/logout',
   userinfo : '/api/user-info',
+  userWeather : 'api/data/user'
+  
 
 }
 
