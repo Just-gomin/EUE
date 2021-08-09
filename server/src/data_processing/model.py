@@ -36,7 +36,7 @@ def modeling(standard_df):
     model = tf.keras.Sequential([
         tf.keras.layers.LSTM(16,
                              return_sequences=False,
-                             input_shape=(6, 7)),
+                             input_shape=(6, 8)),
         tf.keras.layers.Dense(1)
     ])
 
@@ -44,7 +44,3 @@ def modeling(standard_df):
     # model.fit(train_feature, train_label, epochs=50, batch_size=1000)
 
     model.save(os.getcwd() + '/src/data_processing/model.h5')
-
-
-# 사용할때
-# new = tf.keras.models.load_model('/src/dataprocessing/model.h5')

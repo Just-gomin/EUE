@@ -5,6 +5,10 @@ import json
 import os
 import psycopg2
 import sys
+import pandas as pd
+import tensorflow as tf
+import numpy as np
+
 
 
 if __name__ == "__main__":
@@ -66,7 +70,30 @@ if __name__ == "__main__":
     data_file.close()
     cursor.close()
 
-    prediction = "Result_of_Prediction_Process"
+    data_list = pd.read_csv(data_dir)
+    new_data = data_list[-6:]
+
+    date_time = pd.to_datetime(new_data['date'], format='%Y-%m-%d %H:%M')
+    timestamp_s = date_time.map(datetime.datetime.timestamp)
+
+    new_data = new_data[['temp_out', 'humi_out', 'press', 'wind_speed']]
+    day = 24*60*60
+    year = (365.2425)*day
+
+    new_data['Day sin'] = np.sin(timestamp_s * (2 * np.pi / day))
+    new_data['Day cos'] = np.cos(timestamp_s * (2 * np.pi / day))
+    new_data['Year sin'] = np.sin(timestamp_s * (2 * np.pi / year))
+    new_data['Year cos'] = np.cos(timestamp_s * (2 * np.pi / year))
+
+    feature_cols = ['temp_out', 'humi_out', 'press',
+                    'wind_speed', 'Day sin', 'Day cos', 'Year sin', 'Year cos']
+    for col in feature_cols:
+        new_data[col] =  (new_data[col] - mean[col]) / std[col]
+
+    model_pro = tf.keras.models.load_model(model_dir)
+    prediction = model_pro.predict(new_data)
+    prediction = prediction * std['temp_out'] + mean['temp_out']
+
 
     # 사용한 파일 삭제
     if os.path.isfile(data_dir):
