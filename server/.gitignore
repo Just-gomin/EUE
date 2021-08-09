@@ -7,7 +7,7 @@ package-lock.json
 config/config.js
 
 # Project Data
-/data
+/data/init.sql
 
 # Python Cache
 __pycache__

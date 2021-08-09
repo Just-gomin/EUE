@@ -48,7 +48,7 @@
       user_info : — 사용자 정보 —,
       weather_out : — 실외 날씨 데이터 —,
       weather_in : — 실내(사용자 개인) 날씨 데이터 —,
-      weather_predict : - 사용자 날씨 데이터를 통한 예측 값 -,
+      weather_predict : — 사용자 날씨 데이터를 통한 예측 값 —,
       error: — 에러 —,
    }
 }
