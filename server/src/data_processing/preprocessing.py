@@ -8,6 +8,7 @@
 
 import pandas as pd
 import datetime
+from dateutil.relativedelta import relativedelta
 import numpy as np
 import os
 
@@ -22,6 +23,8 @@ def preprocess(cursor, host):
         사용자 정보를 바탕으로 외부 날씨와 내부 날씨를 검색해 CSV 파일로 작성합니다.
         CSV 파일 생성 후 pandas를 이용해 dataframe으로 만든 뒤, 정규화를 진행합니다.
     """
+
+    data_dir = os.getcwd() + "/src/data_processing/temp.csv"
 
     # # 데이터 수집기 오류로 인해 보류
     # cursor.execute(
@@ -44,16 +47,21 @@ def preprocess(cursor, host):
 
     # file.close()
 
+    today = datetime.date.today()
+    five_m_ago = today - relativedelta(months=5)
+    f_five_m_ago = "{0}-{1}-{2}".format(five_m_ago.year,
+                                        five_m_ago.month, five_m_ago.day)
+
     # 사용자의 거주 지역의 실외 데이터 검색
     cursor.execute(
         "SELECT collected_at as \"date\", temp as temp_out, humi as humi_out, press, wind_speed "
         + "From \"Weather_Outs\" "
-        + "WHERE loc_code = %s", (host["loc_code"],)
+        + "WHERE loc_code = %s AND collected_at >= %s", (host["loc_code"], f_five_m_ago,)
     )
 
     results = cursor.fetchall()
 
-    file = open(os.getcwd() + "/src/data_processing/temp.csv", 'w')
+    file = open(data_dir, 'w')
 
     # header
     file.write("date,temp_out,humi_out,press,wind_speed\n")
@@ -64,7 +72,7 @@ def preprocess(cursor, host):
 
     file.close()
 
-    df = pd.read_csv(os.getcwd() + "/src/data_processing/temp.csv")
+    df = pd.read_csv(data_dir)
     date_time = pd.to_datetime(df['date'], format='%Y-%m-%d %H:%M')
     timestamp_s = date_time.map(datetime.datetime.timestamp)
 

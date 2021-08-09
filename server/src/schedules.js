@@ -1,11 +1,7 @@
-import db from "./db/index";
 import envs from "../config/config";
 import schedule from "node-schedule";
 import { spawn } from "child_process";
 import { handleOutData } from "./controllers/dataController";
-
-// Data Processing Python Codes Directory - server directory에서 실행
-const DATA_PROCESSING_DIR = "./src/data_processing/main.py";
 
 // 매일 자정에 실행할 스케줄의 규칙
 const rule_dataProcessing = new schedule.RecurrenceRule();
@@ -23,14 +19,7 @@ const dataProcessingJob = schedule.scheduleJob(rule_dataProcessing, () => {
     }.${today.getDate()} - Data Processing Start.`
   );
 
-  const pyprocess = spawn("python", [
-    DATA_PROCESSING_DIR,
-    envs.db.host,
-    envs.db.port,
-    envs.db.user,
-    envs.db.password,
-    envs.db.database,
-  ]);
+  const pyprocess = spawn("python", [envs.inner_dir.data_processing_main]);
 
   pyprocess.stdout.on("data", (data) => {
     console.log("Data processing is start.");
@@ -43,7 +32,7 @@ const dataProcessingJob = schedule.scheduleJob(rule_dataProcessing, () => {
   });
 
   pyprocess.on("close", () => {
-    console.log("The data processing done.");
+    console.log("The data processing is done.");
   });
 });
 

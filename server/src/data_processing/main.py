@@ -9,15 +9,15 @@ import datetime
 import os
 import psycopg2
 from psycopg2.extras import Json
-import sys
 
+from config import DB
 from preprocessing import preprocess
 from model import modeling
 
 
 # DB 환경 변수
-dbconfig = {"host": sys.argv[1], "port": sys.argv[2], "user": sys.argv[3],
-            "password": sys.argv[4], "database": sys.argv[5]}
+dbconfig = {"host": DB["host"], "port": DB["port"], "user": DB["user"],
+            "password": DB["password"], "database": DB["database"]}
 
 data_dir = os.getcwd() + "/src/data_processing/temp.csv"
 model_dir = os.getcwd() + "/src/data_processing/model.h5"

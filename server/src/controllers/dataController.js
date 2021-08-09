@@ -3,6 +3,7 @@ import envs from "../../config/config";
 import fetch from "node-fetch";
 import jwt from "jsonwebtoken";
 import resForm from "../resForm";
+import { spawn } from "child_process";
 
 // 외부 수집기로 부터 들어온 정보 처리
 export const handleOutData = async (locCode, date, lat, lng) => {
@@ -98,7 +99,7 @@ export const getDataInput = (req, res) => {
 };
 
 // 사용자의 데이터 가져오기 및 예측 값 전송
-export const getUserWeatherData = (req, res) => {
+export const getUserWeatherData = async (req, res) => {
   const {
     cookies: { acs_token },
   } = req;
@@ -118,32 +119,64 @@ export const getUserWeatherData = (req, res) => {
     //   logging: false,
     // });
 
-    const result_user = db.User.findAll({
+    const result_user = await db.User.findAll({
       where: {
         email: decoded.email,
       },
       logging: false,
     });
-    user_info = result_user[0];
+    const user_info = result_user[0];
 
-    const result_weather = db.Weather_Out.findAll({
+    const result_weather = await db.Weather_Out.findAll({
       where: {
         loc_code: user_info.loc_code,
       },
-      order: [["date", "ASC"]],
+      order: [["collected_at", "ASC"]],
       logging: false,
     });
 
-    const weather_out = result_weather.slice(-9, -3);
+    const weather_out = result_weather.slice(-9);
     const weather_predict = result_weather.slice(-3);
 
-    res.json({
-      msg: resForm.msg.ok,
-      contents: { weather_in: weather_out, weather_predict: weather_predict },
+    const pyprocess = spawn("python", [
+      envs.inner_dir.data_processing_prediction,
+      user_info.email,
+    ]);
+
+    pyprocess.stdout.on("data", (data) => {
+      const str_result = data.toString();
+      console.log(data.toString()); // Buffer to String.
+
+      const temp_predict = str_result.split(" ");
+
+      res.json({
+        msg: resForm.msg.ok,
+        contents: { weather_in: weather_out, weather_predict: temp_predict },
+      });
+    });
+
+    pyprocess.stderr.on("data", (error) => {
+      console.log("Error in the data predicting.");
+      console.log(error.toString());
+      res.json({
+        msg: resForm.msg.err,
+        contents: {
+          weather_in: weather_out,
+          weather_predict: weather_predict,
+          error: error.toString(),
+        },
+      });
+    });
+
+    pyprocess.on("close", () => {
+      console.log("The data prediction is done.");
     });
   } catch (err) {
     console.log(err);
-    res.json({ msg: resForm.msg.err, contents: { error: err } });
+    res.json({
+      msg: resForm.msg.err,
+      contents: { weather_in: [], error: err },
+    });
   }
 };
 

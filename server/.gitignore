@@ -11,3 +11,8 @@ config/config.js
 
 # Python Cache
 __pycache__
+
+# Data Processing
+src/data_processing/temp.csv
+src/data_processing/model.h5
+src/data_processing/config.py

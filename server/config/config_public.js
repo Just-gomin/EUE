@@ -41,7 +41,7 @@ const DB_DATABASE = PRODUCTION
 // ## OpenWeatherMap
 const OPENWEATHERMAP_API_KEY = "YOUR_OpenWeatherMap_API_KEY";
 
-// # Nodemailer.
+// ## Nodemailer.
 const NODEMAILER_SERVICE = "gmail";
 const NODEMAILER_USER = "YOUR_MAIL_ADDRESS";
 const NODEMAILER_GAMIL_CLIENT_ID = "YOUR_API_CLIENT_ID";
@@ -50,6 +50,10 @@ const NODEMAILER_GMAIL_REFRESH_TOKEN = "YOUR_GMAIL_REFRESH_TOKEN";
 // # Secret Key.
 const AUTH_MAIL_SECRETKEY = "YOUR_MAIL_SECRETKEY";
 const AUTH_ACCESS_TOKEN_SECRETKEY = "YOUR_ACCESS_TOKEN_SECRETKEY";
+
+// # Server Inner DIR
+const DIR_DATA_PROCESSING_MAIN = "/src/data_processing/main.py";
+const DIR_DATA_PROCESSING_PREDICTION = "/src/data_processing/predict.py";
 
 const envs = {
   production: PRODUCTION,
@@ -85,6 +89,10 @@ const envs = {
   secretKey: {
     mail: AUTH_MAIL_SECRETKEY,
     access_token: AUTH_ACCESS_TOKEN_SECRETKEY,
+  },
+  inner_dir: {
+    data_processing_main: DIR_DATA_PROCESSING_MAIN,
+    data_processing_prediction: DIR_DATA_PROCESSING_PREDICTION,
   },
 };
 
