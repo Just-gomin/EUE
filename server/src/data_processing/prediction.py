@@ -10,7 +10,6 @@ import tensorflow as tf
 import numpy as np
 
 
-
 if __name__ == "__main__":
 
     dbconfig = {"host": DB["host"], "port": DB["port"], "user": DB["user"],
@@ -18,7 +17,6 @@ if __name__ == "__main__":
     user_email = sys.argv[1]
 
     data_dir = os.getcwd() + "/src/data_processing/temp.csv"
-    model_dir = os.getcwd() + "/src/data_processing/model.h5"
 
     # DB Connect and Make Cursor
     connection = psycopg2.connect(
@@ -27,13 +25,10 @@ if __name__ == "__main__":
 
     # Get Model and Params, then Make File and Variable
     cursor.execute(
-        "SELECT model_file, params FROM \"Data_Processings\" WHERE host=%s", (user_email,))
+        "SELECT model_file_path, params FROM \"Data_Processings\" WHERE host=%s", (user_email,))
     model_params = cursor.fetchone()
 
-    blob_model = model_params[0]
-    model_file = open(model_dir, "wb")
-    model_file.write(blob_model)
-    model_file.close()
+    model_file_path = model_params[0]
 
     params = model_params[1]
     mean = json.loads(params["mean"])
@@ -88,18 +83,14 @@ if __name__ == "__main__":
     feature_cols = ['temp_out', 'humi_out', 'press',
                     'wind_speed', 'Day sin', 'Day cos', 'Year sin', 'Year cos']
     for col in feature_cols:
-        new_data[col] =  (new_data[col] - mean[col]) / std[col]
+        new_data[col] = (new_data[col] - mean[col]) / std[col]
 
-    model_pro = tf.keras.models.load_model(model_dir)
+    model_pro = tf.keras.models.load_model(os.getcwd() + model_file_path)
     prediction = model_pro.predict(new_data)
     prediction = prediction * std['temp_out'] + mean['temp_out']
-
 
     # 사용한 파일 삭제
     if os.path.isfile(data_dir):
         os.remove(data_dir)
-
-    if os.path.isfile(model_dir):
-        os.remove(model_dir)
 
     print(prediction)

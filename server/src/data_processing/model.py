@@ -3,7 +3,7 @@ import os
 import tensorflow as tf
 
 
-def modeling(standard_df):
+def modeling(standard_df, host):
 
     n = len(standard_df)
     test_size = int(0.3 * n)
@@ -43,4 +43,5 @@ def modeling(standard_df):
     model.compile(loss='mse', optimizer='adam')
     # model.fit(train_feature, train_label, epochs=50, batch_size=1000)
 
-    model.save(os.getcwd() + '/src/data_processing/model.h5')
+    model.save(os.getcwd() +
+               '/src/data_processing/models/{0}/model.h5'.format(host))

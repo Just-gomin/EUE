@@ -20,7 +20,6 @@ dbconfig = {"host": DB["host"], "port": DB["port"], "user": DB["user"],
             "password": DB["password"], "database": DB["database"]}
 
 data_dir = os.getcwd() + "/src/data_processing/temp.csv"
-model_dir = os.getcwd() + "/src/data_processing/model.h5"
 
 
 def makeDateForm():
@@ -51,32 +50,27 @@ for user in users:
     standard_df, mean_df, std_df = preprocess(cursor, host)
 
     # 데이터 분석
-    modeling(standard_df)
+    modeling(standard_df, host["email"])
 
     # 데이터 분석 결과 저장
 
     collected_at = makeDateForm()
 
-    model_file = open(model_dir, 'rb')
-    model_file_data = model_file.read()
+    model_file_path = "/src/data_processing/models/{0}/model.h5".format(
+        host["email"])
 
     params = {"mean": mean_df.to_json(), "std": std_df.to_json()}
 
-    cursor.execute("INSERT INTO \"Data_Processings\" (host,collected_at,model_file,params) VALUES (%s,%s,%s,%s)",
+    cursor.execute("INSERT INTO \"Data_Processings\" (host,collected_at,model_file_path,params) VALUES (%s,%s,%s,%s)",
                    (host["email"],
                     collected_at,
-                    model_file_data,
+                    model_file_path,
                     Json(params),))
 
     connection.commit()
-    model_file.close()
 
     if os.path.isfile(data_dir):
         os.remove(data_dir)
-
-    if os.path.isfile(model_dir):
-        os.remove(model_dir)
-
 
 # Cursor와 Connection 종료
 cursor.close()

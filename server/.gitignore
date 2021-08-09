@@ -16,3 +16,4 @@ __pycache__
 src/data_processing/temp.csv
 src/data_processing/model.h5
 src/data_processing/config.py
+src/data_processing/models

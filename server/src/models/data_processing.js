@@ -18,8 +18,8 @@ export class Data_Processing extends Model {
           primaryKey: true,
           defaultValue: Date.now(),
         },
-        model_file: {
-          type: DataTypes.BLOB,
+        model_file_path: {
+          type: DataTypes.STRING,
         },
         params: {
           type: DataTypes.JSON,
