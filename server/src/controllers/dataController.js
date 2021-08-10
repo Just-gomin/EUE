@@ -141,9 +141,7 @@ export const getUserWeatherData = async (req, res) => {
     temp_weather.map((data) => {
       weather.push({
         loc_code: data["loc_code"],
-        collected_at: new Date(
-          new Date(data["collected_at"]).getTime() + 9 * 60 * 60 * 1000
-        ),
+        collected_at: new Date(new Date(data["collected_at"]).getTime()),
         temp: data["temp"],
         humi: data["humi"],
         press: data["press"],
