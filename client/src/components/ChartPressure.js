@@ -6,45 +6,7 @@ import { callUserInfo } from '../utils/CheckDB';
 import { isLogined } from './../utils/Auth';
 import { routesClient } from './../routesClient';
 
-function ChartPressure() {
-
-    const [press, setPress] = useState([])
-    const [newLabel, setNewLabel] = useState([])
-
-    useEffect(() => {
-        if (isLogined()) {
-            axios.get(routesClient.userWeather, { withCredentials: true })
-                .then((res) => {
-                    console.log('press', res.data.contents)
-                    const userWeather = res.data.contents.weather_in
-                    const Array = []
-                    const Array2 = []
-                    for (let i = 0; i < userWeather.length; i++) {
-                        Array.push(userWeather[i].press)
-                        Array2.push(userWeather[i].collected_at.split('T')[1].split('.')[0])
-                    }
-                    setPress(Array)
-                    setNewLabel(Array2)
-
-                })
-        }
-        else {
-            axios.get(routesClient.outsideLoc + `3743011`)
-                .then((res) => {
-                    const outWeather = res.data.contents.weather_out
-                    const Array = []
-                    const Array2 = []
-                    for (let i = 0; i < outWeather.length; i++) {
-                        Array.push(outWeather[i].press)
-                        Array2.push(outWeather[i].collected_at.split('T')[1].split('.')[0])
-                        // const colHour = outWeather[i].collected_at.split('T')[1].split('.')[0].split(':')[0]
-                        // const colMin = outWeather[i].collected_at.split('T')[1].split('.')[0].split(':')[1]
-                    }
-                    setPress(Array)
-                    setNewLabel(Array2)
-                })
-        }
-    }, [])
+function ChartPressure({press, newLabel}) {
 
     const options = {
         legend: {
