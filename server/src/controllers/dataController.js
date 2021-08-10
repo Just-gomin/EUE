@@ -135,8 +135,21 @@ export const getUserWeatherData = async (req, res) => {
       logging: false,
     });
 
-    const weather_out = result_weather.slice(-9);
-    const weather_predict = result_weather.slice(-3);
+    let temp_weather = result_weather.slice(-6);
+    let weather = [];
+
+    temp_weather.map((data) => {
+      weather.push({
+        loc_code: data["loc_code"],
+        collected_at: new Date(
+          new Date(data["collected_at"]).getTime() + 9 * 60 * 60 * 1000
+        ),
+        temp: data["temp"],
+        humi: data["humi"],
+        press: data["press"],
+        wind_speed: data["wind_speed"],
+      });
+    });
 
     const pyprocess = spawn("python", [
       envs.inner_dir.data_processing_prediction,
@@ -144,28 +157,37 @@ export const getUserWeatherData = async (req, res) => {
     ]);
 
     pyprocess.stdout.on("data", (data) => {
+      let weather_predict = [];
       const str_result = data.toString();
-      console.log(data.toString()); // Buffer to String.
 
-      const temp_predict = str_result.split(" ");
+      let temp_predict = str_result.trim();
+      temp_predict = temp_predict.replace("]]", "");
+      temp_predict = temp_predict.replace("[[", "");
+      temp_predict = temp_predict.split(" ");
+
+      let date_10m = new Date(weather[weather.length - 1]["collected_at"]);
+      date_10m.setMinutes(date_10m.getMinutes() + 10);
+
+      let date_20m = new Date(weather[weather.length - 1]["collected_at"]);
+      date_20m.setMinutes(date_20m.getMinutes() + 20);
+
+      let date_30m = new Date(weather[weather.length - 1]["collected_at"]);
+      date_30m.setMinutes(date_30m.getMinutes() + 30);
+
+      let dates = [date_10m, date_20m, date_30m];
+
+      temp_predict.map((temp, index) => {
+        weather_predict.push({
+          collected_at: dates[index],
+          temp: Number(temp),
+        });
+      });
 
       res.json({
         msg: resForm.msg.ok,
-        contents: { weather_in: weather_out, weather_predict: temp_predict },
+        contents: { weather_in: weather, weather_predict: weather_predict },
       });
-    });
-
-    pyprocess.stderr.on("data", (error) => {
-      console.log("Error in the data predicting.");
-      console.log(error.toString());
-      res.json({
-        msg: resForm.msg.err,
-        contents: {
-          weather_in: weather_out,
-          weather_predict: weather_predict,
-          error: error.toString(),
-        },
-      });
+      return;
     });
 
     pyprocess.on("close", () => {

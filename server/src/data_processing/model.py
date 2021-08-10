@@ -13,9 +13,10 @@ def modeling(standard_df, host):
     def make_dataset(data, label, window_size=24):
         feature_list = []
         label_list = []
-        for i in range(len(data) - window_size):
+        for i in range(len(data) - (window_size+3)):
             feature_list.append(np.array(data.iloc[i:i+window_size]))
-            label_list.append(np.array(label.iloc[i + window_size]))
+            label_list.append(
+                np.array(label.iloc[i + window_size:i + window_size + 3]))
         return np.array(feature_list), np.array(label_list)
 
     feature_cols = ['temp_out', 'humi_out', 'press',
@@ -37,11 +38,11 @@ def modeling(standard_df, host):
         tf.keras.layers.LSTM(16,
                              return_sequences=False,
                              input_shape=(6, 8)),
-        tf.keras.layers.Dense(1)
+        tf.keras.layers.Dense(3)
     ])
 
     model.compile(loss='mse', optimizer='adam')
-    # model.fit(train_feature, train_label, epochs=50, batch_size=1000)
+    model.fit(train_feature, train_label, epochs=50, batch_size=10)
 
     model.save(os.getcwd() +
                '/src/data_processing/models/{0}/model.h5'.format(host))
