@@ -85,6 +85,10 @@ if __name__ == "__main__":
     for col in feature_cols:
         new_data[col] = (new_data[col] - mean[col]) / std[col]
 
+    df = pd.DataFrame(new_data, columns=feature_cols)
+    new_data = df.to_numpy()
+    new_data = new_data.reshape(1, 6, 8)
+
     model_pro = tf.keras.models.load_model(os.getcwd() + model_file_path)
     prediction = model_pro.predict(new_data)
     prediction = prediction * std['temp_out'] + mean['temp_out']

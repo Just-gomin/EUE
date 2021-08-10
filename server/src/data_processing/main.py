@@ -61,11 +61,18 @@ for user in users:
 
     params = {"mean": mean_df.to_json(), "std": std_df.to_json()}
 
-    cursor.execute("INSERT INTO \"Data_Processings\" (host,collected_at,model_file_path,params) VALUES (%s,%s,%s,%s)",
-                   (host["email"],
-                    collected_at,
-                    model_file_path,
-                    Json(params),))
+    cursor.execute(
+        "SELECT * FROM \"Data_Processings\" WHERE host=%s", (host["email"],))
+    user_checker = cursor.fetchall()
+
+    if len(user_checker) == 0:
+        cursor.execute("INSERT INTO \"Data_Processings\" (host,collected_at,model_file_path,params) VALUES (%s,%s,%s,%s)",
+                       (host["email"], collected_at, model_file_path, Json(params),))
+
+    else:
+        cursor.execute("UPDATE \"Data_Processings\" SET collected_at=%s, params=%s WHERE host=%s", (
+            collected_at, Json(params), host["email"],
+        ))
 
     connection.commit()
 
