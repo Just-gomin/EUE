@@ -6,46 +6,7 @@ import { callUserInfo } from '../utils/CheckDB';
 import { routesClient } from './../routesClient';
 import { isLogined } from './../utils/Auth';
 
-function ChartHumidity() {
-
-    const [humi, setHumi] = useState([])
-    const [newLabel, setNewLabel] = useState([])
-
-    useEffect(() => {
-        if (isLogined()) {
-            axios.get(routesClient.userWeather, { withCredentials: true })
-                .then((res) => {
-                    console.log('humi', res.data.contents.weather_in)
-                    const userWeather = res.data.contents.weather_in
-                    const Array = []
-                    const Array2 = []
-                    for (let i = 0; i < userWeather.length; i++) {
-                        Array.push(userWeather[i].humi)
-                        Array2.push(userWeather[i].collected_at.split('T')[1].split('.')[0])
-                    }
-                    setHumi(Array)
-                    setNewLabel(Array2)
-
-                })
-        }
-        else {
-            axios.get(routesClient.outsideLoc + `3743011`)
-                .then((res) => {
-                    const outWeather = res.data.contents.weather_out
-                    const Array = []
-                    const Array2 = []
-                    for (let i = 0; i < outWeather.length; i++) {
-                        Array.push(outWeather[i].humi)
-                        Array2.push(outWeather[i].collected_at.split('T')[1].split('.')[0])
-                        // const colHour = outWeather[i].collected_at.split('T')[1].split('.')[0].split(':')[0]
-                        // const colMin = outWeather[i].collected_at.split('T')[1].split('.')[0].split(':')[1]
-                    }
-                    setHumi(Array)
-                    setNewLabel(Array2)
-                })
-        }
-    }, [])
-
+function ChartHumidity({humi, newLabel}) {
 
     const options = {
         legend: {

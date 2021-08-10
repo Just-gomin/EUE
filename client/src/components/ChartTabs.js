@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, Row, Tab, Tabs } from "react-bootstrap";
 import ChartTemp from './ChartTemp';
 import ChartHumidity from './ChartHumidity';
 import ChartWindSpeed from './ChartWindSpeed';
 import ChartPressure from './ChartPressure';
 import '../App.css'
-import { getWeatherOut } from './../utils/CheckDB';
 import { isLogined } from './../utils/Auth';
+import axios from "axios";
+import { routesClient } from './../routesClient';
 
 function ChartTabs() {
 
@@ -23,6 +24,87 @@ function ChartTabs() {
     }
 
 
+    const [temp, setTemp] = useState([]);
+    const [press, setPress] = useState([]);
+    const [humi, setHumi] = useState([])
+    const [windSpd, setWindSpd] = useState([])
+
+    const [newLabel, setNewLabel] = useState([]);
+    const [tempNewLabel, setTempNewLabel] = useState([]);
+
+    useEffect(() => {
+        if (isLogined()) {
+            axios.get(routesClient.userWeather, { withCredentials: true })
+                .then((res) => {
+                    console.log(res.data.contents.weather_in)
+                    const userWeather = res.data.contents.weather_in
+                    const userWeatherPredict = res.data.contents.weather_predict
+
+                    const tempArray = []
+                    const humiArray = []
+                    const pressArray = []
+                    const windspeedArray = []
+
+                    const tempLabelArray = []
+                    const labelArray = []
+
+                    for (let i = 3; i < 9; i++) {
+                        tempArray.push(userWeather[i].temp)
+                        humiArray.push(userWeather[i].humi)
+                        pressArray.push(userWeather[i].press)
+                        windspeedArray.push(userWeather[i].wind_speed)
+
+                        tempLabelArray.push(userWeather[i].collected_at.split('T')[1].split('.')[0])
+                        labelArray.push(userWeather[i].collected_at.split('T')[1].split('.')[0])
+                    }
+                    for (let j = 0; j < 3; j++) {
+                        tempArray.push(userWeatherPredict[j].temp)
+                        
+                        tempLabelArray.push(userWeatherPredict[j].collected_at.split('T')[1].split('.')[0])
+                    }
+
+                    setTemp(tempArray)
+                    setHumi(humiArray)
+                    setPress(pressArray)
+                    setWindSpd(windspeedArray)
+
+                    setTempNewLabel(tempLabelArray)
+                    setNewLabel(labelArray)
+                })
+        }
+        else {
+            axios.get(routesClient.outsideLoc + `3743011`).then((res) => {
+                const outWeather = res.data.contents.weather_out;
+
+                const tempArray = []
+                const humiArray = []
+                const pressArray = []
+                const windspeedArray = []
+
+                const tempLabelArray = []
+                const labelArray = []
+
+                let i = outWeather.length - 9;
+                for (i; i < outWeather.length; i++) {
+                    tempArray.push(outWeather[i].temp)
+                    humiArray.push(outWeather[i].humi)
+                    pressArray.push(outWeather[i].press)
+                    windspeedArray.push(outWeather[i].wind_speed)
+
+                    tempLabelArray.push(outWeather[i].collected_at.split("T")[1].split(".")[0]);
+                    labelArray.push(outWeather[i].collected_at.split("T")[1].split(".")[0]);
+                }
+
+                setTemp(tempArray)
+                setHumi(humiArray)
+                setPress(pressArray)
+                setWindSpd(windspeedArray)
+
+                setTempNewLabel(tempLabelArray);
+                setNewLabel(labelArray);
+            });
+        }
+    }, []);
     //3743011 default
 
 
@@ -36,16 +118,16 @@ function ChartTabs() {
                     onSelect={(k) => setKey(k)}
                     className="mb-3" >
                     <Tab eventKey="temp" title="온도">
-                        <ChartTemp />
+                        <ChartTemp temp={temp} newLabel={tempNewLabel} />
                     </Tab>
                     <Tab eventKey="humidity" title="습도">
-                        <ChartHumidity />
+                        <ChartHumidity humi={humi} newLabel={newLabel} />
                     </Tab>
                     <Tab eventKey="windspeed" title="풍속">
-                        <ChartWindSpeed />
+                        <ChartWindSpeed windSpd={windSpd} newLabel={newLabel} />
                     </Tab>
                     <Tab eventKey="pressure" title="기압">
-                        <ChartPressure />
+                        <ChartPressure press={press} newLabel={newLabel} />
                     </Tab>
                 </Tabs>
             </Card>
