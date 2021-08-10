@@ -57,7 +57,13 @@ function ChartTabs() {
               new Date(userWeather[i].collected_at).getTime()
             );
 
-            tempLabelArray.push(`${date.getHours()}:${date.getMinutes()}`);
+            tempLabelArray.push(
+              `${date.getHours()}:${
+                date.getMinutes() < 10
+                  ? `0${date.getMinutes()}`
+                  : date.getMinutes()
+              }`
+            );
             labelArray.push(`${date.getHours()}:${date.getMinutes()}`);
           }
           for (let j = 0; j < userWeatherPredict.length; j++) {
@@ -65,7 +71,13 @@ function ChartTabs() {
             let date = new Date(
               new Date(userWeatherPredict[j].collected_at).getTime()
             );
-            tempLabelArray.push(`${date.getHours()}:${date.getMinutes()}`);
+            tempLabelArray.push(
+              `${date.getHours()}:${
+                date.getMinutes() < 10
+                  ? `0${date.getMinutes()}`
+                  : date.getMinutes()
+              }`
+            );
           }
 
           setTemp(tempArray);
@@ -96,8 +108,20 @@ function ChartTabs() {
 
           let date = new Date(new Date(outWeather[i].collected_at).getTime());
 
-          tempLabelArray.push(`${date.getHours()}:${date.getMinutes()}`);
-          labelArray.push(`${date.getHours()}:${date.getMinutes()}`);
+          tempLabelArray.push(
+            `${date.getHours()}:${
+              date.getMinutes() < 10
+                ? `0${date.getMinutes()}`
+                : date.getMinutes()
+            }`
+          );
+          labelArray.push(
+            `${date.getHours()}:${
+              date.getMinutes() < 10
+                ? `0${date.getMinutes()}`
+                : date.getMinutes()
+            }`
+          );
         }
 
         setTemp(tempArray);
