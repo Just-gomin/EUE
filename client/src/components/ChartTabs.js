@@ -56,14 +56,13 @@ function ChartTabs() {
             let date = new Date(
               new Date(userWeather[i].collected_at).getTime()
             );
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+            let f_date = `${hour < 10 ? `0${hour}` : hour}:${
+              minute < 10 ? `0${minute}` : minute
+            }`;
 
-            tempLabelArray.push(
-              `${date.getHours()}:${
-                date.getMinutes() < 10
-                  ? `0${date.getMinutes()}`
-                  : date.getMinutes()
-              }`
-            );
+            tempLabelArray.push(f_date);
             labelArray.push(`${date.getHours()}:${date.getMinutes()}`);
           }
           for (let j = 0; j < userWeatherPredict.length; j++) {
@@ -71,14 +70,17 @@ function ChartTabs() {
             let date = new Date(
               new Date(userWeatherPredict[j].collected_at).getTime()
             );
-            tempLabelArray.push(
-              `${date.getHours()}:${
-                date.getMinutes() < 10
-                  ? `0${date.getMinutes()}`
-                  : date.getMinutes()
-              }`
-            );
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+            let f_date = `${hour < 10 ? `0${hour}` : hour}:${
+              minute < 10 ? `0${minute}` : minute
+            }`;
+            tempLabelArray.push(f_date);
           }
+
+          console.log(tempLabelArray);
+          console.log(userWeather);
+          console.log(userWeatherPredict);
 
           setTemp(tempArray);
           setHumi(humiArray);
@@ -107,22 +109,17 @@ function ChartTabs() {
           windspeedArray.push(outWeather[i].wind_speed);
 
           let date = new Date(new Date(outWeather[i].collected_at).getTime());
+          let hour = date.getHours();
+          let minute = date.getMinutes();
+          let f_date = `${hour < 10 ? `0${hour}` : hour}:${
+            minute < 10 ? `0${minute}` : minute
+          }`;
 
-          tempLabelArray.push(
-            `${date.getHours()}:${
-              date.getMinutes() < 10
-                ? `0${date.getMinutes()}`
-                : date.getMinutes()
-            }`
-          );
-          labelArray.push(
-            `${date.getHours()}:${
-              date.getMinutes() < 10
-                ? `0${date.getMinutes()}`
-                : date.getMinutes()
-            }`
-          );
+          tempLabelArray.push(f_date);
+          labelArray.push(f_date);
         }
+
+        console.log(tempLabelArray);
 
         setTemp(tempArray);
         setHumi(humiArray);

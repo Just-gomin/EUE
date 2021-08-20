@@ -156,12 +156,14 @@ export const getUserWeatherData = async (req, res) => {
 
     pyprocess.stdout.on("data", (data) => {
       let weather_predict = [];
-      const str_result = data.toString();
 
-      let temp_predict = str_result.trim();
+      let temp_predict = data.toString();
       temp_predict = temp_predict.replace("]]", "");
       temp_predict = temp_predict.replace("[[", "");
+      temp_predict = temp_predict.trim();
       temp_predict = temp_predict.split(" ");
+
+      temp_predict = temp_predict.filter((val) => val.length > 0);
 
       let date_10m = new Date(weather[weather.length - 1]["collected_at"]);
       date_10m.setMinutes(date_10m.getMinutes() + 10);
