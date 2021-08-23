@@ -19,7 +19,7 @@
 
 ---
 
-## 0. 프로젝트 명세서 명세서
+## 0. 프로젝트 명세서
 
 - [API 명세](https://github.com/dorakang612/EUE/blob/master/server/API%EB%AA%85%EC%84%B8%EC%84%9C.md)
 - [Data 명세](https://github.com/dorakang612/EUE/blob/master/server/Data%EB%AA%85%EC%84%B8%EC%84%9C.md)
