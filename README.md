@@ -2,6 +2,7 @@
 
 ## INDEX
 
+**0.[프로젝트 명세서](https://github.com/dorakang612/EUE#0-프로젝트-명세서)**</br>
 **1. [프로젝트 구성](https://github.com/dorakang612/EUE#1-프로젝트-구성)</br>**
 **2. [프로젝트 설치](https://github.com/dorakang612/EUE#2-프로젝트-설치)**
 
@@ -15,6 +16,13 @@
 - 3-3. [Server (Express.js)](https://github.com/dorakang612/EUE#3-3-server-expressjs)
 
 <br>
+
+---
+
+## 0. 프로젝트 명세서 명세서
+
+- [API 명세](https://github.com/dorakang612/EUE/blob/master/server/API%EB%AA%85%EC%84%B8%EC%84%9C.md)
+- [Data 명세](https://github.com/dorakang612/EUE/blob/master/server/Data%EB%AA%85%EC%84%B8%EC%84%9C.md)
 
 ---
 
